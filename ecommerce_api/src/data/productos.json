@@ -1,0 +1,66 @@
+[
+	{
+		"id": 1,
+		"nombre": "iPhone 14 Pro",
+		"categoria": "smartphones",
+		"precio": 1399000,
+		"descripcion": "Pantalla Super Retina XDR",
+		"imagen": "/assets/images/iphone14pro.jpg"
+	},
+	{
+		"id": 2,
+		"nombre": "Samsung Galaxy S23",
+		"categoria": "smartphones",
+		"precio": 1199000,
+		"descripcion": "Cámara de 200MP y gran rendimiento",
+		"imagen": "/assets/images/samsungGalaxyS23.jpg"
+	},
+	{
+		"id": 3,
+		"nombre": "MacBook Air M2",
+		"categoria": "computadoras",
+		"precio": 1599000,
+		"descripcion": "Ligera y con chip Apple M2",
+		"imagen": "/assets/images/macbookAirM2.jpg"
+	},
+	{
+		"id": 4,
+		"nombre": "Lenovo IdeaPad 3",
+		"categoria": "computadoras",
+		"precio": 799000,
+		"descripcion": "Laptop ideal para uso diario",
+		"imagen": "/assets/images/lenovoIdeaPad3.jpg"
+	},
+	{
+		"id": 5,
+		"nombre": "JBL Flip 6",
+		"categoria": "audio",
+		"precio": 149000,
+		"descripcion": "Parlante bluetooth resistente al agua",
+		"imagen": "/assets/images/jblFlip6.jpg"
+	},
+	{
+		"id": 6,
+		"nombre": "Sony Home Theater HT-S20R",
+		"categoria": "audio",
+		"precio": 299000,
+		"descripcion": "Sistema 5.1 con subwoofer",
+		"imagen": "/assets/images/sonyHomeTheaterHTS20R.jpg"
+	},
+	{
+		"id": 7,
+		"nombre": "Cargador USB-C 20W Apple",
+		"categoria": "accesorios",
+		"precio": 29000,
+		"descripcion": "Carga rápida para iPhone y iPad",
+		"imagen": "/assets/images/cargadorUSBC20WApple.jpg"
+	},
+	{
+		"id": 8,
+		"nombre": "Auriculares Xiaomi Redmi Buds 4",
+		"categoria": "accesorios",
+		"precio": 59000,
+		"descripcion": "Bluetooth y cancelación de ruido",
+		"imagen": "/assets/images/auricularesXiaomiRedmiBuds4.jpg"
+	}
+]
