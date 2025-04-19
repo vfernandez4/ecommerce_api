@@ -1,0 +1,29 @@
+.body {
+    background-color: lightblue;
+    font-family: sans-serif;
+    padding-left: 10%;
+    padding-top: 5%;
+}
+
+.page_container {
+    display: flex;
+}
+
+.profile {
+    flex: 2;
+    align-items: center;
+}
+
+.profile_img {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+}
+
+.data {
+    flex: 3;
+}
+
+.data p {
+    font-weight: bold;;
+}
