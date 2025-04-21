@@ -1,6 +1,26 @@
 import React from "react";
 import styles from "./profile.module.css";
 import Profile_img from "../../assets/imagenPerfil/perfil.png";
+import HistoryCard from "./components/HistoryCard";
+import iPhone from "../../assets/imagenesProductos/iphone14pro.jpg";
+import macbook from "../../assets/imagenesProductos/macbookAirM2.jpg";
+
+const productosVendidos = [
+  {
+    id: 1,
+    nombre: "iPhone 14 Pro",
+    precio: 1399999,
+    fecha: "01/03/2024",
+    imagen: iPhone
+  },
+  {
+    id: 2,
+    nombre: "MacBook Air M2",
+    precio: 2399999,
+    fecha: "15/02/2024",
+    imagen: macbook
+  }
+];
 
 const Profile = () => {
   return (
@@ -10,18 +30,54 @@ const Profile = () => {
                 <img className={styles["profile_img"]} src={Profile_img} alt="imagen" />
             </nav>
             <div className={styles["data"]}>
+              <section className={styles["data_section"]}>
                 <h1>Nombre</h1>
                 <p>Santino Fosco</p>
-                <h2>Direccion</h2>
+              </section>
+              <section className={styles["data_section"]}>
+                <h1>Direccion</h1>
                 <p>Calle falsa 123</p>
-                <h2>Telefono</h2>
+              </section>
+              <section className={styles["data_section"]}>
+                <h1>Telefono</h1>
                 <p>11-1234-5678</p>
-                <h2>Email</h2>
+              </section>
+              <section className={styles["data_section"]}>
+                <h1>Email</h1>
                 <p>santinofosco@gmail.com</p>
-                <h2>Fecha de nacimiento</h2>
-                <p>01/01/2000</p>
+              </section>
+              <section className={styles["data_section"]}>
+              <h2>Fecha de nacimiento</h2>
+              <p>01/01/2000</p>
+              </section>
             </div>
         </div>
+        <section className={styles["history"]}>
+          <div className={styles["child_history"]}>
+            <h2>Historial de compras</h2>
+            {productosVendidos.map((producto) => (
+              <HistoryCard
+                key={producto.id}
+                nombre={producto.nombre}
+                precio={producto.precio}
+                fecha={producto.fecha}
+                imagen={producto.imagen}
+              />
+            ))}
+          </div>
+          <div className={styles["child_history"]}>
+            <h2>Historial de ventas</h2>
+            {productosVendidos.map((producto) => (
+              <HistoryCard
+                key={producto.id}
+                nombre={producto.nombre}
+                precio={producto.precio}
+                fecha={producto.fecha}
+                imagen={producto.imagen}
+              />
+            ))}
+          </div>
+        </section>
     </body>
   );
 };
