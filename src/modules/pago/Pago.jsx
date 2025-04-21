@@ -1,45 +1,54 @@
-import React from "react";
+import { useState } from "react";
 import styles from "./pago.module.css";
 
 const Pago = () => {
+  const [calle, setCalle] = useState("");
+  const [numero, setNumero] = useState("");
+  const [piso, setPiso] = useState("");
+  const [depto, setDepto] = useState("");
+  const [codigoPostal, setCodigoPostal] = useState("");
+
+  const [metodoPago, setMetodoPago] = useState("");
+
+  const [numeroTarjeta, setNumeroTarjeta] = useState("");
+  const [fechaVencimiento, setFechaVencimiento] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [nombreTarjeta, setNombreTarjeta] = useState("");
+
   return (
-    <body className={styles["body"]}>
-      <header className={styles["main-header"]}>
-        <div className={styles["logo"]}>
-          <a href="#">MiTienda</a>
-        </div>
-
-        <div className={styles["user-actions"]}>
-          <a href="#">Carrito (0)</a>
-        </div>
-      </header>
-
+    <div className={styles["body"]}>
       <div className={styles["page-container"]}>
         <div className={styles["purchase-details"]}>
           <h3 className={styles["title"]}>Direccion de entrega</h3>
           <form className={styles["forms"]} action="">
             <section>
-            <label htmlFor="calle">Calle</label>
+            <label>Calle</label>
             <br />
-            <input type="text" id="calle" name="calle" required />
+            <input type="text" value={calle} onChange={(e) => setCalle(e.target.value)} />
             </section>
             
             <section>
-            <label htmlFor="numero_direccion">Numero</label>
+            <label>Numero</label>
             <br />
-            <input type="text" id="numero_direccion" name="numero_direccion" required />
+            <input type="number" value={numero} onChange={(e) => setNumero(e.target.value)} />
             </section>
             
             <section>
-            <label htmlFor="piso">Piso</label>
+            <label>Piso</label>
             <br />
-            <input type="text" id="piso" name="piso" required />
+            <input type="number" value={piso} onChange={(e) => setPiso(e.target.value)} />
             </section>
             
             <section>
-            <label htmlFor="dpto">Dpto</label>
+            <label>Dpto</label>
             <br />
-            <input type="text" id="dpto" name="dpto" required />
+            <input type="" value={depto} onChange={(e) => setDepto(e.target.value)} />
+            </section>
+
+            <section>
+            <label>Codigo Postal</label>
+            <br />
+            <input type="number" value={codigoPostal} onChange={(e) => setCodigoPostal(e.target.value)} />
             </section>
           </form>
 
@@ -48,34 +57,40 @@ const Pago = () => {
           <h3 className={styles["title"]}>Forma de pago</h3>
 
           <label>
-          <input type="radio" name="metodoPago" value="credito" />Tarjeta de crédito </label>
+            <input type="radio" name="metodoPago" value="credito" checked={metodoPago === "credito"} onChange={(e) => setMetodoPago(e.target.value)} />
+            Tarjeta de crédito
+          </label>
+
           <br />
+
           <label>
-          <input type="radio" name="metodoPago" value="debito" />Tarjeta de débito</label>
+            <input type="radio" name="metodoPago" value="debito" checked={metodoPago === "debito"} onChange={(e) => setMetodoPago(e.target.value)} />
+            Tarjeta de débito
+          </label>
 
           <form className={styles["forms"]} action="">
             <section>
-              <label htmlFor="numero_tarjeta">Numero</label>
-              <br />
-              <input type="text" id="numero_tarjeta" name="numero_tarjeta" required />
+            <label>Numero</label>
+            <br />
+            <input type="number" value={numeroTarjeta} onChange={(e) => setNumeroTarjeta(e.target.value)} />
             </section>
 
             <section>
-              <label htmlFor="vencimiento">Fecha de vencimiento</label>
-              <br />
-              <input type="date" id="vencimiento" name="vencimiento" required />
+            <label>Fecha de vencimiento</label>
+            <br />
+            <input type="date" value={fechaVencimiento} onChange={(e) => setFechaVencimiento(e.target.value)} />
             </section>
 
             <section>
-              <label htmlFor="cvv">CVV</label>
-              <br />
-              <input type="text" id="cvv" name="cvv" required />
+            <label>CVV</label>
+            <br />
+            <input type="number" value={cvv} onChange={(e) => setCvv(e.target.value)} />
             </section>
 
             <section>
-              <label htmlFor="nombre">Nombre en la tarjeta</label>
-              <br />
-              <input type="text" id="nombre" name="nombre" required />
+            <label>Nombre en la tarjeta</label>
+            <br />
+            <input type="text" value={nombreTarjeta} onChange={(e) => setNombreTarjeta(e.target.value)} />
             </section>
           </form>
         </div>
@@ -100,7 +115,7 @@ const Pago = () => {
           <button className={styles["buy_button"]}>Confirmar compra</button>
         </aside>
       </div>
-    </body>
+    </div>
   );
 };
 
