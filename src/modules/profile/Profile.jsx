@@ -24,7 +24,7 @@ const productosVendidos = [
 
 const Profile = () => {
   return (
-    <body className={styles["body"]}>
+    <div className={styles["body"]}>
         <div className={styles["page_container"]}>
             <nav className={styles["profile"]}>
                 <img className={styles["profile_img"]} src={Profile_img} alt="imagen" />
@@ -78,7 +78,7 @@ const Profile = () => {
             ))}
           </div>
         </section>
-    </body>
+    </div>
   );
 };
 
