@@ -1,11 +1,17 @@
-import './App.css'
-import Home from "./modules/home/Home";
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Login from "./modules/login/Login";
+import Registro from "./modules/registro/Registro"; // Importa el componente de registro
 
 function App() {
-
-	return (
-		<Home />
-	)
+  return (
+    <Router>
+      <Routes>
+        <Route path="/login" element={<Login />} />
+        <Route path="/registro" element={<Registro />} /> {/* Ruta de registro */}
+      </Routes>
+    </Router>
+  );
 }
 
-export default App
+export default App;
