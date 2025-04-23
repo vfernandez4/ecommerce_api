@@ -2,9 +2,8 @@ import React from "react";
 
 const RegistroHeader = () => {
   return (
-    <header style={{ textAlign: "center", marginBottom: "20px" }}>
-      <h1>Crear una Cuenta</h1>
-      <p>Por favor, completa el formulario para registrarte.</p>
+    <header>
+      <h3>Completa con tus datos</h3>
     </header>
   );
 };

@@ -46,7 +46,6 @@ const RegistroForm = () => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h1>Registro</h1>
       <label>
         Correo Electrónico:
         <input

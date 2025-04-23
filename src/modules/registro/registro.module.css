@@ -1,3 +1,7 @@
+body {
+  margin: 0;
+}
+
 .registro-container {
   display: flex;
   height: 100vh;
@@ -6,8 +10,8 @@
 
 .registro-welcome,
 .registro-form-container {
-  flex: 1; /* Asegura que ambas secciones ocupen el mismo ancho */
-  width: 50%; /* Garantiza que cada sección ocupe el 50% del ancho */
+  flex: 1;
+  width: 50%;
 }
 
 .registro-welcome {
@@ -74,7 +78,8 @@ form input {
 }
 
 form button {
-  width: 100%;
+  margin: 0 auto;
+  width: 108%;
   padding: 10px;
   background-color: #86c9eb;
   color: white;
@@ -87,5 +92,5 @@ form button {
 }
 
 form button:hover {
-  background-color: #5aa88c;
+  background-color: #86c9eb;
 }
