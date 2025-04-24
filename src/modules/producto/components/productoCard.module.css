@@ -1,53 +1,54 @@
 .card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 1rem;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    width: 220px;
-    background-color: white;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  }
-  
-  .imagen {
-    width: 150px;
-    height: 150px;
-    object-fit: contain;
-    margin-bottom: 0.5rem;
-  }
-  
-  .info {
-    text-align: center;
-  }
-  
-  .nombre {
-    font-size: 1.1rem;
-    font-weight: bold;
-    margin: 0.5rem 0;
-    color: #000;
-  }
-  
-  .precio {
-    color: #333;
-    margin-bottom: 0.5rem;
-  }
-  
-  .boton {
-    background-color: #0070f3;
-    color: white;
-    border: none;
-    padding: 0.4rem 0.8rem;
-    border-radius: 4px;
-    cursor: pointer;
-  }
-  
-  .boton:hover {
-    background-color: #034384;
-  }
-  
-  .sinStock {
-    color: red;
-    font-weight: bold;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem; 
+  border-radius: 8px;
+  width: 220px;
+  background-color: var(--color-blanco); 
+  color: var(--color-negro); 
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); 
+}
+
+.imagen {
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+}
+
+.info {
+  text-align: center;
+}
+
+.nombre {
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin: 0.5rem 0;
+  color: var(--color-negro);
+}
+
+.precio {
+  margin-bottom: 0.5rem;
+  color: rgb(80, 80, 80); 
+}
+
+.boton {
+  background-color: var(--color-azul-oscuro); 
+  color: var(--color-blanco); 
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.boton:hover {
+  background-color: var(--color-azul-claro); 
+  color: var(--color-blanco);
+}
+
+.sinStock {
+  color: red; 
+  font-weight: bold;
+}

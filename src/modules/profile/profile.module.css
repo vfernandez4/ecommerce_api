@@ -1,6 +1,4 @@
 .body {
-    background-color: lightblue;
-    font-family: sans-serif;
     padding: 5%;
 }
 
@@ -14,8 +12,7 @@
 }
 
 .profile_img {
-    width: 200px;
-    height: 200px;
+    width: 300px;
     padding-left: 100px;
 }
 
