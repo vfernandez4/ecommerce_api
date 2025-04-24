@@ -10,6 +10,7 @@ import Login from './modules/login/Login';
 import Registro from './modules/registro/Registro';
 import Profile from './modules/profile/Profile';
 import Pago from './modules/pago/Pago';
+import Vender from './modules/vender/Vender';
 
 function App() {
 	return (
@@ -25,6 +26,7 @@ function App() {
 						<Route path="/registro" element={<Registro />} />
 						<Route path="/profile" element={<Profile />} />
 						<Route path="/pago" element={<Pago />} />
+						<Route path="/vender" element={<Vender />} />
 					</Routes>
 				</main>
 				<Footer />
