@@ -1,0 +1,87 @@
+.home {
+	display: flex;
+	flex-direction: column;
+	gap: 2rem;
+	padding: 1rem;
+}
+
+.banner {
+	background-color: var(--color-acento);
+	color: var(--color-azul-oscuro);
+	text-align: center;
+	padding: 1rem;
+	border-radius: 8px;
+	font-weight: 600;
+	font-size: 25px;
+}
+
+.productosDestacadosSection {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+.tituloSeccionDestacados {
+	font-size: 1.75rem;
+	text-align: center;
+	margin-bottom: 1rem;
+}
+
+.grillaDestacados {
+	display: flex;
+	flex-direction: row;
+	align-items: flex-start;
+	grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+	gap: 1rem;
+	margin-bottom: 1.5rem;
+}
+
+.card {
+	background-color: var(--color-fondo);
+	border: 1px solid var(--color-azul-claro);
+	border-radius: 8px;
+	padding: 0.75rem;
+	text-align: center;
+	transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+}
+
+.card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.cardImg {
+	width: 180px;
+	height: 180px;    
+	object-fit: cover;   
+	border-radius: 4px;
+	margin-bottom: 0.5rem;
+}
+
+.cardTitulo {
+	font-size: 1rem;
+	margin: 0.5rem 0;
+	color: var(--color-azul-oscuro);
+}
+
+.cardPrecio {
+	font-size: 0.9rem;
+	color: var(--color-texto);
+}
+
+.botonVerTodos {
+	display: inline-block;
+	margin: 0 auto;
+	background-color: var(--color-azul-oscuro);
+	color: var(--color-blanco);
+	padding: 0.75rem 1.5rem;
+	border-radius: 999px;
+	text-decoration: none;
+	font-weight: 600;
+	transition: background-color 0.2s ease;
+}
+
+.viewAllBtn:hover {
+	background-color: var(--color-acento);
+	color: var(--color-azul-oscuro);
+}

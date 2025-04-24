@@ -2,25 +2,7 @@ import React from "react";
 import styles from "./profile.module.css";
 import Profile_img from "../../assets/imagenPerfil/perfil.png";
 import HistoryCard from "./components/HistoryCard";
-import iPhone from "../../assets/imagenesProductos/iphone14pro.jpg";
-import macbook from "../../assets/imagenesProductos/macbookAirM2.jpg";
-
-const productosVendidos = [
-  {
-    id: 1,
-    nombre: "iPhone 14 Pro",
-    precio: 1399999,
-    fecha: "01/03/2024",
-    imagen: iPhone
-  },
-  {
-    id: 2,
-    nombre: "MacBook Air M2",
-    precio: 2399999,
-    fecha: "15/02/2024",
-    imagen: macbook
-  }
-];
+import productos from "../../data/productos.json";
 
 const Profile = () => {
   return (
@@ -55,7 +37,7 @@ const Profile = () => {
         <section className={styles["history"]}>
           <div className={styles["child_history"]}>
             <h2>Historial de compras</h2>
-            {productosVendidos.map((producto) => (
+            {productos.map((producto) => (
               <HistoryCard
                 key={producto.id}
                 nombre={producto.nombre}
@@ -67,7 +49,7 @@ const Profile = () => {
           </div>
           <div className={styles["child_history"]}>
             <h2>Historial de ventas</h2>
-            {productosVendidos.map((producto) => (
+            {productos.map((producto) => (
               <HistoryCard
                 key={producto.id}
                 nombre={producto.nombre}
