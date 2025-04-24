@@ -15,7 +15,7 @@ body {
 }
 
 .registro-welcome {
-  background-color: #86c9eb;
+  background-color: #3b82f6;
   color: white;
   display: flex;
   flex-direction: column;
@@ -81,7 +81,7 @@ form button {
   margin: 0 auto;
   width: 100%;
   padding: 10px;
-  background-color: #86c9eb;
+  background-color: #172f74;
   color: white;
   border: none;
   border-radius: 5px;
@@ -92,5 +92,5 @@ form button {
 }
 
 form button:hover {
-  background-color: #86c9eb;
+  background-color: #3b82f6; 
 }
