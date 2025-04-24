@@ -7,8 +7,8 @@ const RegistroForm = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const navigate = useNavigate(); // Hook para redirigir
-  const location = useLocation(); // Hook para obtener la ubicación actual
+  const navigate = useNavigate(); 
+  const location = useLocation(); 
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -43,15 +43,13 @@ const RegistroForm = () => {
     }
     setError("");
 
-    // Guardar la información del usuario en localStorage
     const userData = { name, email, password };
     localStorage.setItem("registeredUser", JSON.stringify(userData));
 
     setSuccess(true);
 
-    // Redirigir a la página previa o a la principal
     const redirectTo = location.state?.from?.pathname || "/";
-    setTimeout(() => navigate(redirectTo), 2000); // Redirige después de 2 segundos
+    setTimeout(() => navigate(redirectTo), 2000); 
   };
 
   return (
