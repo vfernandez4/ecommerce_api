@@ -50,7 +50,7 @@ const LoginForm = ({ onSubmit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <label>
-        Correo Electrónico:
+        Correo electrónico:
         <input
           type="text"
           name="email"
@@ -71,9 +71,12 @@ const LoginForm = ({ onSubmit }) => {
       <br />
       {error && <p style={{ color: "red" }}>{error}</p>}
       <button type="submit">Ingresar</button>
-      <button type="button" onClick={handleRegisterRedirect}>
-        Registrarse
-      </button>
+      <p>
+        ¿Todavía no tienes cuenta?{" "}
+        <a href="/registro" style={{ color: "blue", textDecoration: "underline" }}>
+          Sign Up
+        </a>
+      </p>
     </form>
   );
 };

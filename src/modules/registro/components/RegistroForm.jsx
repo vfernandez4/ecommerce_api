@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 
 const RegistroForm = () => {
+  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,8 +20,17 @@ const RegistroForm = () => {
     return passwordRegex.test(password);
   };
 
+  const validateName = (name) => {
+    const nameRegex = /^[A-Za-z\s]{1,30}$/;
+    return nameRegex.test(name);
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+    if (!validateName(name)) {
+      setError("Ingrese un nombre válido.");
+      return;
+    }
     if (!validateEmail(email)) {
       setError("Por favor, ingresa un correo electrónico válido.");
       return;
@@ -34,18 +44,28 @@ const RegistroForm = () => {
     setError("");
 
     // Guardar la información del usuario en localStorage
-    const userData = { email, password };
+    const userData = { name, email, password };
     localStorage.setItem("registeredUser", JSON.stringify(userData));
 
     setSuccess(true);
 
-    // Redirigir a la página previa o a la página principal si no hay una previa
+    // Redirigir a la página previa o a la principal
     const redirectTo = location.state?.from?.pathname || "/";
     setTimeout(() => navigate(redirectTo), 2000); // Redirige después de 2 segundos
   };
 
   return (
     <form onSubmit={handleSubmit}>
+      <label>
+        Nombre completo:
+        <input
+          type="text"
+          name="name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      </label>
+      <br />
       <label>
         Correo Electrónico:
         <input
@@ -69,6 +89,12 @@ const RegistroForm = () => {
       {error && <p style={{ color: "red" }}>{error}</p>}
       {success && <p style={{ color: "green" }}>Registro exitoso. Redirigiendo...</p>}
       <button type="submit">Registrarse</button>
+      <p>
+        ¿Ya tienes cuenta?{" "}
+        <a href="/login" style={{ color: "blue", textDecoration: "underline" }}>
+          Sign In
+        </a>
+      </p>
     </form>
   );
 };
