@@ -1,34 +1,30 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./carrito.module.css";
-import productosData from "../../data/productos.json";
 
 export default function Carrito() {
-	const productos = productosData.slice(0, 4);
-
 	const [cartItems, setCartItems] = useState([
 		{
 			id: 1,
 			nombre: "iPhone 14 Pro",
 			precio: 1399000,
-			imagen: "/assets/images/iphone14.jpg",
+			imagen: "/assets/images/iphone14pro.jpg",
 			cantidad: 1,
 		},
 		{
 			id: 2,
 			nombre: "Samsung Galaxy S23",
 			precio: 1199000,
-			imagen: "/assets/images/galaxyS23.jpg",
+			imagen: "/assets/images/samsungGalaxyS23.jpg",
 			cantidad: 2,
 		},
 	]);
 
-	function cambiarCantidades(id, delta) {
+	function cambiarCantidades(id, masOMenos) {
 		setCartItems(items =>
 			items.map(item => {
 				if (item.id !== id) return item;
-
-				const nuevaCantidad = Math.max(1, item.cantidad + delta);
+				const nuevaCantidad = Math.max(1, item.cantidad + masOMenos);
 				return { ...item, cantidad: nuevaCantidad };
 			})
 		);
