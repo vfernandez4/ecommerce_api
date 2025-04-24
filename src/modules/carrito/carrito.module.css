@@ -1,0 +1,106 @@
+.contenedor {
+	max-width: 1000px;
+	margin: 2rem auto;
+	padding: 0 1rem;
+}
+
+.titulo {
+	text-align: center;
+	margin-bottom: 1.5rem;
+	color: var(--color-azul-oscuro);
+}
+
+.listaCarrito {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.cartItem {
+	display: flex;
+	gap: 1rem;
+	background-color: var(--color-blanco);
+	border: 1px solid var(--color-azul-claro);
+	border-radius: 8px;
+	padding: 1rem;
+	margin-bottom: 1rem;
+	align-items: center;
+}
+
+.image {
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+	border-radius: 4px;
+}
+
+.infoItem {
+	flex: 1;
+}
+
+.name {
+	margin: 0 0 0.5rem 0;
+}
+
+.precio,
+.subtotal {
+	margin: 0.25rem 0;
+	color: var(--color-negro);
+}
+
+.cantidadesControles {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	margin: 0.5rem 0;
+}
+
+.cantidadesControles button {
+	width: 30px;
+	height: 30px;
+	border: 1px solid var(--color-azul-claro);
+	background: none;
+	cursor: pointer;
+	font-size: 1.25rem;
+	line-height: 1;
+}
+
+.eliminar {
+	margin-top: 0.5rem;
+	background-color: #e74c3c;
+	color: var(--color-blanco);
+	border: none;
+	padding: 0.5rem 1rem;
+	border-radius: 4px;
+	cursor: pointer;
+}
+
+.total {
+	text-align: right;
+	margin-top: 2rem;
+}
+
+.botonPagar {
+	display: inline-block;
+	background-color: var(--color-azul-oscuro);
+	color: var(--color-blanco);
+	padding: 0.75rem 1.5rem;
+	border-radius: 999px;
+	text-decoration: none;
+	font-weight: 600;
+	transition: background-color 0.2s ease;
+}
+
+.botonPagar:hover {
+	background-color: var(--color-acento);
+}
+
+.mensajeVacio {
+	text-align: center;
+	color: var(--color-negro);
+}
+
+.link {
+	color: var(--color-azul-claro);
+	text-decoration: underline;
+}

@@ -11,6 +11,7 @@ import Registro from './modules/registro/Registro';
 import Profile from './modules/profile/Profile';
 import Pago from './modules/pago/Pago';
 import Vender from './modules/vender/Vender';
+import ProductoDetalle from './modules/productoDetalle/ProductoDetalle';
 
 function App() {
 	return (
@@ -27,6 +28,7 @@ function App() {
 						<Route path="/profile" element={<Profile />} />
 						<Route path="/pago" element={<Pago />} />
 						<Route path="/vender" element={<Vender />} />
+						<Route path="/producto/:id" element={<ProductoDetalle />} />
 					</Routes>
 				</main>
 				<Footer />
