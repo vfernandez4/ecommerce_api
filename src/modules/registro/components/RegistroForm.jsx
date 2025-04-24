@@ -5,6 +5,7 @@ const RegistroForm = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState(""); 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const navigate = useNavigate(); 
@@ -39,6 +40,10 @@ const RegistroForm = () => {
       setError(
         "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un carácter especial."
       );
+      return;
+    }
+    if (password !== confirmPassword) {
+      setError("Las contraseñas no coinciden.");
       return;
     }
     setError("");
@@ -81,6 +86,16 @@ const RegistroForm = () => {
           name="password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+        />
+      </label>
+      <br />
+      <label>
+        Confirmar Contraseña:
+        <input
+          type="password"
+          name="confirmPassword"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
         />
       </label>
       <br />
