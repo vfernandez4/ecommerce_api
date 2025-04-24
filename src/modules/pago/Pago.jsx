@@ -1,0 +1,122 @@
+import { useState } from "react";
+import styles from "./pago.module.css";
+
+const Pago = () => {
+  const [calle, setCalle] = useState("");
+  const [numero, setNumero] = useState("");
+  const [piso, setPiso] = useState("");
+  const [depto, setDepto] = useState("");
+  const [codigoPostal, setCodigoPostal] = useState("");
+
+  const [metodoPago, setMetodoPago] = useState("");
+
+  const [numeroTarjeta, setNumeroTarjeta] = useState("");
+  const [fechaVencimiento, setFechaVencimiento] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [nombreTarjeta, setNombreTarjeta] = useState("");
+
+  return (
+    <div className={styles["body"]}>
+      <div className={styles["page-container"]}>
+        <div className={styles["purchase-details"]}>
+          <h3 className={styles["title"]}>Direccion de entrega</h3>
+          <form className={styles["forms"]} action="">
+            <section>
+            <label>Calle</label>
+            <br />
+            <input type="text" value={calle} onChange={(e) => setCalle(e.target.value)} />
+            </section>
+            
+            <section>
+            <label>Numero</label>
+            <br />
+            <input type="number" value={numero} onChange={(e) => setNumero(e.target.value)} />
+            </section>
+            
+            <section>
+            <label>Piso</label>
+            <br />
+            <input type="number" value={piso} onChange={(e) => setPiso(e.target.value)} />
+            </section>
+            
+            <section>
+            <label>Dpto</label>
+            <br />
+            <input type="" value={depto} onChange={(e) => setDepto(e.target.value)} />
+            </section>
+
+            <section>
+            <label>Codigo Postal</label>
+            <br />
+            <input type="number" value={codigoPostal} onChange={(e) => setCodigoPostal(e.target.value)} />
+            </section>
+          </form>
+
+          <hr />
+
+          <h3 className={styles["title"]}>Forma de pago</h3>
+
+          <label>
+            <input type="radio" name="metodoPago" value="credito" checked={metodoPago === "credito"} onChange={(e) => setMetodoPago(e.target.value)} />
+            Tarjeta de crédito
+          </label>
+
+          <br />
+
+          <label>
+            <input type="radio" name="metodoPago" value="debito" checked={metodoPago === "debito"} onChange={(e) => setMetodoPago(e.target.value)} />
+            Tarjeta de débito
+          </label>
+
+          <form className={styles["forms"]} action="">
+            <section>
+            <label>Numero</label>
+            <br />
+            <input type="number" value={numeroTarjeta} onChange={(e) => setNumeroTarjeta(e.target.value)} />
+            </section>
+
+            <section>
+            <label>Fecha de vencimiento</label>
+            <br />
+            <input type="date" value={fechaVencimiento} onChange={(e) => setFechaVencimiento(e.target.value)} />
+            </section>
+
+            <section>
+            <label>CVV</label>
+            <br />
+            <input type="number" value={cvv} onChange={(e) => setCvv(e.target.value)} />
+            </section>
+
+            <section>
+            <label>Nombre en la tarjeta</label>
+            <br />
+            <input type="text" value={nombreTarjeta} onChange={(e) => setNombreTarjeta(e.target.value)} />
+            </section>
+          </form>
+        </div>
+
+        <aside className={styles["buy-resume"]}>
+          <h3 className={styles["title"]}>Resumen de compra</h3>
+          <hr />
+          <section className={styles["buy_details"]}>
+            <p className={styles["detail"]}>Producto</p>
+            <p className={styles["price"]}>$20.000</p>
+          </section>
+          <section className={styles["buy_details"]}>
+          <p className={styles["detail"]}>Envio</p>
+          <p className={styles["price"]}>$2.000</p>
+          </section>
+          <hr />
+          <section className={styles["buy_details"]}>
+          <p className={styles["detail"]}>Total</p>
+            <p className={styles["price"]}>$22.000</p>
+          </section>
+
+          <button className={styles["buy_button"]}>Confirmar compra</button>
+        </aside>
+      </div>
+    </div>
+  );
+};
+
+export default Pago;
