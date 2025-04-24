@@ -13,9 +13,26 @@
 	box-sizing: border-box;
 }
 
+html,
+body {
+	height: 100%;
+	margin: 0;
+}
+
 body {
 	background-color: var(--color-fondo);
 	line-height: 1.6;
+	min-width: 320px;
+}
+
+.appContainer {
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+}
+
+.mainGenerico {
+	flex: 1;
 }
 
 a {

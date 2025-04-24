@@ -1,0 +1,15 @@
+.history_card {
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 15px;
+}
+
+.profile_img {
+    height: 150px;
+    width: 150px;
+    object-fit: cover;
+}
+
+.history_card_info {
+    margin-left: 30px;
+}
