@@ -5,7 +5,7 @@
 		"categoria": "smartphones",
 		"precio": 1399000,
 		"descripcion": "Pantalla Super Retina XDR",
-		"imagen": "./assets/images/iphone14pro.jpg",
+		"imagen": "/assets/images/iphone14pro.jpg",
 		"stock": 5
 	},
 	{
@@ -77,7 +77,7 @@
 		"categoria": "smartphones",
 		"precio": 1399000,
 		"descripcion": "Pantalla Super Retina XDR",
-		"imagen": "./assets/images/xiaomiRedmiNote14Pro.png",
+		"imagen": "/assets/images/xiaomiRedmiNote14Pro.png",
 		"stock": 5
 	},
 	{

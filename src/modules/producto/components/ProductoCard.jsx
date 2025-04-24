@@ -1,5 +1,6 @@
 import React from "react";
 import styles from "./productoCard.module.css";
+import { Link } from "react-router-dom";
 
 const ProductoCard = ({ producto }) => {
   const { nombre, precio, imagen, stock } = producto;
@@ -12,10 +13,13 @@ const ProductoCard = ({ producto }) => {
         <p className={styles.precio}>Precio: ${precio}</p>
 
         {stock > 0 ? (
-          <button className={styles.boton}>Ver detalle</button>
+          <Link to={`/producto/${producto.id}`} className={styles.boton}>
+            Ver detalle
+          </Link>
         ) : (
           <p className={styles.sinStock}>Sin stock</p>
-        )}
+)}
+
       </div>
     </div>
   );
