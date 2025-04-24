@@ -5,7 +5,6 @@ body{
 .login-container {
   display: flex;
   height: 100vh;
-  background-color: #f5f5f5;
 }
 
 .login-welcome,
@@ -15,7 +14,7 @@ body{
 }
 
 .login-welcome {
-  background-color: #86c9eb;
+  background-color: #172f74;
   color: white;
   display: flex;
   flex-direction: column;
@@ -36,8 +35,6 @@ body{
 }
 
 .login-welcome .login-button {
-  background-color: white;
-  color: #86c9eb;
   border: none;
   padding: 10px 20px;
   font-size: 1rem;
@@ -51,7 +48,7 @@ body{
 }
 
 .login-form-container {
-  background-color: white;
+  background-color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,17 +78,16 @@ form button {
   margin: 0 auto;
   width: 108%;
   padding: 10px;
-  background-color: #86c9eb;
+  background-color: #172f74;
   color: white;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
   margin-bottom: 15px;
 }
 
 form button:hover {
-  background-color: #86c9eb;
+  background-color: #3b82f6; 
 }
 

@@ -1,7 +1,7 @@
 import React from "react";
 import LoginForm from "./components/LoginForm";
 import LoginHeader from "./components/LoginHeader";
-import styles from "./login.module.css"; // Importa correctamente el archivo CSS
+import styles from "./login.module.css"; 
 
 const Login = () => {
   const handleLogin = (formData) => {
