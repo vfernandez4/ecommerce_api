@@ -11,15 +11,9 @@ const ProductoCard = ({ producto }) => {
       <div className={styles.info}>
         <h3 className={styles.nombre}>{nombre}</h3>
         <p className={styles.precio}>Precio: ${precio}</p>
-
-        {stock > 0 ? (
           <Link to={`/producto/${producto.id}`} className={styles.boton}>
             Ver detalle
           </Link>
-        ) : (
-          <p className={styles.sinStock}>Sin stock</p>
-)}
-
       </div>
     </div>
   );
