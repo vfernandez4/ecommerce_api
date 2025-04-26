@@ -1,7 +1,8 @@
 .grid {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 1.5rem;
-  width: 100%;
+  justify-items: center;
+  align-items: stretch; /* Estira verticalmente */
+  text-align: center;
 }
