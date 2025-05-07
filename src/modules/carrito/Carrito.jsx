@@ -10,6 +10,11 @@ export default function Carrito() {
 	  
 
 	function cambiarCantidades(id, masOMenos) {
+		modificarVista(id, masOMenos);
+		modificarJson(id, masOMenos);
+	}
+
+	function modificarVista(id, masOMenos) {
 		setCartItems(items =>
 			items.map(item => {
 				if (item.id !== id) return item;
@@ -17,6 +22,21 @@ export default function Carrito() {
 				return { ...item, cantidad: nuevaCantidad };
 			})
 		);
+	}
+
+	function modificarJson(id, masOMenos) {
+		const carritoGuardado = localStorage.getItem("carrito");
+		const carrito = carritoGuardado ? JSON.parse(carritoGuardado) : [];
+
+		const item = carrito.find((producto) => producto.id === id);
+		const nuevaCantidad = Math.max(1, item.cantidad + masOMenos);
+
+		const carritoActualizado = carrito.map((producto) =>
+			producto.id === id
+				? { ...producto, cantidad: nuevaCantidad }
+				: producto
+		);
+		localStorage.setItem("carrito", JSON.stringify(carritoActualizado));
 	}
 
 	const eliminar = (id) => {
@@ -48,7 +68,7 @@ export default function Carrito() {
 									<p className={styles.precio}> Precio unitario: ${item.precio.toLocaleString()} </p>
 
 									<div className={styles.cantidadesControles}>
-										<button onClick={() => cambiarCantidades(item.id, -1)} > – </button>
+										<button onClick={() => cambiarCantidades(item.id, -1)}> – </button>
 										<span>{item.cantidad}</span>
 										<button onClick={() => cambiarCantidades(item.id, +1)} > + </button>
 									</div>
