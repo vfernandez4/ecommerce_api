@@ -3,22 +3,11 @@ import { Link } from "react-router-dom";
 import styles from "./carrito.module.css";
 
 export default function Carrito() {
-	const [cartItems, setCartItems] = useState([
-		{
-			id: 1,
-			nombre: "iPhone 14 Pro",
-			precio: 1399000,
-			imagen: "/assets/images/iphone14pro.jpg",
-			cantidad: 1,
-		},
-		{
-			id: 2,
-			nombre: "Samsung Galaxy S23",
-			precio: 1199000,
-			imagen: "/assets/images/samsungGalaxyS23.jpg",
-			cantidad: 2,
-		},
-	]);
+	const [cartItems, setCartItems] = useState(() => {
+		const carritoGuardado = localStorage.getItem("carrito");
+		return carritoGuardado ? JSON.parse(carritoGuardado) : [];
+	  });
+	  
 
 	function cambiarCantidades(id, masOMenos) {
 		setCartItems(items =>
