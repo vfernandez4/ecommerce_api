@@ -15,6 +15,23 @@ const Pago = () => {
   const [cvv, setCvv] = useState("");
   const [nombreTarjeta, setNombreTarjeta] = useState("");
 
+  const [cartItems, setCartItems] = useState(() => {
+    const carritoGuardado = localStorage.getItem("carrito");
+    return carritoGuardado ? JSON.parse(carritoGuardado) : [];
+  });
+
+  function calcularTotal(items) {
+		let total = 0;
+		items.forEach(item => {
+			total += item.precio * item.cantidad;
+		});
+		return total;
+	}
+	const total = calcularTotal(cartItems);
+
+  const envio = 7000;
+  const totalConEnvio = total + envio;
+
   return (
     <div className={styles["body"]}>
       <div className={styles["page-container"]}>
@@ -100,16 +117,16 @@ const Pago = () => {
           <hr />
           <section className={styles["buy_details"]}>
             <p className={styles["detail"]}>Producto</p>
-            <p className={styles["price"]}>$20.000</p>
+            <p className={styles["price"]}>${total.toLocaleString()}</p>
           </section>
           <section className={styles["buy_details"]}>
           <p className={styles["detail"]}>Envio</p>
-          <p className={styles["price"]}>$2.000</p>
+          <p className={styles["price"]}>${envio.toLocaleString()}</p>
           </section>
           <hr />
           <section className={styles["buy_details"]}>
           <p className={styles["detail"]}>Total</p>
-            <p className={styles["price"]}>$22.000</p>
+            <p className={styles["price"]}>${totalConEnvio.toLocaleString()}</p>
           </section>
 
           <button className={styles["buy_button"]}>Confirmar compra</button>

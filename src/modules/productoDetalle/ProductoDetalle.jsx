@@ -9,6 +9,27 @@ const ProductoDetalle = () => {
 
   if (!producto) return <p>Producto no encontrado</p>;
 
+  const agregarAlCarrito = () => {
+    const carritoGuardado = localStorage.getItem("carrito");
+    const carrito = carritoGuardado ? JSON.parse(carritoGuardado) : [];
+
+    const productoExistente = carrito.find((item) => item.id === producto.id);
+
+    if (productoExistente) {
+      const carritoActualizado = carrito.map((item) =>
+        item.id === producto.id
+          ? { ...item, cantidad: item.cantidad + 1 }
+          : item
+      );
+      localStorage.setItem("carrito", JSON.stringify(carritoActualizado));
+    } else {
+      const nuevoProducto = { ...producto, cantidad: 1 };
+      localStorage.setItem("carrito", JSON.stringify([...carrito, nuevoProducto]));
+    }
+
+    alert("Producto agregado al carrito");
+  };
+
   return (
     <div className={styles.contenedor}>
       <div className={styles.card}>
@@ -18,7 +39,9 @@ const ProductoDetalle = () => {
           <p className={styles.descripcion}>{producto.descripcion}</p>
           <p className={styles.precio}>Precio: ${producto.precio}</p>
           {producto.stock > 0 ? (
-            <button className={styles.boton}>Agregar al carrito</button>
+            <button className={styles.boton} onClick={agregarAlCarrito}>
+              Agregar al carrito
+            </button>
           ) : (
             <p className={styles.sinStock}>Sin stock</p>
           )}
