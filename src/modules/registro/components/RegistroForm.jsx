@@ -187,7 +187,7 @@ const RegistroForm = () => {
       <button type="submit">Registrarse</button>
       <p>
         ¿Ya tienes cuenta?{" "}
-        <a href="/login" style={{ color: "blue", textDecoration: "underline" }}>
+        <a href="/login" style={{ color: "#5c9aff", textDecoration: "underline" }}>
           Sign In
         </a>
       </p>

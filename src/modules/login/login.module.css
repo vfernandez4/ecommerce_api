@@ -14,7 +14,7 @@ body{
 }
 
 .login-welcome {
-  background-color: #3b82f6;
+  background-color: #5c9aff;
   color: white;
   display: flex;
   flex-direction: column;
@@ -88,6 +88,6 @@ form button {
 }
 
 form button:hover {
-  background-color: #3b82f6; 
+  background-color: #5c9aff; 
 }
 
