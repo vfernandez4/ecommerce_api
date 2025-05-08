@@ -1,7 +1,7 @@
 {
   "productos": [
     {
-      "id": 1,
+      "id": "1",
       "nombre": "IPhone 14 Pro",
       "categoria": "smartphones",
       "precio": 1399000,
@@ -10,7 +10,7 @@
       "stock": 5
     },
     {
-      "id": 2,
+      "id": "2",
       "nombre": "Samsung Galaxy S23",
       "categoria": "smartphones",
       "precio": 1199000,
@@ -19,7 +19,7 @@
       "stock": 5
     },
     {
-      "id": 3,
+      "id": "3",
       "nombre": "MacBook Air M2",
       "categoria": "computadoras",
       "precio": 1599000,
@@ -28,7 +28,7 @@
       "stock": 5
     },
     {
-      "id": 4,
+      "id": "4",
       "nombre": "Lenovo IdeaPad 3",
       "categoria": "computadoras",
       "precio": 799000,
@@ -37,7 +37,7 @@
       "stock": 5
     },
     {
-      "id": 5,
+      "id": "5",
       "nombre": "JBL Flip 6",
       "categoria": "audio",
       "precio": 149000,
@@ -46,7 +46,7 @@
       "stock": 5
     },
     {
-      "id": 6,
+      "id": "6",
       "nombre": "Sony Home Theater HT-S20R",
       "categoria": "audio",
       "precio": 299000,
@@ -55,7 +55,7 @@
       "stock": 0
     },
     {
-      "id": 7,
+      "id": "7",
       "nombre": "Cargador USB-C 20W Apple",
       "categoria": "accesorios",
       "precio": 29000,
@@ -64,7 +64,7 @@
       "stock": 5
     },
     {
-      "id": 8,
+      "id": "8",
       "nombre": "Auriculares Xiaomi Redmi Buds 4",
       "categoria": "accesorios",
       "precio": 59000,
@@ -73,7 +73,7 @@
       "stock": 5
     },
     {
-      "id": 9,
+      "id": "9",
       "nombre": "Xiaomi Redmi Note 14 Pro",
       "categoria": "smartphones",
       "precio": 1399000,
@@ -82,7 +82,7 @@
       "stock": 5
     },
     {
-      "id": 10,
+      "id": "10",
       "nombre": "Dell Inspiron 14 Plus",
       "categoria": "computadoras",
       "precio": 1599000,
@@ -91,7 +91,7 @@
       "stock": 5
     },
     {
-      "id": 11,
+      "id": "11",
       "nombre": "Marshall Emberton Bluetooth",
       "categoria": "audio",
       "precio": 149000,
@@ -100,26 +100,18 @@
       "stock": 0
     },
     {
-      "id": 12,
+      "id": "12",
       "nombre": "Headphones JBL T450BT",
       "categoria": "accesorios",
       "precio": 29000,
       "descripcion": "Carga rápida para iPhone y iPad",
       "imagen": "/producto/jblT45.jpg",
       "stock": 0
-    },
-    {
-      "id": "7ec3",
-      "nombre": "productoTest",
-      "categoria": "smartphones",
-      "precio": "999999",
-      "descripcion": "descripcion test producto test",
-      "stock": 1
     }
   ],
   "usuarios": [
     {
-      "id": 1,
+      "id": "1",
       "nombreCompleto": "María González",
       "direccion": "Av. Corrientes 123",
       "telefono": "1598765432",
@@ -137,7 +129,7 @@
       ]
     },
     {
-      "id": 2,
+      "id": "2",
       "nombreCompleto": "Juan Pérez",
       "direccion": "Av. Cabildo 123",
       "telefono": "1512345678",
@@ -159,6 +151,17 @@
       "email": "katerinacejas@gmail.com",
       "fechaNacimiento": "1999-09-03",
       "avatar": "/avatar/avatar2.png",
+      "productosComprados": [],
+      "productosVendidos": []
+    },
+    {
+      "id": "792a",
+      "nombreCompleto": "Juan Ignacio Santoro",
+      "direccion": "Ayres de Pilar",
+      "telefono": "1122633581",
+      "email": "nacho.santoro2002@gmail.com",
+      "fechaNacimiento": "2002-11-05",
+      "avatar": "/avatar/avatar1.png",
       "productosComprados": [],
       "productosVendidos": []
     }

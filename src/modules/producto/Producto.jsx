@@ -25,9 +25,10 @@ const Producto = () => {
     categorias[producto.categoria].push(producto);
   });
 
-  const categoriasAMostrar = categoria
-    ? { [categoria]: categorias[categoria] }
-    : categorias;
+  const categoriasAMostrar = categoria && categorias[categoria]
+  ? { [categoria]: categorias[categoria] }
+  : categorias;
+
 
   return (
     <div className={styles.catalogo}>
