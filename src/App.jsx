@@ -29,6 +29,7 @@ function App() {
 						<Route path="/pago" element={<Pago />} />
 						<Route path="/vender" element={<Vender />} />
 						<Route path="/producto/:id" element={<ProductoDetalle />} />
+						<Route path="/producto/categoria/:categoria" element={<Producto />} />
 					</Routes>
 				</main>
 				<Footer />

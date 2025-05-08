@@ -24,7 +24,7 @@
 .categoriaTitulo {
   font-size: 1.5rem;
   margin-bottom: 1rem;
-  border-bottom: 2px solid var(--color-negro); 
+  border-bottom: 2px solid rgb(118, 118, 118); 
   padding-bottom: 0.5rem;
   color: var(--color-negro); 
   text-align: left;
