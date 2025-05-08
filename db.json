@@ -107,6 +107,14 @@
       "descripcion": "Carga rápida para iPhone y iPad",
       "imagen": "/producto/jblT45.jpg",
       "stock": 0
+    },
+    {
+      "id": "7ec3",
+      "nombre": "productoTest",
+      "categoria": "smartphones",
+      "precio": "999999",
+      "descripcion": "descripcion test producto test",
+      "stock": 1
     }
   ],
   "usuarios": [
@@ -119,10 +127,13 @@
       "fechaNacimiento": "1985-07-24",
       "avatar": "/avatar/avatar1.png",
       "productosComprados": [
-        4, 5
+        4,
+        5
       ],
       "productosVendidos": [
-        11, 9, 10
+        11,
+        9,
+        10
       ]
     },
     {
