@@ -26,7 +26,28 @@ export default function Vender() {
 	const captarDescripcion = (e) => {
 		setDescripcion(e.target.value);
 	};
-	const handleSubmit = (e) => {
+	const handleSubmit = async (e) => {
+		const productoAVender = {
+			nombre,
+			categoria,
+			precio,
+			descripcion,
+			stock: 1
+		};
+
+		console.log(productoAVender);
+
+		try {
+			const res = await fetch("http://localhost:4000/productos", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(productoAVender),
+			});
+			if (!res.ok) throw new Error("Error al publicar un producto");
+		} catch (err) {
+			console.error(err);
+			setError("No se pudo conectar con el servidor.");
+		}
 		setNombre("");
 		setCategoria("");
 		setPrecio(0);

@@ -32,7 +32,7 @@ const LoginForm = ({ onSubmit }) => {
     }
     setError("");
 
-    const userData = { email, password };
+    const userData = { email };
     localStorage.setItem("user", JSON.stringify(userData));
 
     onSubmit(userData); 
