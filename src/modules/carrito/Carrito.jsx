@@ -40,8 +40,11 @@ export default function Carrito() {
 	}
 
 	const eliminar = (id) => {
-		return;
+		const nuevoCarrito = cartItems.filter(item => item.id !== id);
+		setCartItems(nuevoCarrito);
+		localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
 	};
+	
 
 	function calcularTotal(items) {
 		let total = 0;
@@ -89,7 +92,7 @@ export default function Carrito() {
 			) : (
 				<>
 					<p className={styles.mensajeVacio}> Aún no has añadido ningún producto{" "} </p>
-					<Link to="/productos" className={styles.link}> Ver productos </Link>
+					<Link to="/producto" className={styles.link}> Ver productos </Link>
 				</>
 			)}
 		</div>

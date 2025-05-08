@@ -4,8 +4,8 @@ import styles from "./productoDetalle.module.css";
 
 const ProductoDetalle = () => {
   const { id } = useParams();
-  
   const [productos, setProductos] = useState([]);
+
   useEffect(() => {
     fetch("http://localhost:4000/productos")
       .then((res) => {
@@ -16,9 +16,11 @@ const ProductoDetalle = () => {
       .catch((err) => console.error(err));
   }, []);
 
-  const producto = productos.find((p) => p.id === parseInt(id));
+  const producto = productos.find((p) => p.id.toString() === id);
 
-  if (!producto) return <p>Producto no encontrado</p>;
+  if (!producto) {
+    return <p>Producto no encontrado</p>;
+  }
 
   const agregarAlCarrito = () => {
     const carritoGuardado = localStorage.getItem("carrito");
