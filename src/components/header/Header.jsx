@@ -38,9 +38,9 @@ function NavSinLog() {
 	return (
 		<ul className={`${styles.flex_horizontal} ${styles.margen_horizontal} ${styles.items_centro} ${styles.barrita_navegacion} ${styles.fondo_circular}`}>
 			<li><Link to="/producto">Todos Los Productos</Link></li>
-			<li><Link to="/producto/computadoras">Computadoras</Link></li>
-			<li><Link to="/producto/smartphones">Smartphones</Link></li>
-			<li><Link to="/producto/accesorios">Accesorios</Link></li>
+			<li><Link to="/producto/categoria/computadoras">Computadoras</Link></li>
+			<li><Link to="/producto/categoria/smartphones">Smartphones</Link></li>
+			<li><Link to="/producto/categoria/accesorios">Accesorios</Link></li>
 			<li><Link to="/registro">Registrarse</Link></li>
 			<li><Link to="/login">Iniciar Sesión</Link></li>
 		</ul>
