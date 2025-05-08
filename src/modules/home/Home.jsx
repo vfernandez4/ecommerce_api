@@ -1,10 +1,20 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import styles from "./home.module.css";
-import productosData from "../../data/productos.json";
 
 export default function Home() {
-	const productosDestacados = productosData.slice(0, 4);
+	const [productos, setProductos] = useState([]);
+	useEffect(() => {
+		fetch("http://localhost:4000/productos")
+			.then((res) => {
+				if (!res.ok) throw new Error("Error al cargar productos");
+				return res.json();
+			})
+			.then((data) => setProductos(data))
+			.catch((err) => console.error(err));
+	}, []);
+
+	const productosDestacados = productos.filter((p) => p.stock > 0).slice(0, 4);
 
 	return (
 		<div className={styles.home}>
