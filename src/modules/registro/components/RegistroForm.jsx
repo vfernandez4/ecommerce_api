@@ -57,9 +57,6 @@ const RegistroForm = () => {
     }
     setError("");
 
-    const userData = { email };
-    localStorage.setItem("registeredUser", JSON.stringify(userData));
-
     const usuarioARegistrar = {
       nombreCompleto: name,
       direccion,
