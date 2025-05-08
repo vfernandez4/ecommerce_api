@@ -119,11 +119,10 @@
       "fechaNacimiento": "1985-07-24",
       "avatar": "/avatar/avatar1.png",
       "productosComprados": [
-        1,
-        2
+        4, 5
       ],
       "productosVendidos": [
-        11
+        11, 9, 10
       ]
     },
     {

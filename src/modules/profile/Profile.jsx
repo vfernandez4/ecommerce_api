@@ -4,33 +4,58 @@ import HistoryCard from "./components/HistoryCard";
 
 const Profile = () => {
     const [usuarioData, setUsuarioData] = useState(null);
-    useEffect(() => {
-        const { email } = JSON.parse(localStorage.getItem("user"));
+    const [comprados, setComprados] = useState([]);
+    const [vendidos, setVendidos] = useState([]);
 
-        fetch(`http://localhost:4000/usuarios?email=${encodeURIComponent(email)}`)
-            .then((res) => {
-                if (!res.ok) throw new Error("Error al conectar con el servidor");
-                console.log(usuarioData);
-                return res.json();
-            })
-            .then((data) => {
-                setUsuarioData(data[0]);
-                if (data.length > 0) setUsuarioData(data[0]);
-            })
-            .catch((err) => console.error(err));
-    }, []);
+    useEffect(() => {
+        const cargarPerfil = async () => {
+          try {
+            const { email } = JSON.parse(localStorage.getItem("user"));
+      
+            const resU = await fetch(`http://localhost:4000/usuarios?email=${encodeURIComponent(email)}`);
+            if (!resU.ok) throw new Error("Error al conectar con usuarios");
+            const [user] = await resU.json();
+            setUsuarioData(user);
+      
+            const compradosTmp = [];
+            for (const id of user.productosComprados) {
+              const resP = await fetch(`http://localhost:4000/productos?id=${encodeURIComponent(id)}`);
+              if (!resP.ok) throw new Error(`No se pudo cargar producto ${id}`);
+              const arrayProductos = await resP.json();      // arr = [ {...} ]
+              const prod = arrayProductos[0];
+              compradosTmp.push(prod);
+            }
+            setComprados(compradosTmp);
+      
+            const vendidosTmp = [];
+            for (const id of user.productosVendidos) {
+              const resP = await fetch(`http://localhost:4000/productos?id=${encodeURIComponent(id)}`);
+              if (!resP.ok) throw new Error(`No se pudo cargar producto ${id}`);
+              const arrayProductos = await resP.json();
+              const prod = arrayProductos[0];
+              vendidosTmp.push(prod);
+            }
+            setVendidos(vendidosTmp);
+      
+          } catch (e) {
+            console.error(e);
+          } 
+        };
+      
+        cargarPerfil();
+      }, []);
+
     if (!usuarioData) {
         return <p className={styles.body}>Cargando perfil</p>;
     }
+
     const {
         nombreCompleto,
         direccion,
         telefono,
         email,
         fechaNacimiento,
-        avatar,
-        productosComprados,
-        productosVendidos,
+        avatar
     } = usuarioData;
 
     return (
@@ -65,7 +90,7 @@ const Profile = () => {
             <section className={styles["history"]}>
                 <div className={styles["child_history"]}>
                     <h2>Historial de compras</h2>
-                    {productosComprados.map((producto) => (
+                    {comprados.map((producto) => (
                         <HistoryCard
                             key={producto.id}
                             nombre={producto.nombre}
@@ -77,7 +102,7 @@ const Profile = () => {
                 </div>
                 <div className={styles["child_history"]}>
                     <h2>Historial de ventas</h2>
-                    {productosVendidos.map((producto) => (
+                    {vendidos.map((producto) => (
                         <HistoryCard
                             key={producto.id}
                             nombre={producto.nombre}
