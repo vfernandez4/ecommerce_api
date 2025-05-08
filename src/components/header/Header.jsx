@@ -1,6 +1,6 @@
 import React from "react";
 import styles from "./Header.module.css";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from "react-router-dom";
 
 function NavLogeado() {
 	return (
@@ -33,7 +33,8 @@ function NavSinLog() {
 }
 
 export default function Header() {
-	const estaLogeado = true //tengo que modificar esto para que la logica sea real. por ahora un bool
+	const location = useLocation();
+	const estaLogeado = Boolean(localStorage.getItem("user"));
 
 	return (
 		<header className={`${styles.encabezado} ${styles.display_flex} ${styles.items_centro}`}>

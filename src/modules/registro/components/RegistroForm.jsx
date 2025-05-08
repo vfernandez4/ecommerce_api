@@ -3,13 +3,22 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 const RegistroForm = () => {
   const [name, setName] = useState("");
+  const [direccion, setDireccion] = useState("");
+  const [telefono, setTelefono] = useState("");
+  const [fechaNacimiento, setFechaNacimiento] = useState("");
+  const [avatar, setAvatar] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); 
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
-  const navigate = useNavigate(); 
-  const location = useLocation(); 
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const opcionesDeAvatar = [
+    "/avatar/avatar1.png",
+    "/avatar/avatar2.png"
+  ];
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -26,7 +35,7 @@ const RegistroForm = () => {
     return nameRegex.test(name);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateName(name)) {
       setError("Ingrese un nombre válido.");
@@ -51,10 +60,36 @@ const RegistroForm = () => {
     const userData = { name, email, password };
     localStorage.setItem("registeredUser", JSON.stringify(userData));
 
-    setSuccess(true);
+    const usuarioARegistrar = {
+      nombreCompleto: name,
+      direccion,
+      telefono,
+      email,
+      fechaNacimiento,
+      avatar,
+      productosComprados: [],
+      productosVendidos: []
+    };
 
-    const redirectTo = location.state?.from?.pathname || "/";
-    setTimeout(() => navigate(redirectTo), 2000); 
+    console.log(usuarioARegistrar);
+
+    try {
+      const res = await fetch("http://localhost:4000/usuarios", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(usuarioARegistrar),
+      });
+      if (!res.ok) throw new Error("Error al resgistrar al usuario");
+
+      setSuccess(true);
+      const redirectTo = location.state?.from?.pathname || "/";
+      setTimeout(() => navigate(redirectTo), 2000);
+
+    } catch (err) {
+      console.error(err);
+      setError("No se pudo conectar con el servidor.");
+    }
+
   };
 
   return (
@@ -68,6 +103,57 @@ const RegistroForm = () => {
           onChange={(e) => setName(e.target.value)}
         />
       </label>
+      <br />
+      <label>
+        Dirección:
+        <input
+          type="text"
+          name="direccion"
+          value={direccion}
+          onChange={(e) => setDireccion(e.target.value)}
+        />
+      </label>
+      <br />
+      <label>
+        Telefono:
+        <input
+          type="text"
+          name="telefono"
+          value={telefono}
+          onChange={(e) => setTelefono(e.target.value)}
+        />
+      </label>
+      <br />
+      <label>
+        Fecha de nacimiento:
+        <input
+          type="date"
+          name="fechaNacimiento"
+          value={fechaNacimiento}
+          onChange={(e) => setFechaNacimiento(e.target.value)}
+        />
+      </label>
+      <br />
+      <div className="avatar-section">
+        <p className="section-title">Elige tu avatar:</p>
+        <div className="avatar-options">
+          {opcionesDeAvatar.map((avatarASeleccionar) => (
+            <label
+              key={avatarASeleccionar}
+              className={`avatar-option ${avatar === avatarASeleccionar ? "selected" : ""}`}
+            >
+              <img src={avatarASeleccionar} alt="avatar" width={60} height={60} />
+              <input
+                type="radio"
+                name="avatar"
+                value={avatarASeleccionar}
+                checked={avatar === avatarASeleccionar}
+                onChange={() => setAvatar(avatarASeleccionar)}
+              />
+            </label>
+          ))}
+        </div>
+      </div>
       <br />
       <label>
         Correo Electrónico:

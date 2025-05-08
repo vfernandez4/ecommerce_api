@@ -11,12 +11,11 @@ body {
 .registro-welcome,
 .registro-form-container {
   flex: 1;
-  width: 50%;
 }
 
 .registro-welcome {
   background-color: #3b82f6;
-  color: white;
+  color: #fff;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -36,14 +35,14 @@ body {
 }
 
 .registro-welcome .registro-button {
-  background-color: white;
+  background-color: #fff;
   color: #86c9eb;
   border: none;
   padding: 10px 20px;
   font-size: 1rem;
   border-radius: 20px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
 }
 
 .registro-welcome .registro-button:hover {
@@ -51,17 +50,15 @@ body {
 }
 
 .registro-form-container {
-  background-color: white;
+  background-color: #fff;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
   padding: 40px;
   box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
-}
-
-.registro-form-container header {
-  margin-bottom: 20px;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 form {
@@ -78,19 +75,56 @@ form input {
 }
 
 form button {
-  margin: 0 auto;
   width: 100%;
   padding: 10px;
   background-color: #172f74;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 5px;
   font-size: 1rem;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s;
   margin-bottom: 15px;
 }
 
 form button:hover {
-  background-color: #3b82f6; 
+  background-color: #3b82f6;
+}
+
+.avatar-section {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.section-title {
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+}
+
+.avatar-options {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.avatar-option {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+}
+
+.avatar-option img {
+  border: 2px solid transparent;
+  border-radius: 50%;
+  transition: border-color 0.2s;
+}
+
+.avatar-option.selected img {
+  border-color: #007bff;
+}
+
+.avatar-option input {
+  margin-top: 0.3rem;
 }
