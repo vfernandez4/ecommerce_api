@@ -51,6 +51,9 @@ const ProductoDetalle = () => {
           <h1 className={styles.titulo}>{producto.nombre}</h1>
           <p className={styles.descripcion}>{producto.descripcion}</p>
           <p className={styles.precio}>Precio: ${producto.precio}</p>
+          <p className={styles.infoExtra}>💳 12 cuotas sin interés</p>
+          <p className={styles.infoExtra}>🚚 Envío GRATIS a todo el país</p>
+          <p className={styles.infoExtra}>🏬 Retiro GRATIS en sucursal</p>
           {producto.stock > 0 ? (
             <button className={styles.boton} onClick={agregarAlCarrito}>
               Agregar al carrito
