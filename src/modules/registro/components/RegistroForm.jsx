@@ -1,169 +1,167 @@
-import React, { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import React, { useState } from "react"; // Importa React y el hook useState
+import { useNavigate, useLocation } from "react-router-dom"; // Importa hooks para navegación y ubicación
 
-const RegistroForm = () => {
-  const [name, setName] = useState("");
-  const [direccion, setDireccion] = useState("");
-  const [telefono, setTelefono] = useState("");
-  const [fechaNacimiento, setFechaNacimiento] = useState("");
-  const [avatar, setAvatar] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState(false);
-  const navigate = useNavigate();
-  const location = useLocation();
+const RegistroForm = () => { // Componente funcional RegistroForm
+  const [name, setName] = useState(""); // Estado para almacenar el nombre del usuario
+  const [direccion, setDireccion] = useState(""); // Estado para almacenar la dirección
+  const [telefono, setTelefono] = useState(""); // Estado para almacenar el teléfono
+  const [fechaNacimiento, setFechaNacimiento] = useState(""); // Estado para almacenar la fecha de nacimiento
+  const [avatar, setAvatar] = useState(""); // Estado para almacenar el avatar seleccionado
+  const [email, setEmail] = useState(""); // Estado para almacenar el correo electrónico
+  const [password, setPassword] = useState(""); // Estado para almacenar la contraseña
+  const [confirmPassword, setConfirmPassword] = useState(""); // Estado para confirmar la contraseña
+  const [error, setError] = useState(""); // Estado para almacenar mensajes de error
+  const [success, setSuccess] = useState(false); // Estado para indicar si el registro fue exitoso
+  const navigate = useNavigate(); // Hook para redirigir a otras rutas
+  const location = useLocation(); // Hook para obtener la ubicación actual
 
-  const opcionesDeAvatar = [
-    "/avatar/avatar1.png",
-    "/avatar/avatar2.png"
+  const opcionesDeAvatar = [ // Opciones de avatar disponibles
+    "/avatar/avatar1.png", // Ruta del primer avatar
+    "/avatar/avatar2.png" // Ruta del segundo avatar
   ];
 
-  const validateEmail = (email) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  const validateEmail = (email) => { // Valida el formato del correo electrónico
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para correos válidos
+    return emailRegex.test(email); // Retorna true si el correo es válido
   };
 
-  const validatePassword = (password) => {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
-    return passwordRegex.test(password);
+  const validatePassword = (password) => { // Valida el formato de la contraseña
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/; // Expresión regular para contraseñas válidas
+    return passwordRegex.test(password); // Retorna true si la contraseña es válida
   };
 
-  const validateName = (name) => {
-    const nameRegex = /^[A-Za-z\s]{1,30}$/;
-    return nameRegex.test(name);
+  const validateName = (name) => { // Valida el formato del nombre
+    const nameRegex = /^[A-Za-z\s]{1,30}$/; // Expresión regular para nombres válidos
+    return nameRegex.test(name); // Retorna true si el nombre es válido
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  const handleSubmit = async (e) => { // Maneja el envío del formulario
+    e.preventDefault(); // Previene el comportamiento por defecto del formulario
 
     try {
-      const existingUsersResponse = await fetch("http://localhost:4000/usuarios");
-      if (!existingUsersResponse.ok) throw new Error("Error al obtener usuarios existentes");
+      const existingUsersResponse = await fetch("http://localhost:4000/usuarios"); // Solicita la lista de usuarios existentes
+      if (!existingUsersResponse.ok) throw new Error("Error al obtener usuarios existentes"); // Lanza un error si la respuesta no es exitosa
 
-      const existingUsers = await existingUsersResponse.json();
-      const emailExists = existingUsers.some((user) => user.email === email);
+      const existingUsers = await existingUsersResponse.json(); // Convierte la respuesta a JSON
+      const emailExists = existingUsers.some((user) => user.email === email); // Verifica si el correo ya está registrado
 
-      if (emailExists) {
-        setError("El correo electrónico ya está registrado.");
-        return;
+      if (emailExists) { // Si el correo ya existe
+        setError("El correo electrónico ya está registrado."); // Muestra un mensaje de error
+        return; // Detiene la ejecución
       }
-    } catch (err) {
-      console.error(err);
-      setError("No se pudo verificar la existencia del correo electrónico.");
-      return;
+    } catch (err) { // Maneja errores en la solicitud
+      console.error(err); // Imprime el error en la consola
+      setError("No se pudo verificar la existencia del correo electrónico."); // Muestra un mensaje de error
+      return; // Detiene la ejecución
     }
 
-    if (!validateName(name)) {
-      setError("Ingrese un nombre válido.");
-      return;
+    if (!validateName(name)) { // Verifica si el nombre es inválido
+      setError("Ingrese un nombre válido."); // Muestra un mensaje de error
+      return; // Detiene la ejecución
     }
-    if (!validateEmail(email)) {
-      setError("Por favor, ingresa un correo electrónico válido.");
-      return;
+    if (!validateEmail(email)) { // Verifica si el correo es inválido
+      setError("Por favor, ingresa un correo electrónico válido."); // Muestra un mensaje de error
+      return; // Detiene la ejecución
     }
-    if (!validatePassword(password)) {
-      setError(
+    if (!validatePassword(password)) { // Verifica si la contraseña es inválida
+      setError( // Muestra un mensaje de error
         "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un carácter especial."
       );
-      return;
+      return; // Detiene la ejecución
     }
-    if (password !== confirmPassword) {
-      setError("Las contraseñas no coinciden.");
-      return;
+    if (password !== confirmPassword) { // Verifica si las contraseñas no coinciden
+      setError("Las contraseñas no coinciden."); // Muestra un mensaje de error
+      return; // Detiene la ejecución
     }
-    setError("");
+    setError(""); // Limpia los mensajes de error
 
-    const usuarioARegistrar = {
-      nombreCompleto: name,
-      direccion,
-      telefono,
-      email,
-      fechaNacimiento,
-      avatar,
-      productosComprados: [],
-      productosVendidos: []
+    const usuarioARegistrar = { // Crea un objeto con los datos del usuario
+      nombreCompleto: name, // Nombre completo del usuario
+      direccion, // Dirección del usuario
+      telefono, // Teléfono del usuario
+      email, // Correo electrónico del usuario
+      fechaNacimiento, // Fecha de nacimiento del usuario
+      avatar, // Avatar seleccionado
+      productosComprados: [], // Inicializa la lista de productos comprados como vacía
+      productosVendidos: [] // Inicializa la lista de productos vendidos como vacía
     };
 
-    console.log(usuarioARegistrar);
+    console.log(usuarioARegistrar); // Imprime el usuario en la consola
 
     try {
-      const res = await fetch("http://localhost:4000/usuarios", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(usuarioARegistrar),
+      const res = await fetch("http://localhost:4000/usuarios", { // Realiza una solicitud POST para registrar al usuario
+        method: "POST", // Método HTTP POST
+        headers: { "Content-Type": "application/json" }, // Cabecera indicando que el cuerpo es JSON
+        body: JSON.stringify(usuarioARegistrar), // Convierte el objeto usuario a JSON
       });
-      if (!res.ok) throw new Error("Error al resgistrar al usuario");
+      if (!res.ok) throw new Error("Error al resgistrar al usuario"); // Lanza un error si la respuesta no es exitosa
 
-      setSuccess(true);
-      const redirectTo = location.state?.from?.pathname || "/";
-      setTimeout(() => navigate(redirectTo), 2000);
-
-    } catch (err) {
-      console.error(err);
-      setError("No se pudo conectar con el servidor.");
+      setSuccess(true); // Indica que el registro fue exitoso
+      const redirectTo = location.state?.from?.pathname || "/"; // Obtiene la ruta de redirección o la raíz
+      setTimeout(() => navigate(redirectTo), 2000); // Redirige después de 2 segundos
+    } catch (err) { // Maneja errores en la solicitud
+      console.error(err); // Imprime el error en la consola
+      setError("No se pudo conectar con el servidor."); // Muestra un mensaje de error
     }
-
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit}> {/* Formulario con el manejador de envío */}
       <label>
         Nombre completo:
         <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
+          type="text" // Campo de texto para el nombre
+          name="name" // Nombre del campo
+          value={name} // Valor actual del estado name
+          onChange={(e) => setName(e.target.value)} // Actualiza el estado name al cambiar el valor
         />
       </label>
       <br />
       <label>
         Dirección:
         <input
-          type="text"
-          name="direccion"
-          value={direccion}
-          onChange={(e) => setDireccion(e.target.value)}
+          type="text" // Campo de texto para la dirección
+          name="direccion" // Nombre del campo
+          value={direccion} // Valor actual del estado direccion
+          onChange={(e) => setDireccion(e.target.value)} // Actualiza el estado direccion al cambiar el valor
         />
       </label>
       <br />
       <label>
         Telefono:
         <input
-          type="text"
-          name="telefono"
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
+          type="text" // Campo de texto para el teléfono
+          name="telefono" // Nombre del campo
+          value={telefono} // Valor actual del estado telefono
+          onChange={(e) => setTelefono(e.target.value)} // Actualiza el estado telefono al cambiar el valor
         />
       </label>
       <br />
       <label>
         Fecha de nacimiento:
         <input
-          type="date"
-          name="fechaNacimiento"
-          value={fechaNacimiento}
-          onChange={(e) => setFechaNacimiento(e.target.value)}
+          type="date" // Campo de fecha para la fecha de nacimiento
+          name="fechaNacimiento" // Nombre del campo
+          value={fechaNacimiento} // Valor actual del estado fechaNacimiento
+          onChange={(e) => setFechaNacimiento(e.target.value)} // Actualiza el estado fechaNacimiento al cambiar el valor
         />
       </label>
       <br />
-      <div className="avatar-section">
+      <div className="avatar-section"> {/* Sección para seleccionar el avatar */}
         <p className="section-title">Elige tu avatar:</p>
-        <div className="avatar-options">
-          {opcionesDeAvatar.map((avatarASeleccionar) => (
+        <div className="avatar-options"> {/* Opciones de avatar */}
+          {opcionesDeAvatar.map((avatarASeleccionar) => ( // Mapea las opciones de avatar
             <label
-              key={avatarASeleccionar}
-              className={`avatar-option ${avatar === avatarASeleccionar ? "selected" : ""}`}
+              key={avatarASeleccionar} // Clave única para cada opción
+              className={`avatar-option ${avatar === avatarASeleccionar ? "selected" : ""}`} // Clase dinámica según selección
             >
-              <img src={avatarASeleccionar} alt="avatar" width={60} height={60} />
+              <img src={avatarASeleccionar} alt="avatar" width={60} height={60} /> {/* Imagen del avatar */}
               <input
-                type="radio"
-                name="avatar"
-                value={avatarASeleccionar}
-                checked={avatar === avatarASeleccionar}
-                onChange={() => setAvatar(avatarASeleccionar)}
+                type="radio" // Campo de tipo radio para seleccionar el avatar
+                name="avatar" // Nombre del campo
+                value={avatarASeleccionar} // Valor del avatar
+                checked={avatar === avatarASeleccionar} // Marca el avatar seleccionado
+                onChange={() => setAvatar(avatarASeleccionar)} // Actualiza el estado avatar al cambiar la selección
               />
             </label>
           ))}
@@ -173,39 +171,39 @@ const RegistroForm = () => {
       <label>
         Correo Electrónico:
         <input
-          type="text"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          type="text" // Campo de texto para el correo electrónico
+          name="email" // Nombre del campo
+          value={email} // Valor actual del estado email
+          onChange={(e) => setEmail(e.target.value)} // Actualiza el estado email al cambiar el valor
         />
       </label>
       <br />
       <label>
         Contraseña:
         <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          type="password" // Campo de contraseña
+          name="password" // Nombre del campo
+          value={password} // Valor actual del estado password
+          onChange={(e) => setPassword(e.target.value)} // Actualiza el estado password al cambiar el valor
         />
       </label>
       <br />
       <label>
         Confirmar Contraseña:
         <input
-          type="password"
-          name="confirmPassword"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          type="password" // Campo de contraseña para confirmar
+          name="confirmPassword" // Nombre del campo
+          value={confirmPassword} // Valor actual del estado confirmPassword
+          onChange={(e) => setConfirmPassword(e.target.value)} // Actualiza el estado confirmPassword al cambiar el valor
         />
       </label>
       <br />
-      {error && <p style={{ color: "red" }}>{error}</p>}
-      {success && <p style={{ color: "green" }}>Registro exitoso. Redirigiendo...</p>}
-      <button type="submit">Registrarse</button>
+      {error && <p style={{ color: "red" }}>{error}</p>} {/* Muestra el mensaje de error si existe */}
+      {success && <p style={{ color: "green" }}>Registro exitoso. Redirigiendo...</p>} {/* Muestra un mensaje de éxito si el registro fue exitoso */}
+      <button type="submit">Registrarse</button> {/* Botón para enviar el formulario */}
       <p>
         ¿Ya tienes cuenta?{" "}
-        <a href="/login" style={{ color: "#5c9aff", textDecoration: "underline" }}>
+        <a href="/login" style={{ color: "#5c9aff", textDecoration: "underline" }}> {/* Enlace a la página de inicio de sesión */}
           Sign In
         </a>
       </p>
@@ -213,4 +211,4 @@ const RegistroForm = () => {
   );
 };
 
-export default RegistroForm;
+export default RegistroForm; // Exporta el componente RegistroForm como predeterminado
