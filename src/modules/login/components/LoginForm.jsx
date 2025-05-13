@@ -42,6 +42,11 @@ const LoginForm = ({ onSubmit }) => {
         return;
       }
 
+      if (user.password !== password) {
+      setError("La contraseña es incorrecta.");
+      return;
+      }
+
       const userData = { email };
       localStorage.setItem("user", JSON.stringify(userData));
 

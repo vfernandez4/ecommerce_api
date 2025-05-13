@@ -77,6 +77,7 @@ const RegistroForm = () => {
 
     const usuarioARegistrar = {
       nombreCompleto: name,
+      password,
       direccion,
       telefono,
       email,

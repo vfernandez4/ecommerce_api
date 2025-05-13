@@ -113,6 +113,7 @@
     {
       "id": "1",
       "nombreCompleto": "María González",
+      "password": "Maria123.",
       "direccion": "Av. Corrientes 123",
       "telefono": "1598765432",
       "email": "maria@example.com",
@@ -131,6 +132,7 @@
     {
       "id": "2",
       "nombreCompleto": "Juan Pérez",
+      "password": "Juan123.",
       "direccion": "Av. Cabildo 123",
       "telefono": "1512345678",
       "email": "juan@example.com",
@@ -142,28 +144,6 @@
       "productosVendidos": [
         12
       ]
-    },
-    {
-      "id": "e0d5",
-      "nombreCompleto": "Katerina Cejas",
-      "direccion": "Avenida Rivadavia 702",
-      "telefono": "1162250626",
-      "email": "katerinacejas@gmail.com",
-      "fechaNacimiento": "1999-09-03",
-      "avatar": "/avatar/avatar2.png",
-      "productosComprados": [],
-      "productosVendidos": []
-    },
-    {
-      "id": "792a",
-      "nombreCompleto": "Juan Ignacio Santoro",
-      "direccion": "Ayres de Pilar",
-      "telefono": "1122633581",
-      "email": "nacho.santoro2002@gmail.com",
-      "fechaNacimiento": "2002-11-05",
-      "avatar": "/avatar/avatar1.png",
-      "productosComprados": [],
-      "productosVendidos": []
     }
   ]
 }
