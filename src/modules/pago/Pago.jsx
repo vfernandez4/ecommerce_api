@@ -32,6 +32,46 @@ const Pago = () => {
   const envio = 7000;
   const totalConEnvio = total + envio;
 
+  const agregarAlHistorial = async () => {
+    try {
+    const userData = JSON.parse(localStorage.getItem("user"));
+    const carrito = JSON.parse(localStorage.getItem("carrito"));
+
+    if (!userData || !userData.email || !Array.isArray(carrito)) {
+      throw new Error("Datos de usuario o carrito inválidos");
+    }
+
+    const emailUsuario = userData.email;
+
+    const nuevosIds = carrito.map(item => Number(item.id));
+
+    const resUsuario = await fetch(`http://localhost:4000/usuarios?email=${emailUsuario}`);
+    const data = await resUsuario.json();
+
+    if (data.length === 0) throw new Error("Usuario no encontrado");
+
+    const usuario = data[0];
+    const idUsuario = usuario.id;
+
+    const productosActualizados = [
+      ...new Set([...(usuario.productosComprados || []), ...nuevosIds])
+    ];
+
+    const resPatch = await fetch(`http://localhost:4000/usuarios/${idUsuario}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ productosComprados: productosActualizados })
+    });
+
+    if (!resPatch.ok) throw new Error("Error al actualizar el usuario");
+    }
+    catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
   return (
     <div className={styles["body"]}>
       <div className={styles["page-container"]}>
@@ -129,7 +169,7 @@ const Pago = () => {
             <p className={styles["price"]}>${totalConEnvio.toLocaleString()}</p>
           </section>
 
-          <button className={styles["buy_button"]}>Confirmar compra</button>
+          <button className={styles["buy_button"]} onClick={agregarAlHistorial()}>Confirmar compra</button>
         </aside>
       </div>
     </div>
