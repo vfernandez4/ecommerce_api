@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./pago.module.css";
+import { useNavigate } from "react-router-dom";
 
 const Pago = () => {
   const [calle, setCalle] = useState("");
@@ -31,6 +32,8 @@ const Pago = () => {
 
   const envio = 7000;
   const totalConEnvio = total + envio;
+
+  const navigate = useNavigate();
 
   const agregarAlHistorial = async () => {
     try {
@@ -70,6 +73,11 @@ const Pago = () => {
     catch (error) {
       console.error("Error:", error);
     }
+
+    alert("Gracias por tu compra!");
+
+    localStorage.removeItem("carrito");
+    navigate("/");
   }
 
   return (
@@ -169,7 +177,7 @@ const Pago = () => {
             <p className={styles["price"]}>${totalConEnvio.toLocaleString()}</p>
           </section>
 
-          <button className={styles["buy_button"]} onClick={agregarAlHistorial()}>Confirmar compra</button>
+          <button className={styles["buy_button"]} onClick={agregarAlHistorial}>Confirmar compra</button>
         </aside>
       </div>
     </div>
