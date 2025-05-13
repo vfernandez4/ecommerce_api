@@ -104,3 +104,19 @@
 	color: var(--color-azul-claro);
 	text-decoration: underline;
 }
+
+@keyframes slideOutLeft {
+	0% {
+	  opacity: 1;
+	  transform: translateX(0);
+	}
+	100% {
+	  opacity: 0;
+	  transform: translateX(-100%);
+	}
+  }
+  
+  .eliminando {
+	animation: slideOutLeft 0.3s ease forwards;
+  }
+  
