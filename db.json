@@ -144,6 +144,18 @@
       "productosVendidos": [
         12
       ]
+    },
+    {
+      "id": "7f5a",
+      "nombreCompleto": "Nacho Santoro",
+      "password": "Secreto1!",
+      "direccion": "Panamericana Km 43, del Viso",
+      "telefono": "1122633581",
+      "email": "santoro.ignacio2002@gmail.com",
+      "fechaNacimiento": "2002-11-05",
+      "avatar": "/avatar/avatar1.png",
+      "productosComprados": [],
+      "productosVendidos": []
     }
   ]
 }
