@@ -1,8 +1,10 @@
 import { useState } from "react";
 import styles from "./pago.module.css";
 import { useNavigate } from "react-router-dom";
+import { useCarrito } from "../../context/CarritoContext";
 
 const Pago = () => {
+  const { vaciarCarrito } = useCarrito();
   const [calle, setCalle] = useState("");
   const [numero, setNumero] = useState("");
   const [piso, setPiso] = useState("");
@@ -76,7 +78,7 @@ const Pago = () => {
 
     alert("Gracias por tu compra!");
 
-    localStorage.removeItem("carrito");
+    vaciarCarrito();
     navigate("/");
   }
 
