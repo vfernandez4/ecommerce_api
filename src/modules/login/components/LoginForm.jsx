@@ -18,7 +18,7 @@ const LoginForm = ({ onSubmit }) => {
     return passwordRegex.test(password);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateEmail(email)) {
       setError("Por favor, ingresa un correo electrónico válido.");
@@ -32,13 +32,32 @@ const LoginForm = ({ onSubmit }) => {
     }
     setError("");
 
-    const userData = { email };
-    localStorage.setItem("user", JSON.stringify(userData));
+    try {
+      const userResponse = await fetch("http://localhost:4000/usuarios?email=" + email);
+      if (!userResponse.ok) throw new Error("Error al verificar el usuario");
 
-    onSubmit(userData); 
+      const [user] = await userResponse.json();
+      if (!user) {
+        setError("El usuario no existe. Por favor, regístrate primero.");
+        return;
+      }
 
-    const redirectTo = location.state?.from?.pathname || "/";
-    navigate(redirectTo);
+      if (user.password !== password) {
+      setError("La contraseña es incorrecta.");
+      return;
+      }
+
+      const userData = { email };
+      localStorage.setItem("user", JSON.stringify(userData));
+
+      onSubmit(userData);
+
+      const redirectTo = location.state?.from?.pathname || "/";
+      navigate(redirectTo);
+    } catch (err) {
+      console.error(err);
+      setError("Error al verificar el usuario. Inténtalo de nuevo más tarde.");
+    }
   };
 
   const handleRegisterRedirect = () => {

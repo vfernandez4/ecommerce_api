@@ -37,6 +37,24 @@ const RegistroForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    try {
+      const existingUsersResponse = await fetch("http://localhost:4000/usuarios");
+      if (!existingUsersResponse.ok) throw new Error("Error al obtener usuarios existentes");
+
+      const existingUsers = await existingUsersResponse.json();
+      const emailExists = existingUsers.some((user) => user.email === email);
+
+      if (emailExists) {
+        setError("El correo electrónico ya está registrado.");
+        return;
+      }
+    } catch (err) {
+      console.error(err);
+      setError("No se pudo verificar la existencia del correo electrónico.");
+      return;
+    }
+
     if (!validateName(name)) {
       setError("Ingrese un nombre válido.");
       return;
@@ -59,6 +77,7 @@ const RegistroForm = () => {
 
     const usuarioARegistrar = {
       nombreCompleto: name,
+      password,
       direccion,
       telefono,
       email,
