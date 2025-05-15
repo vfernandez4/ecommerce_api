@@ -15,6 +15,10 @@ export default function Carrito() {
     if (!producto) return;
   
     const nuevaCantidad = producto.cantidad + masOMenos;
+    if (nuevaCantidad < 1) {
+      alert("La cantidad mínima es 1.");
+      return;
+    }
     if (nuevaCantidad >= 1) {
       cambiarCantidad(id, nuevaCantidad);
     }
