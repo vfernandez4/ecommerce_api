@@ -74,3 +74,20 @@
 	gap: 20px;
 	align-items: center;
 }
+
+.carritoContenedor {
+	position: relative;
+	display: inline-block;
+}
+
+.carritoBadge {
+	position: absolute;
+	top: -8px;
+	right: -10px;
+	background-color: red;
+	color: white;
+	border-radius: 50%;
+	padding: 2px 6px;
+	font-size: 12px;
+	font-weight: bold;
+}

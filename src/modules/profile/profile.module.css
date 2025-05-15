@@ -37,7 +37,7 @@
 .history {
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: top;
     justify-content: space-between;
 }
 
