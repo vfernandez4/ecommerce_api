@@ -5,9 +5,10 @@ const ProtectedRoute = ({ children }) => {
  const location = useLocation();
  const isAuthenticated = Boolean(localStorage.getItem('user'));
 
- if (!isAuthenticated) {
-   return <Navigate to="/login" state={{ from: location }} replace />;
-    }
+if (!isAuthenticated) {
+  return <Navigate to="/login" state={{ from: location }} replace />;
 }
+  return children;  
+};
 
- return children;
+export default ProtectedRoute;

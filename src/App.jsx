@@ -12,6 +12,7 @@ import Profile from './modules/profile/Profile';
 import Pago from './modules/pago/Pago';
 import Vender from './modules/vender/Vender';
 import ProductoDetalle from './modules/productoDetalle/ProductoDetalle';
+import ProtectedRoute from './components/ProtectedRoute'; 
 import { CarritoProvider } from './context/CarritoContext'; 
 
 function App() {
