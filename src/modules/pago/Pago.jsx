@@ -1,25 +1,24 @@
+import { useState } from "react"; // Importa el hook useState de React
+import styles from "./pago.module.css"; // Importa los estilos CSS del componente Pago
+import { useNavigate } from "react-router-dom"; // Importa el hook useNavigate para redirección
 
-import { useState } from "react";
-import styles from "./pago.module.css";
-import { useNavigate } from "react-router-dom";
+const Pago = () => { // Componente funcional Pago
+  const [calle, setCalle] = useState(""); // Estado para almacenar la calle
+  const [numero, setNumero] = useState(""); // Estado para almacenar el número
+  const [piso, setPiso] = useState(""); // Estado para almacenar el piso
+  const [depto, setDepto] = useState(""); // Estado para almacenar el departamento
+  const [codigoPostal, setCodigoPostal] = useState(""); // Estado para almacenar el código postal
 
-const Pago = () => {
-  const [calle, setCalle] = useState("");
-  const [numero, setNumero] = useState("");
-  const [piso, setPiso] = useState("");
-  const [depto, setDepto] = useState("");
-  const [codigoPostal, setCodigoPostal] = useState("");
+  const [metodoPago, setMetodoPago] = useState(""); // Estado para almacenar el método de pago seleccionado
 
-  const [metodoPago, setMetodoPago] = useState("");
+  const [numeroTarjeta, setNumeroTarjeta] = useState(""); // Estado para almacenar el número de la tarjeta
+  const [fechaVencimiento, setFechaVencimiento] = useState(""); // Estado para almacenar la fecha de vencimiento
+  const [cvv, setCvv] = useState(""); // Estado para almacenar el CVV
+  const [nombreTarjeta, setNombreTarjeta] = useState(""); // Estado para almacenar el nombre en la tarjeta
 
-  const [numeroTarjeta, setNumeroTarjeta] = useState("");
-  const [fechaVencimiento, setFechaVencimiento] = useState("");
-  const [cvv, setCvv] = useState("");
-  const [nombreTarjeta, setNombreTarjeta] = useState("");
-
-  const [cartItems, setCartItems] = useState(() => {
-    const carritoGuardado = localStorage.getItem("carrito");
-    return carritoGuardado ? JSON.parse(carritoGuardado) : [];
+  const [cartItems, setCartItems] = useState(() => { // Estado para almacenar los productos del carrito
+    const carritoGuardado = localStorage.getItem("carrito"); // Obtiene el carrito guardado en localStorage
+    return carritoGuardado ? JSON.parse(carritoGuardado) : []; // Si existe, lo parsea; si no, inicializa como un array vacío
   });
 
   function calcularTotal(items) { // Calcula el total de los productos en el carrito
@@ -34,52 +33,49 @@ const Pago = () => {
   const envio = 7000; // Costo fijo del envío
   const totalConEnvio = total + envio; // Calcula el total con el costo de envío incluido
 
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Hook para redirigir a otras rutas
 
-  const agregarAlHistorial = async () => {
+  const agregarAlHistorial = async () => { // Función para agregar la compra al historial del usuario
     try {
-    const userData = JSON.parse(localStorage.getItem("user"));
-    const carrito = JSON.parse(localStorage.getItem("carrito"));
+      const userData = JSON.parse(localStorage.getItem("user")); // Obtiene los datos del usuario desde localStorage
+      const carrito = JSON.parse(localStorage.getItem("carrito")); // Obtiene el carrito desde localStorage
 
-    if (!userData || !userData.email || !Array.isArray(carrito)) {
-      throw new Error("Datos de usuario o carrito inválidos");
+      if (!userData || !userData.email || !Array.isArray(carrito)) { // Verifica si los datos del usuario o carrito son inválidos
+        throw new Error("Datos de usuario o carrito inválidos");
+      }
+
+      const emailUsuario = userData.email; // Obtiene el email del usuario
+      const nuevosIds = carrito.map(item => Number(item.id)); // Obtiene los IDs de los productos en el carrito
+
+      const resUsuario = await fetch(`http://localhost:4000/usuarios?email=${emailUsuario}`); // Solicita los datos del usuario
+      const data = await resUsuario.json(); // Convierte la respuesta a JSON
+
+      if (data.length === 0) throw new Error("Usuario no encontrado"); // Lanza un error si el usuario no existe
+
+      const usuario = data[0]; // Obtiene el primer usuario de la respuesta
+      const idUsuario = usuario.id; // Obtiene el ID del usuario
+
+      const productosActualizados = [ // Combina los productos comprados existentes con los nuevos, eliminando duplicados
+        ...new Set([...(usuario.productosComprados || []), ...nuevosIds])
+      ];
+
+      const resPatch = await fetch(`http://localhost:4000/usuarios/${idUsuario}`, { // Actualiza los productos comprados del usuario
+        method: 'PATCH', // Método HTTP PATCH
+        headers: {
+          'Content-Type': 'application/json' // Cabecera indicando que el cuerpo es JSON
+        },
+        body: JSON.stringify({ productosComprados: productosActualizados }) // Envía los productos actualizados
+      });
+
+      if (!resPatch.ok) throw new Error("Error al actualizar el usuario"); // Lanza un error si la actualización falla
+    } catch (error) { // Maneja errores en la solicitud
+      console.error("Error:", error); // Imprime el error en la consola
     }
 
-    const emailUsuario = userData.email;
-
-    const nuevosIds = carrito.map(item => Number(item.id));
-
-    const resUsuario = await fetch(`http://localhost:4000/usuarios?email=${emailUsuario}`);
-    const data = await resUsuario.json();
-
-    if (data.length === 0) throw new Error("Usuario no encontrado");
-
-    const usuario = data[0];
-    const idUsuario = usuario.id;
-
-    const productosActualizados = [
-      ...new Set([...(usuario.productosComprados || []), ...nuevosIds])
-    ];
-
-    const resPatch = await fetch(`http://localhost:4000/usuarios/${idUsuario}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ productosComprados: productosActualizados })
-    });
-
-    if (!resPatch.ok) throw new Error("Error al actualizar el usuario");
-    }
-    catch (error) {
-      console.error("Error:", error);
-    }
-
-    alert("Gracias por tu compra!");
-
-    localStorage.removeItem("carrito");
-    navigate("/");
-  }
+    alert("Gracias por tu compra!"); // Muestra un mensaje de agradecimiento
+    localStorage.removeItem("carrito"); // Elimina el carrito de localStorage
+    navigate("/"); // Redirige a la página principal
+  };
 
   return (
     <div className={styles["body"]}> {/* Contenedor principal del componente */}
@@ -178,7 +174,7 @@ const Pago = () => {
             <p className={styles["price"]}>${totalConEnvio.toLocaleString()}</p> {/* Precio total con envío */}
           </section>
 
-          <button className={styles["buy_button"]} onClick={agregarAlHistorial}>Confirmar compra</button>
+          <button className={styles["buy_button"]} onClick={agregarAlHistorial}>Confirmar compra</button> {/* Botón para confirmar la compra */}
         </aside>
       </div>
     </div>

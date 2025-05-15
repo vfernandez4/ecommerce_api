@@ -24,14 +24,12 @@ const ProductoDetalle = () => {
   if (!producto) { // Verifica si el producto no fue encontrado
     return <p>Producto no encontrado</p>; // Muestra un mensaje de error
   }
-  
-  const { agregarProducto } = useCarrito();
 
-  const agregarAlCarrito = () => {
-    agregarProducto(producto);
-    alert("Producto agregado al carrito");
-  };
-  
+    const agregarAlCarrito = () => {
+      agregarProducto(producto); // Agrega el producto actual al carrito
+      alert("Producto agregado al carrito"); // Muestra una alerta indicando que el producto fue agregado
+    };
+
 
   return (
 
@@ -47,7 +45,6 @@ const ProductoDetalle = () => {
           <p className={styles.infoExtra}>🏬 Retiro GRATIS en sucursal</p>
           {producto.stock > 0 ? (
             <button className={styles.boton} onClick={agregarAlCarrito}>
-
               Agregar al carrito
             </button>
           ) : (

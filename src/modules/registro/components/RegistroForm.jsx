@@ -73,19 +73,19 @@ const RegistroForm = () => { // Componente funcional RegistroForm
       setError("Las contraseñas no coinciden."); // Muestra un mensaje de error
       return; // Detiene la ejecución
     }
-    
-    setError("");
 
-    const usuarioARegistrar = {
-      nombreCompleto: name,
-      password,
-      direccion,
-      telefono,
-      email,
-      fechaNacimiento,
-      avatar,
-      productosComprados: [],
-      productosVendidos: []
+    setError(""); // Limpia los mensajes de error
+
+    const usuarioARegistrar = { // Crea un objeto con los datos del usuario
+      nombreCompleto: name, // Nombre completo del usuario
+      password, // Contraseña del usuario
+      direccion, // Dirección del usuario
+      telefono, // Teléfono del usuario
+      email, // Correo electrónico del usuario
+      fechaNacimiento, // Fecha de nacimiento del usuario
+      avatar, // Avatar seleccionado
+      productosComprados: [], // Inicializa la lista de productos comprados como vacía
+      productosVendidos: [] // Inicializa la lista de productos vendidos como vacía
     };
 
     console.log(usuarioARegistrar); // Imprime el usuario en la consola
