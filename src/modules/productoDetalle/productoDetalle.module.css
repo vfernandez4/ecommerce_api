@@ -56,6 +56,12 @@
   color: var(--color-negro); 
 }
 
+.infoExtra {
+  font-size: 1rem;
+  color: #007d0a;
+  margin-bottom: 0.5rem;
+}
+
 .boton {
   background-color: var(--color-azul-oscuro); 
   color: var(--color-blanco);

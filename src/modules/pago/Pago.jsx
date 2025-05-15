@@ -1,23 +1,25 @@
-import { useState } from "react"; // Importa el hook useState de React
-import styles from "./pago.module.css"; // Importa los estilos CSS del componente Pago
 
-const Pago = () => { // Componente funcional Pago
-  const [calle, setCalle] = useState(""); // Estado para almacenar la calle
-  const [numero, setNumero] = useState(""); // Estado para almacenar el número
-  const [piso, setPiso] = useState(""); // Estado para almacenar el piso
-  const [depto, setDepto] = useState(""); // Estado para almacenar el departamento
-  const [codigoPostal, setCodigoPostal] = useState(""); // Estado para almacenar el código postal
+import { useState } from "react";
+import styles from "./pago.module.css";
+import { useNavigate } from "react-router-dom";
 
-  const [metodoPago, setMetodoPago] = useState(""); // Estado para almacenar el método de pago seleccionado
+const Pago = () => {
+  const [calle, setCalle] = useState("");
+  const [numero, setNumero] = useState("");
+  const [piso, setPiso] = useState("");
+  const [depto, setDepto] = useState("");
+  const [codigoPostal, setCodigoPostal] = useState("");
 
-  const [numeroTarjeta, setNumeroTarjeta] = useState(""); // Estado para almacenar el número de la tarjeta
-  const [fechaVencimiento, setFechaVencimiento] = useState(""); // Estado para almacenar la fecha de vencimiento
-  const [cvv, setCvv] = useState(""); // Estado para almacenar el CVV
-  const [nombreTarjeta, setNombreTarjeta] = useState(""); // Estado para almacenar el nombre en la tarjeta
+  const [metodoPago, setMetodoPago] = useState("");
 
-  const [cartItems, setCartItems] = useState(() => { // Estado para almacenar los productos del carrito
-    const carritoGuardado = localStorage.getItem("carrito"); // Obtiene el carrito guardado en localStorage
-    return carritoGuardado ? JSON.parse(carritoGuardado) : []; // Si existe, lo parsea; si no, inicializa como un array vacío
+  const [numeroTarjeta, setNumeroTarjeta] = useState("");
+  const [fechaVencimiento, setFechaVencimiento] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [nombreTarjeta, setNombreTarjeta] = useState("");
+
+  const [cartItems, setCartItems] = useState(() => {
+    const carritoGuardado = localStorage.getItem("carrito");
+    return carritoGuardado ? JSON.parse(carritoGuardado) : [];
   });
 
   function calcularTotal(items) { // Calcula el total de los productos en el carrito
@@ -31,6 +33,53 @@ const Pago = () => { // Componente funcional Pago
 
   const envio = 7000; // Costo fijo del envío
   const totalConEnvio = total + envio; // Calcula el total con el costo de envío incluido
+
+  const navigate = useNavigate();
+
+  const agregarAlHistorial = async () => {
+    try {
+    const userData = JSON.parse(localStorage.getItem("user"));
+    const carrito = JSON.parse(localStorage.getItem("carrito"));
+
+    if (!userData || !userData.email || !Array.isArray(carrito)) {
+      throw new Error("Datos de usuario o carrito inválidos");
+    }
+
+    const emailUsuario = userData.email;
+
+    const nuevosIds = carrito.map(item => Number(item.id));
+
+    const resUsuario = await fetch(`http://localhost:4000/usuarios?email=${emailUsuario}`);
+    const data = await resUsuario.json();
+
+    if (data.length === 0) throw new Error("Usuario no encontrado");
+
+    const usuario = data[0];
+    const idUsuario = usuario.id;
+
+    const productosActualizados = [
+      ...new Set([...(usuario.productosComprados || []), ...nuevosIds])
+    ];
+
+    const resPatch = await fetch(`http://localhost:4000/usuarios/${idUsuario}`, {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ productosComprados: productosActualizados })
+    });
+
+    if (!resPatch.ok) throw new Error("Error al actualizar el usuario");
+    }
+    catch (error) {
+      console.error("Error:", error);
+    }
+
+    alert("Gracias por tu compra!");
+
+    localStorage.removeItem("carrito");
+    navigate("/");
+  }
 
   return (
     <div className={styles["body"]}> {/* Contenedor principal del componente */}
@@ -129,7 +178,7 @@ const Pago = () => { // Componente funcional Pago
             <p className={styles["price"]}>${totalConEnvio.toLocaleString()}</p> {/* Precio total con envío */}
           </section>
 
-          <button className={styles["buy_button"]}>Confirmar compra</button> {/* Botón para confirmar la compra */}
+          <button className={styles["buy_button"]} onClick={agregarAlHistorial}>Confirmar compra</button>
         </aside>
       </div>
     </div>

@@ -41,9 +41,14 @@ const LoginForm = ({ onSubmit }) => { // Componente funcional LoginForm que reci
         setError("El usuario no existe. Por favor, regístrate primero."); // Muestra un mensaje de error
         return; // Detiene la ejecución
       }
+      
+      if (user.password !== password) {
+      setError("La contraseña es incorrecta.");
+      return;
+      }
 
-      const userData = { email }; // Crea un objeto con los datos del usuario
-      localStorage.setItem("user", JSON.stringify(userData)); // Guarda los datos del usuario en localStorage
+      const userData = { email };
+      localStorage.setItem("user", JSON.stringify(userData));
 
       onSubmit(userData); // Llama a la función onSubmit con los datos del usuario
 

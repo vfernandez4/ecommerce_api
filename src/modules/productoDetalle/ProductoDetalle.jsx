@@ -1,10 +1,13 @@
-import React, { useState, useEffect } from "react"; // Importa React y los hooks useState y useEffect
-import { useParams } from "react-router-dom"; // Importa el hook useParams para obtener parámetros de la URL
-import styles from "./productoDetalle.module.css"; // Importa los estilos CSS del componente ProductoDetalle
 
-const ProductoDetalle = () => { // Componente funcional ProductoDetalle
-  const { id } = useParams(); // Obtiene el parámetro "id" de la URL
-  const [productos, setProductos] = useState([]); // Estado para almacenar la lista de productos
+import React, { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
+import styles from "./productoDetalle.module.css";
+import { useCarrito } from "../../context/CarritoContext";
+
+const ProductoDetalle = () => {
+  const { id } = useParams();
+  const [productos, setProductos] = useState([]);
+  const { actualizarCantidadTotal } = useCarrito();
 
   useEffect(() => { // Hook para ejecutar código al montar el componente
     fetch("http://localhost:4000/productos") // Realiza una solicitud a la API para obtener los productos
@@ -21,38 +24,30 @@ const ProductoDetalle = () => { // Componente funcional ProductoDetalle
   if (!producto) { // Verifica si el producto no fue encontrado
     return <p>Producto no encontrado</p>; // Muestra un mensaje de error
   }
+  
+  const { agregarProducto } = useCarrito();
 
-  const agregarAlCarrito = () => { // Función para agregar el producto al carrito
-    const carritoGuardado = localStorage.getItem("carrito"); // Obtiene el carrito guardado en localStorage
-    const carrito = carritoGuardado ? JSON.parse(carritoGuardado) : []; // Si existe, lo parsea; si no, inicializa como un array vacío
-
-    const productoExistente = carrito.find((item) => item.id === producto.id); // Busca si el producto ya está en el carrito
-
-    if (productoExistente) { // Si el producto ya está en el carrito
-      const carritoActualizado = carrito.map((item) => // Actualiza la cantidad del producto
-        item.id === producto.id
-          ? { ...item, cantidad: item.cantidad + 1 } // Incrementa la cantidad en 1
-          : item // Retorna los demás productos sin cambios
-      );
-      localStorage.setItem("carrito", JSON.stringify(carritoActualizado)); // Guarda el carrito actualizado en localStorage
-    } else { // Si el producto no está en el carrito
-      const nuevoProducto = { ...producto, cantidad: 1 }; // Crea un nuevo producto con cantidad inicial de 1
-      localStorage.setItem("carrito", JSON.stringify([...carrito, nuevoProducto])); // Agrega el nuevo producto al carrito y lo guarda
-    }
-
-    alert("Producto agregado al carrito"); // Muestra una alerta indicando que el producto fue agregado
+  const agregarAlCarrito = () => {
+    agregarProducto(producto);
+    alert("Producto agregado al carrito");
   };
+  
 
   return (
-    <div className={styles.contenedor}> {/* Contenedor principal del detalle del producto */}
-      <div className={styles.card}> {/* Contenedor de la tarjeta del producto */}
-        <img src={producto.imagen} alt={producto.nombre} className={styles.imagen} /> {/* Imagen del producto */}
-        <div className={styles.detalles}> {/* Contenedor de los detalles del producto */}
-          <h1 className={styles.titulo}>{producto.nombre}</h1> {/* Nombre del producto */}
-          <p className={styles.descripcion}>{producto.descripcion}</p> {/* Descripción del producto */}
-          <p className={styles.precio}>Precio: ${producto.precio}</p> {/* Precio del producto */}
-          {producto.stock > 0 ? ( // Verifica si el producto tiene stock disponible
-            <button className={styles.boton} onClick={agregarAlCarrito}> {/* Botón para agregar al carrito */}
+
+    <div className={styles.contenedor}>
+      <div className={styles.card}>
+        <img src={producto.imagen} alt={producto.nombre} className={styles.imagen} />
+        <div className={styles.detalles}>
+          <h1 className={styles.titulo}>{producto.nombre}</h1>
+          <p className={styles.descripcion}>{producto.descripcion}</p>
+          <p className={styles.precio}>Precio: ${producto.precio}</p>
+          <p className={styles.infoExtra}>💳 12 cuotas sin interés</p>
+          <p className={styles.infoExtra}>🚚 Envío GRATIS a todo el país</p>
+          <p className={styles.infoExtra}>🏬 Retiro GRATIS en sucursal</p>
+          {producto.stock > 0 ? (
+            <button className={styles.boton} onClick={agregarAlCarrito}>
+
               Agregar al carrito
             </button>
           ) : (

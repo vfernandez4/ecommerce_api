@@ -12,28 +12,31 @@ import Profile from './modules/profile/Profile';
 import Pago from './modules/pago/Pago';
 import Vender from './modules/vender/Vender';
 import ProductoDetalle from './modules/productoDetalle/ProductoDetalle';
+import { CarritoProvider } from './context/CarritoContext'; 
 
 function App() {
 	return (
 		<Router>
-			<div className="appContainer">
-				<Header />
-				<main className="mainGenerico">
-					<Routes>
-						<Route path="/" element={<Home />} />
-						<Route path="/producto" element={<Producto />} />
-						<Route path="/carrito" element={<Carrito />} />
-						<Route path="/login" element={<Login />} />
-						<Route path="/registro" element={<Registro />} />
-						<Route path="/profile" element={<Profile />} />
-						<Route path="/pago" element={<Pago />} />
-						<Route path="/vender" element={<Vender />} />
-						<Route path="/producto/:id" element={<ProductoDetalle />} />
-						<Route path="/producto/categoria/:categoria" element={<Producto />} />
-					</Routes>
-				</main>
-				<Footer />
-			</div>
+			<CarritoProvider> 
+				<div className="appContainer">
+					<Header />
+					<main className="mainGenerico">
+						<Routes>
+							<Route path="/" element={<Home />} />
+							<Route path="/producto" element={<Producto />} />
+							<Route path="/carrito" element={<Carrito />} />
+							<Route path="/login" element={<Login />} />
+							<Route path="/registro" element={<Registro />} />
+							<Route path="/profile" element={<Profile />} />
+							<Route path="/pago" element={<Pago />} />
+							<Route path="/vender" element={<Vender />} />
+							<Route path="/producto/:id" element={<ProductoDetalle />} />
+							<Route path="/producto/categoria/:categoria" element={<Producto />} />
+						</Routes>
+					</main>
+					<Footer />
+				</div>
+			</CarritoProvider>
 		</Router>
 	);
 }
