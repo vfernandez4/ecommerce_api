@@ -5,15 +5,21 @@ import { useCarrito } from "../../context/CarritoContext";
 
 
 export default function Carrito() {
-  const { carrito, eliminarProducto, setCarrito } = useCarrito();
+  const { carrito, eliminarProducto, setCarrito, cambiarCantidad } = useCarrito();
   const cartItems = carrito;
 
   const [itemsEliminando, setItemsEliminando] = useState([]);
 
   function cambiarCantidades(id, masOMenos) {
-    modificarVista(id, masOMenos);
-    modificarJson(id, masOMenos);
+    const producto = carrito.find(item => item.id === id);
+    if (!producto) return;
+  
+    const nuevaCantidad = producto.cantidad + masOMenos;
+    if (nuevaCantidad >= 1) {
+      cambiarCantidad(id, nuevaCantidad);
+    }
   }
+  
 
   function modificarVista(id, masOMenos) {
     setCartItems(items =>
