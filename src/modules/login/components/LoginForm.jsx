@@ -1,45 +1,45 @@
-import React, { useState } from "react"; // Importa React y el hook useState
-import { useNavigate, useLocation } from "react-router-dom"; // Importa hooks para navegación y ubicación
+import React, { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-const LoginForm = ({ onSubmit }) => { // Componente funcional LoginForm que recibe una función onSubmit como prop
-  const [email, setEmail] = useState(""); // Estado para almacenar el correo electrónico
-  const [password, setPassword] = useState(""); // Estado para almacenar la contraseña
-  const [error, setError] = useState(""); // Estado para almacenar mensajes de error
-  const navigate = useNavigate(); // Hook para redirigir a otras rutas
-  const location = useLocation(); // Hook para obtener la ubicación actual
+const LoginForm = ({ onSubmit }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
+  const location = useLocation();
 
-  const validateEmail = (email) => { // Valida el formato del correo electrónico
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/; // Expresión regular para correos válidos
-    return emailRegex.test(email); // Retorna true si el correo es válido
+  const validateEmail = (email) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
   };
 
-  const validatePassword = (password) => { // Valida el formato de la contraseña
-    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/; // Expresión regular para contraseñas válidas
-    return passwordRegex.test(password); // Retorna true si la contraseña es válida
+  const validatePassword = (password) => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/;
+    return passwordRegex.test(password);
   };
 
-  const handleSubmit = async (e) => { // Maneja el envío del formulario
-    e.preventDefault(); // Previene el comportamiento por defecto del formulario
-    if (!validateEmail(email)) { // Verifica si el correo es inválido
-      setError("Por favor, ingresa un correo electrónico válido."); // Muestra un mensaje de error
-      return; // Detiene la ejecución
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!validateEmail(email)) {
+      setError("Por favor, ingresa un correo electrónico válido.");
+      return;
     }
-    if (!validatePassword(password)) { // Verifica si la contraseña es inválida
-      setError( // Muestra un mensaje de error
+    if (!validatePassword(password)) {
+      setError(
         "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un carácter especial."
       );
-      return; // Detiene la ejecución
+      return;
     }
-    setError(""); // Limpia los mensajes de error
+    setError("");
 
     try {
-      const userResponse = await fetch("http://localhost:4000/usuarios?email=" + email); // Solicita al servidor el usuario con el correo ingresado
-      if (!userResponse.ok) throw new Error("Error al verificar el usuario"); // Lanza un error si la respuesta no es exitosa
+      const userResponse = await fetch("http://localhost:4000/usuarios?email=" + email);
+      if (!userResponse.ok) throw new Error("Error al verificar el usuario");
 
-      const [user] = await userResponse.json(); // Obtiene el primer usuario de la respuesta
-      if (!user) { // Verifica si no existe el usuario
-        setError("El usuario no existe. Por favor, regístrate primero."); // Muestra un mensaje de error
-        return; // Detiene la ejecución
+      const [user] = await userResponse.json();
+      if (!user) {
+        setError("El usuario no existe. Por favor, regístrate primero.");
+        return;
       }
       
       if (user.password !== password) {
@@ -50,47 +50,47 @@ const LoginForm = ({ onSubmit }) => { // Componente funcional LoginForm que reci
       const userData = { email };
       localStorage.setItem("user", JSON.stringify(userData));
 
-      onSubmit(userData); // Llama a la función onSubmit con los datos del usuario
+      onSubmit(userData);
 
-      const redirectTo = location.state?.from?.pathname || "/"; // Obtiene la ruta de redirección o la raíz
-      navigate(redirectTo); // Redirige a la ruta correspondiente
-    } catch (err) { // Maneja errores en la solicitud
-      console.error(err); // Imprime el error en la consola
-      setError("Error al verificar el usuario. Inténtalo de nuevo más tarde."); // Muestra un mensaje de error
+      const redirectTo = location.state?.from?.pathname || "/";
+      navigate(redirectTo);
+    } catch (err) {
+      console.error(err);
+      setError("Error al verificar el usuario. Inténtalo de nuevo más tarde.");
     }
   };
 
-  const handleRegisterRedirect = () => { // Redirige a la página de registro
-    navigate("/registro"); // Cambia la ruta a "/registro"
+  const handleRegisterRedirect = () => {
+    navigate("/registro");
   };
 
   return (
-    <form onSubmit={handleSubmit}> {/* Formulario con el manejador de envío */}
+    <form onSubmit={handleSubmit}>
       <label>
         Correo electrónico:
         <input
-          type="text" // Campo de texto para el correo electrónico
-          name="email" // Nombre del campo
-          value={email} // Valor actual del estado email
-          onChange={(e) => setEmail(e.target.value)} // Actualiza el estado email al cambiar el valor
+          type="text"
+          name="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
         />
       </label>
       <br />
       <label>
         Contraseña:
         <input
-          type="password" // Campo de texto para la contraseña
-          name="password" // Nombre del campo
-          value={password} // Valor actual del estado password
-          onChange={(e) => setPassword(e.target.value)} // Actualiza el estado password al cambiar el valor
+          type="password"
+          name="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
         />
       </label>
       <br />
-      {error && <p style={{ color: "red" }}>{error}</p>} {/* Muestra el mensaje de error si existe */}
-      <button type="submit">Ingresar</button> {/* Botón para enviar el formulario */}
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      <button type="submit">Ingresar</button>
       <p>
         ¿Todavía no tienes cuenta?{" "}
-        <a href="/registro" style={{ color: "blue", textDecoration: "underline" }}> {/* Enlace a la página de registro */}
+        <a href="/registro" style={{ color: "blue", textDecoration: "underline" }}>
           Sign Up
         </a>
       </p>
@@ -98,4 +98,4 @@ const LoginForm = ({ onSubmit }) => { // Componente funcional LoginForm que reci
   );
 };
 
-export default LoginForm; // Exporta el componente LoginForm como predeterminado
+export default LoginForm;

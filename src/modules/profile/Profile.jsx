@@ -1,114 +1,114 @@
-import React, { useEffect, useState } from "react"; // Importa React y los hooks useEffect y useState
-import styles from "./profile.module.css"; // Importa los estilos CSS del componente Profile
-import HistoryCard from "./components/HistoryCard"; // Importa el componente HistoryCard para mostrar historial
+import React, { useEffect, useState } from "react";
+import styles from "./profile.module.css";
+import HistoryCard from "./components/HistoryCard";
 
-const Profile = () => { // Componente funcional Profile
-    const [usuarioData, setUsuarioData] = useState(null); // Estado para almacenar los datos del usuario
-    const [comprados, setComprados] = useState([]); // Estado para almacenar los productos comprados
-    const [vendidos, setVendidos] = useState([]); // Estado para almacenar los productos vendidos
+const Profile = () => {
+    const [usuarioData, setUsuarioData] = useState(null);
+    const [comprados, setComprados] = useState([]);
+    const [vendidos, setVendidos] = useState([]);
 
-    useEffect(() => { // Hook para ejecutar código al montar el componente
-        const cargarPerfil = async () => { // Función asíncrona para cargar los datos del perfil
+    useEffect(() => {
+        const cargarPerfil = async () => {
           try {
-            const { email } = JSON.parse(localStorage.getItem("user")); // Obtiene el correo del usuario desde localStorage
+            const { email } = JSON.parse(localStorage.getItem("user"));
       
-            const resU = await fetch(`http://localhost:4000/usuarios?email=${encodeURIComponent(email)}`); // Solicita los datos del usuario
-            if (!resU.ok) throw new Error("Error al conectar con usuarios"); // Lanza un error si la respuesta no es exitosa
-            const [user] = await resU.json(); // Obtiene el usuario de la respuesta
-            setUsuarioData(user); // Actualiza el estado con los datos del usuario
+            const resU = await fetch(`http://localhost:4000/usuarios?email=${encodeURIComponent(email)}`);
+            if (!resU.ok) throw new Error("Error al conectar con usuarios");
+            const [user] = await resU.json();
+            setUsuarioData(user);
       
-            const compradosTmp = []; // Array temporal para los productos comprados
-            for (const id of user.productosComprados) { // Itera sobre los IDs de productos comprados
-              const resP = await fetch(`http://localhost:4000/productos?id=${encodeURIComponent(id)}`); // Solicita los datos del producto
-              if (!resP.ok) throw new Error(`No se pudo cargar producto ${id}`); // Lanza un error si no se puede cargar el producto
-              const arrayProductos = await resP.json(); // Convierte la respuesta a JSON
-              const prod = arrayProductos[0]; // Obtiene el primer producto del array
-              compradosTmp.push(prod); // Agrega el producto al array temporal
+            const compradosTmp = [];
+            for (const id of user.productosComprados) {
+              const resP = await fetch(`http://localhost:4000/productos?id=${encodeURIComponent(id)}`);
+              if (!resP.ok) throw new Error(`No se pudo cargar producto ${id}`);
+              const arrayProductos = await resP.json();      
+              const prod = arrayProductos[0];
+              compradosTmp.push(prod);
             }
-            setComprados(compradosTmp); // Actualiza el estado con los productos comprados
+            setComprados(compradosTmp);
       
-            const vendidosTmp = []; // Array temporal para los productos vendidos
-            for (const id of user.productosVendidos) { // Itera sobre los IDs de productos vendidos
-              const resP = await fetch(`http://localhost:4000/productos?id=${encodeURIComponent(id)}`); // Solicita los datos del producto
-              if (!resP.ok) throw new Error(`No se pudo cargar producto ${id}`); // Lanza un error si no se puede cargar el producto
-              const arrayProductos = await resP.json(); // Convierte la respuesta a JSON
-              const prod = arrayProductos[0]; // Obtiene el primer producto del array
-              vendidosTmp.push(prod); // Agrega el producto al array temporal
+            const vendidosTmp = [];
+            for (const id of user.productosVendidos) {
+              const resP = await fetch(`http://localhost:4000/productos?id=${encodeURIComponent(id)}`);
+              if (!resP.ok) throw new Error(`No se pudo cargar producto ${id}`);
+              const arrayProductos = await resP.json();
+              const prod = arrayProductos[0];
+              vendidosTmp.push(prod);
             }
-            setVendidos(vendidosTmp); // Actualiza el estado con los productos vendidos
+            setVendidos(vendidosTmp);
       
-          } catch (e) { // Maneja errores en la solicitud
-            console.error(e); // Imprime el error en la consola
+          } catch (e) {
+            console.error(e);
           } 
         };
       
-        cargarPerfil(); // Llama a la función para cargar el perfil
-      }, []); // El array vacío asegura que el efecto se ejecute solo una vez al montar
+        cargarPerfil();
+      }, []);
 
-    if (!usuarioData) { // Verifica si los datos del usuario aún no están cargados
-        return <p className={styles.body}>Cargando perfil</p>; // Muestra un mensaje de carga
+    if (!usuarioData) {
+        return <p className={styles.body}>Cargando perfil</p>;
     }
 
     const {
-        nombreCompleto, // Nombre completo del usuario
-        direccion, // Dirección del usuario
-        telefono, // Teléfono del usuario
-        email, // Correo electrónico del usuario
-        fechaNacimiento, // Fecha de nacimiento del usuario
-        avatar // Avatar del usuario
-    } = usuarioData; // Desestructura los datos del usuario
+        nombreCompleto,
+        direccion,
+        telefono,
+        email,
+        fechaNacimiento,
+        avatar
+    } = usuarioData;
 
     return (
-        <div className={styles["body"]}> {/* Contenedor principal del perfil */}
-            <div className={styles["page_container"]}> {/* Contenedor de la página */}
-                <nav className={styles["profile"]}> {/* Sección del perfil */}
-                    <img className={styles["profile_img"]} src={avatar} alt="imagen" /> {/* Imagen del avatar */}
+        <div className={styles["body"]}>
+            <div className={styles["page_container"]}>
+                <nav className={styles["profile"]}>
+                    <img className={styles["profile_img"]} src={avatar} alt="imagen" />
                 </nav>
-                <div className={styles["data"]}> {/* Contenedor de los datos del usuario */}
-                    <section className={styles["data_section"]}> {/* Sección para el nombre */}
+                <div className={styles["data"]}>
+                    <section className={styles["data_section"]}>
                         <h1>Nombre</h1>
-                        <p>{nombreCompleto}</p> {/* Muestra el nombre completo */}
+                        <p>{nombreCompleto}</p>
                     </section>
-                    <section className={styles["data_section"]}> {/* Sección para la dirección */}
+                    <section className={styles["data_section"]}>
                         <h1>Direccion</h1>
-                        <p>{direccion}</p> {/* Muestra la dirección */}
+                        <p>{direccion}</p>
                     </section>
-                    <section className={styles["data_section"]}> {/* Sección para el teléfono */}
+                    <section className={styles["data_section"]}>
                         <h1>Telefono</h1>
-                        <p>{telefono}</p> {/* Muestra el teléfono */}
+                        <p>{telefono}</p>
                     </section>
-                    <section className={styles["data_section"]}> {/* Sección para el correo electrónico */}
+                    <section className={styles["data_section"]}>
                         <h1>Email</h1>
-                        <p>{email}</p> {/* Muestra el correo electrónico */}
+                        <p>{email}</p>
                     </section>
-                    <section className={styles["data_section"]}> {/* Sección para la fecha de nacimiento */}
+                    <section className={styles["data_section"]}>
                         <h2>Fecha de nacimiento</h2>
-                        <p>{fechaNacimiento}</p> {/* Muestra la fecha de nacimiento */}
+                        <p>{fechaNacimiento}</p>
                     </section>
                 </div>
             </div>
-            <section className={styles["history"]}> {/* Sección del historial */}
-                <div className={styles["child_history"]}> {/* Historial de compras */}
+            <section className={styles["history"]}>
+                <div className={styles["child_history"]}>
                     <h2>Historial de compras</h2>
-                    {comprados.map((producto) => ( // Itera sobre los productos comprados
+                    {comprados.map((producto) => (
                         <HistoryCard
-                            key={producto.id} // Clave única para cada producto
-                            nombre={producto.nombre} // Nombre del producto
-                            precio={producto.precio} // Precio del producto
-                            fecha={producto.fecha} // Fecha de compra
-                            imagen={producto.imagen} // Imagen del producto
+                            key={producto.id}
+                            nombre={producto.nombre}
+                            precio={producto.precio}
+                            fecha={producto.fecha}
+                            imagen={producto.imagen}
                         />
                     ))}
                 </div>
-                <div className={styles["child_history"]}> {/* Historial de ventas */}
+                <div className={styles["child_history"]}>
                     <h2>Historial de ventas</h2>
-                    {vendidos.map((producto) => ( // Itera sobre los productos vendidos
+                    {vendidos.map((producto) => (
                         <HistoryCard
-                            key={producto.id} // Clave única para cada producto
-                            nombre={producto.nombre} // Nombre del producto
-                            precio={producto.precio} // Precio del producto
-                            fecha={producto.fecha} // Fecha de venta
-                            imagen={producto.imagen} // Imagen del producto
+                            key={producto.id}
+                            nombre={producto.nombre}
+                            precio={producto.precio}
+                            fecha={producto.fecha}
+                            imagen={producto.imagen}
                         />
                     ))}
                 </div>
@@ -117,4 +117,4 @@ const Profile = () => { // Componente funcional Profile
     );
 };
 
-export default Profile; // Exporta el componente Profile como predeterminado
+export default Profile;

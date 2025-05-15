@@ -1,46 +1,46 @@
-import React, { useState, useEffect } from "react"; // Importa React y los hooks useState y useEffect
-import { useParams } from "react-router-dom"; // Importa el hook useParams para obtener parámetros de la URL
-import ProductoLista from "./components/ProductoLista"; // Importa el componente ProductoLista
-import styles from "./producto.module.css"; // Importa los estilos CSS del componente Producto
+import React, { useState, useEffect } from "react"; 
+import { useParams } from "react-router-dom"; 
+import ProductoLista from "./components/ProductoLista"; 
+import styles from "./producto.module.css"; 
 
-const Producto = () => { // Componente funcional Producto
-  const { categoria } = useParams(); // Obtiene el parámetro "categoria" de la URL
-  const categorias = {}; // Objeto para agrupar productos por categoría
+const Producto = () => { 
+  const { categoria } = useParams(); 
+  const categorias = {}; 
 
-  const [productos, setProductos] = useState([]); // Estado para almacenar la lista de productos
-  useEffect(() => { // Hook para ejecutar código al montar el componente
-    fetch("http://localhost:4000/productos") // Realiza una solicitud a la API para obtener los productos
-      .then((res) => { // Maneja la respuesta de la API
-        if (!res.ok) throw new Error("Error al cargar productos"); // Lanza un error si la respuesta no es exitosa
-        return res.json(); // Convierte la respuesta a JSON
+  const [productos, setProductos] = useState([]); 
+  useEffect(() => { 
+    fetch("http://localhost:4000/productos") 
+      .then((res) => { 
+        if (!res.ok) throw new Error("Error al cargar productos"); 
+        return res.json(); 
       })
-      .then((data) => setProductos(data)) // Actualiza el estado con los datos obtenidos
-      .catch((err) => console.error(err)); // Maneja errores en la solicitud
-  }, []); // El array vacío asegura que el efecto se ejecute solo una vez al montar
+      .then((data) => setProductos(data)) 
+      .catch((err) => console.error(err)); 
+  }, []); 
 
-  productos.forEach((producto) => { // Itera sobre los productos obtenidos
-    if (!categorias[producto.categoria]) { // Si la categoría no existe en el objeto
-      categorias[producto.categoria] = []; // Inicializa un array para la categoría
+  productos.forEach((producto) => { 
+    if (!categorias[producto.categoria]) { 
+      categorias[producto.categoria] = []; 
     }
-    categorias[producto.categoria].push(producto); // Agrega el producto a la categoría correspondiente
+    categorias[producto.categoria].push(producto); 
   });
 
-  const categoriasAMostrar = categoria && categorias[categoria] // Determina las categorías a mostrar
-    ? { [categoria]: categorias[categoria] } // Si hay una categoría en la URL, muestra solo esa
-    : categorias; // Si no, muestra todas las categorías
+  const categoriasAMostrar = categoria && categorias[categoria] 
+    ? { [categoria]: categorias[categoria] } 
+    : categorias; 
 
   return (
-    <div className={styles.catalogo}> {/* Contenedor principal del catálogo */}
-      <h1 className={styles.titulo}>Catálogo de Productos</h1> {/* Título del catálogo */}
+    <div className={styles.catalogo}> 
+      <h1 className={styles.titulo}>Catálogo de Productos</h1> 
 
-      {Object.entries(categoriasAMostrar).map(([categoria, productos]) => ( // Itera sobre las categorías a mostrar
-        <div key={categoria} className={styles.categoriaGrupo}> {/* Contenedor de cada grupo de categoría */}
-          <h2 className={styles.categoriaTitulo}>{categoria.toUpperCase()}</h2> {/* Título de la categoría en mayúsculas */}
-          <ProductoLista productos={productos} /> {/* Componente que muestra la lista de productos */}
+      {Object.entries(categoriasAMostrar).map(([categoria, productos]) => ( 
+        <div key={categoria} className={styles.categoriaGrupo}> 
+          <h2 className={styles.categoriaTitulo}>{categoria.toUpperCase()}</h2> 
+          <ProductoLista productos={productos} /> 
         </div>
       ))}
     </div>
   );
 };
 
-export default Producto; // Exporta el componente Producto como predeterminado
+export default Producto;

@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import styles from "./pago.module.css";
 import { useNavigate } from "react-router-dom";
@@ -22,17 +21,17 @@ const Pago = () => {
     return carritoGuardado ? JSON.parse(carritoGuardado) : [];
   });
 
-  function calcularTotal(items) { // Calcula el total de los productos en el carrito
-    let total = 0; // Inicializa el total en 0
-    items.forEach(item => { // Itera sobre los productos del carrito
-      total += item.precio * item.cantidad; // Suma el precio total de cada producto
+  function calcularTotal(items) {
+    let total = 0;
+    items.forEach(item => {
+      total += item.precio * item.cantidad;
     });
-    return total; // Retorna el total calculado
+    return total;
   }
-  const total = calcularTotal(cartItems); // Calcula el total del carrito
+  const total = calcularTotal(cartItems);
 
-  const envio = 7000; // Costo fijo del envío
-  const totalConEnvio = total + envio; // Calcula el total con el costo de envío incluido
+  const envio = 7000;
+  const totalConEnvio = total + envio;
 
   const navigate = useNavigate();
 
@@ -82,100 +81,100 @@ const Pago = () => {
   }
 
   return (
-    <div className={styles["body"]}> {/* Contenedor principal del componente */}
-      <div className={styles["page-container"]}> {/* Contenedor de la página */}
-        <div className={styles["purchase-details"]}> {/* Contenedor de los detalles de la compra */}
-          <h3 className={styles["title"]}>Direccion de entrega</h3> {/* Título de la sección de dirección */}
-          <form className={styles["forms"]} action=""> {/* Formulario para la dirección */}
+    <div className={styles["body"]}>
+      <div className={styles["page-container"]}>
+        <div className={styles["purchase-details"]}>
+          <h3 className={styles["title"]}>Direccion de entrega</h3>
+          <form className={styles["forms"]} action="">
             <section>
-              <label>Calle</label> {/* Etiqueta para la calle */}
+              <label>Calle</label>
               <br />
-              <input type="text" value={calle} onChange={(e) => setCalle(e.target.value)} /> {/* Campo para ingresar la calle */}
+              <input type="text" value={calle} onChange={(e) => setCalle(e.target.value)} />
             </section>
             
             <section>
-              <label>Numero</label> {/* Etiqueta para el número */}
+              <label>Numero</label>
               <br />
-              <input type="number" value={numero} onChange={(e) => setNumero(e.target.value)} /> {/* Campo para ingresar el número */}
+              <input type="number" value={numero} onChange={(e) => setNumero(e.target.value)} />
             </section>
             
             <section>
-              <label>Piso</label> {/* Etiqueta para el piso */}
+              <label>Piso</label>
               <br />
-              <input type="number" value={piso} onChange={(e) => setPiso(e.target.value)} /> {/* Campo para ingresar el piso */}
+              <input type="number" value={piso} onChange={(e) => setPiso(e.target.value)} />
             </section>
             
             <section>
-              <label>Dpto</label> {/* Etiqueta para el departamento */}
+              <label>Dpto</label>
               <br />
-              <input type="" value={depto} onChange={(e) => setDepto(e.target.value)} /> {/* Campo para ingresar el departamento */}
+              <input type="" value={depto} onChange={(e) => setDepto(e.target.value)} />
             </section>
 
             <section>
-              <label>Codigo Postal</label> {/* Etiqueta para el código postal */}
+              <label>Codigo Postal</label>
               <br />
-              <input type="number" value={codigoPostal} onChange={(e) => setCodigoPostal(e.target.value)} /> {/* Campo para ingresar el código postal */}
+              <input type="number" value={codigoPostal} onChange={(e) => setCodigoPostal(e.target.value)} />
             </section>
           </form>
 
-          <hr /> {/* Línea divisoria */}
+          <hr />
 
-          <h3 className={styles["title"]}>Forma de pago</h3> {/* Título de la sección de forma de pago */}
+          <h3 className={styles["title"]}>Forma de pago</h3>
 
           <label>
-            <input type="radio" name="metodoPago" value="credito" checked={metodoPago === "credito"} onChange={(e) => setMetodoPago(e.target.value)} /> {/* Opción para tarjeta de crédito */}
+            <input type="radio" name="metodoPago" value="credito" checked={metodoPago === "credito"} onChange={(e) => setMetodoPago(e.target.value)} />
             Tarjeta de crédito
           </label>
 
           <br />
 
           <label>
-            <input type="radio" name="metodoPago" value="debito" checked={metodoPago === "debito"} onChange={(e) => setMetodoPago(e.target.value)} /> {/* Opción para tarjeta de débito */}
+            <input type="radio" name="metodoPago" value="debito" checked={metodoPago === "debito"} onChange={(e) => setMetodoPago(e.target.value)} />
             Tarjeta de débito
           </label>
 
-          <form className={styles["forms"]} action=""> {/* Formulario para los datos de la tarjeta */}
+          <form className={styles["forms"]} action="">
             <section>
-              <label>Numero</label> {/* Etiqueta para el número de la tarjeta */}
+              <label>Numero</label>
               <br />
-              <input type="number" value={numeroTarjeta} onChange={(e) => setNumeroTarjeta(e.target.value)} /> {/* Campo para ingresar el número de la tarjeta */}
+              <input type="number" value={numeroTarjeta} onChange={(e) => setNumeroTarjeta(e.target.value)} />
             </section>
 
             <section>
-              <label>Fecha de vencimiento</label> {/* Etiqueta para la fecha de vencimiento */}
+              <label>Fecha de vencimiento</label>
               <br />
-              <input type="date" value={fechaVencimiento} onChange={(e) => setFechaVencimiento(e.target.value)} /> {/* Campo para ingresar la fecha de vencimiento */}
+              <input type="date" value={fechaVencimiento} onChange={(e) => setFechaVencimiento(e.target.value)} />
             </section>
 
             <section>
-              <label>CVV</label> {/* Etiqueta para el CVV */}
+              <label>CVV</label>
               <br />
-              <input type="number" value={cvv} onChange={(e) => setCvv(e.target.value)} /> {/* Campo para ingresar el CVV */}
+              <input type="number" value={cvv} onChange={(e) => setCvv(e.target.value)} />
             </section>
 
             <section>
-              <label>Nombre en la tarjeta</label> {/* Etiqueta para el nombre en la tarjeta */}
+              <label>Nombre en la tarjeta</label>
               <br />
-              <input type="text" value={nombreTarjeta} onChange={(e) => setNombreTarjeta(e.target.value)} /> {/* Campo para ingresar el nombre en la tarjeta */}
+              <input type="text" value={nombreTarjeta} onChange={(e) => setNombreTarjeta(e.target.value)} />
             </section>
           </form>
         </div>
 
-        <aside className={styles["buy-resume"]}> {/* Contenedor del resumen de compra */}
-          <h3 className={styles["title"]}>Resumen de compra</h3> {/* Título del resumen */}
-          <hr /> {/* Línea divisoria */}
+        <aside className={styles["buy-resume"]}>
+          <h3 className={styles["title"]}>Resumen de compra</h3>
+          <hr />
           <section className={styles["buy_details"]}>
-            <p className={styles["detail"]}>Producto</p> {/* Detalle del producto */}
-            <p className={styles["price"]}>${total.toLocaleString()}</p> {/* Precio total de los productos */}
+            <p className={styles["detail"]}>Producto</p>
+            <p className={styles["price"]}>${total.toLocaleString()}</p>
           </section>
           <section className={styles["buy_details"]}>
-            <p className={styles["detail"]}>Envio</p> {/* Detalle del envío */}
-            <p className={styles["price"]}>${envio.toLocaleString()}</p> {/* Precio del envío */}
+            <p className={styles["detail"]}>Envio</p>
+            <p className={styles["price"]}>${envio.toLocaleString()}</p>
           </section>
-          <hr /> {/* Línea divisoria */}
+          <hr />
           <section className={styles["buy_details"]}>
-            <p className={styles["detail"]}>Total</p> {/* Detalle del total */}
-            <p className={styles["price"]}>${totalConEnvio.toLocaleString()}</p> {/* Precio total con envío */}
+            <p className={styles["detail"]}>Total</p>
+            <p className={styles["price"]}>${totalConEnvio.toLocaleString()}</p>
           </section>
 
           <button className={styles["buy_button"]} onClick={agregarAlHistorial}>Confirmar compra</button>
@@ -185,4 +184,4 @@ const Pago = () => {
   );
 };
 
-export default Pago; // Exporta el componente Pago como predeterminado
+export default Pago;
