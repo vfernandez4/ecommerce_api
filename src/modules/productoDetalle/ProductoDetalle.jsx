@@ -28,7 +28,7 @@ const ProductoDetalle = () => {
 
   const agregarAlCarrito = () => {
     agregarProducto(producto);
-    alert("Producto agregado al carrito");
+    //alert("Producto agregado al carrito");
   };
   
 

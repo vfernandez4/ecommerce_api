@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import styles from "./carrito.module.css";
+import { useCarrito } from "../../context/CarritoContext";
+
 
 export default function Carrito() {
-  const [cartItems, setCartItems] = useState(() => {
-    const carritoGuardado = localStorage.getItem("carrito");
-    return carritoGuardado ? JSON.parse(carritoGuardado) : [];
-  });
+  const { carrito, eliminarProducto, setCarrito } = useCarrito();
+  const cartItems = carrito;
 
   const [itemsEliminando, setItemsEliminando] = useState([]);
 
@@ -42,14 +42,13 @@ export default function Carrito() {
 
   const eliminar = (id) => {
     setItemsEliminando(prev => [...prev, id]);
-
+  
     setTimeout(() => {
-      const nuevoCarrito = cartItems.filter(item => item.id !== id);
-      setCartItems(nuevoCarrito);
-      localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+      eliminarProducto(id);
       setItemsEliminando(prev => prev.filter(itemId => itemId !== id));
     }, 200);
   };
+  
 
   function calcularTotal(items) {
     let total = 0;
