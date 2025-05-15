@@ -1,6 +1,6 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import styles from "./carrito.module.css";
+import React, { useState } from "react"; // Importa React y el hook useState
+import { Link } from "react-router-dom"; // Importa el componente Link para navegación
+import styles from "./carrito.module.css"; // Importa los estilos CSS del componente Carrito
 
 export default function Carrito() {
   const [cartItems, setCartItems] = useState(() => {
