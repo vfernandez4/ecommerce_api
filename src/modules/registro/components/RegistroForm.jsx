@@ -73,6 +73,7 @@ const RegistroForm = () => {
       setError("Las contraseñas no coinciden.");
       return;
     }
+    
     setError("");
 
     const usuarioARegistrar = {
@@ -100,12 +101,10 @@ const RegistroForm = () => {
       setSuccess(true);
       const redirectTo = location.state?.from?.pathname || "/";
       setTimeout(() => navigate(redirectTo), 2000);
-
     } catch (err) {
       console.error(err);
       setError("No se pudo conectar con el servidor.");
     }
-
   };
 
   return (

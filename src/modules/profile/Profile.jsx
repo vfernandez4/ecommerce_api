@@ -21,7 +21,7 @@ const Profile = () => {
             for (const id of user.productosComprados) {
               const resP = await fetch(`http://localhost:4000/productos?id=${encodeURIComponent(id)}`);
               if (!resP.ok) throw new Error(`No se pudo cargar producto ${id}`);
-              const arrayProductos = await resP.json();      // arr = [ {...} ]
+              const arrayProductos = await resP.json();      
               const prod = arrayProductos[0];
               compradosTmp.push(prod);
             }

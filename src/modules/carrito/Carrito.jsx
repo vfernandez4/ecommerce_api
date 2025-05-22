@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 import styles from "./carrito.module.css";
 import { useCarrito } from "../../context/CarritoContext";
 
-
 export default function Carrito() {
   const { carrito, eliminarProducto, setCarrito, cambiarCantidad } = useCarrito();
   const cartItems = carrito;

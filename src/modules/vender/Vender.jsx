@@ -27,6 +27,7 @@ export default function Vender() {
 		setDescripcion(e.target.value);
 	};
 	const handleSubmit = async (e) => {
+		e.preventDefault();
 		const productoAVender = {
 			nombre,
 			categoria,

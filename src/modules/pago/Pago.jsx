@@ -24,13 +24,13 @@ const Pago = () => {
   });
 
   function calcularTotal(items) {
-		let total = 0;
-		items.forEach(item => {
-			total += item.precio * item.cantidad;
-		});
-		return total;
-	}
-	const total = calcularTotal(cartItems);
+    let total = 0;
+    items.forEach(item => {
+      total += item.precio * item.cantidad;
+    });
+    return total;
+  }
+  const total = calcularTotal(cartItems);
 
   const envio = 7000;
   const totalConEnvio = total + envio;
@@ -89,33 +89,33 @@ const Pago = () => {
           <h3 className={styles["title"]}>Direccion de entrega</h3>
           <form className={styles["forms"]} action="">
             <section>
-            <label>Calle</label>
-            <br />
-            <input type="text" value={calle} onChange={(e) => setCalle(e.target.value)} />
+              <label>Calle</label>
+              <br />
+              <input type="text" value={calle} onChange={(e) => setCalle(e.target.value)} />
             </section>
             
             <section>
-            <label>Numero</label>
-            <br />
-            <input type="number" value={numero} onChange={(e) => setNumero(e.target.value)} />
+              <label>Numero</label>
+              <br />
+              <input type="number" value={numero} onChange={(e) => setNumero(e.target.value)} />
             </section>
             
             <section>
-            <label>Piso</label>
-            <br />
-            <input type="number" value={piso} onChange={(e) => setPiso(e.target.value)} />
+              <label>Piso</label>
+              <br />
+              <input type="number" value={piso} onChange={(e) => setPiso(e.target.value)} />
             </section>
             
             <section>
-            <label>Dpto</label>
-            <br />
-            <input type="" value={depto} onChange={(e) => setDepto(e.target.value)} />
+              <label>Dpto</label>
+              <br />
+              <input type="" value={depto} onChange={(e) => setDepto(e.target.value)} />
             </section>
 
             <section>
-            <label>Codigo Postal</label>
-            <br />
-            <input type="number" value={codigoPostal} onChange={(e) => setCodigoPostal(e.target.value)} />
+              <label>Codigo Postal</label>
+              <br />
+              <input type="number" value={codigoPostal} onChange={(e) => setCodigoPostal(e.target.value)} />
             </section>
           </form>
 
@@ -137,27 +137,27 @@ const Pago = () => {
 
           <form className={styles["forms"]} action="">
             <section>
-            <label>Numero</label>
-            <br />
-            <input type="number" value={numeroTarjeta} onChange={(e) => setNumeroTarjeta(e.target.value)} />
+              <label>Numero</label>
+              <br />
+              <input type="number" value={numeroTarjeta} onChange={(e) => setNumeroTarjeta(e.target.value)} />
             </section>
 
             <section>
-            <label>Fecha de vencimiento</label>
-            <br />
-            <input type="date" value={fechaVencimiento} onChange={(e) => setFechaVencimiento(e.target.value)} />
+              <label>Fecha de vencimiento</label>
+              <br />
+              <input type="date" value={fechaVencimiento} onChange={(e) => setFechaVencimiento(e.target.value)} />
             </section>
 
             <section>
-            <label>CVV</label>
-            <br />
-            <input type="number" value={cvv} onChange={(e) => setCvv(e.target.value)} />
+              <label>CVV</label>
+              <br />
+              <input type="number" value={cvv} onChange={(e) => setCvv(e.target.value)} />
             </section>
 
             <section>
-            <label>Nombre en la tarjeta</label>
-            <br />
-            <input type="text" value={nombreTarjeta} onChange={(e) => setNombreTarjeta(e.target.value)} />
+              <label>Nombre en la tarjeta</label>
+              <br />
+              <input type="text" value={nombreTarjeta} onChange={(e) => setNombreTarjeta(e.target.value)} />
             </section>
           </form>
         </div>
@@ -170,12 +170,12 @@ const Pago = () => {
             <p className={styles["price"]}>${total.toLocaleString()}</p>
           </section>
           <section className={styles["buy_details"]}>
-          <p className={styles["detail"]}>Envio</p>
-          <p className={styles["price"]}>${envio.toLocaleString()}</p>
+            <p className={styles["detail"]}>Envio</p>
+            <p className={styles["price"]}>${envio.toLocaleString()}</p>
           </section>
           <hr />
           <section className={styles["buy_details"]}>
-          <p className={styles["detail"]}>Total</p>
+            <p className={styles["detail"]}>Total</p>
             <p className={styles["price"]}>${totalConEnvio.toLocaleString()}</p>
           </section>
 

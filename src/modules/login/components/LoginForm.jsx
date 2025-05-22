@@ -5,8 +5,8 @@ const LoginForm = ({ onSubmit }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate(); 
-  const location = useLocation(); 
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const validateEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -41,7 +41,7 @@ const LoginForm = ({ onSubmit }) => {
         setError("El usuario no existe. Por favor, regístrate primero.");
         return;
       }
-
+      
       if (user.password !== password) {
       setError("La contraseña es incorrecta.");
       return;
@@ -61,7 +61,7 @@ const LoginForm = ({ onSubmit }) => {
   };
 
   const handleRegisterRedirect = () => {
-    navigate("/registro"); 
+    navigate("/registro");
   };
 
   return (
