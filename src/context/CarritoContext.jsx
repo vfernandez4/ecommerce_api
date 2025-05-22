@@ -29,8 +29,36 @@ export const CarritoProvider = ({ children }) => {
     });
   };
 
+  const cambiarCantidad = (id, cantidadNueva) => {
+    setCarrito(prevCarrito =>
+      prevCarrito.map(item =>
+        item.id === id
+          ? { ...item, cantidad: Math.max(1, cantidadNueva) } // nunca menos de 1
+          : item
+      )
+    );
+  };
+
+  const eliminarProducto = (id) => {
+    setCarrito(prevCarrito => prevCarrito.filter(item => item.id !== id));
+  };
+
+  const vaciarCarrito = () => {
+    setCarrito([]);
+  };
+  
+
   return (
-    <CarritoContext.Provider value={{ carrito, setCarrito, agregarProducto, cantidadTotal }}>
+    <CarritoContext.Provider 
+        value={{ 
+            carrito, 
+            setCarrito, 
+            agregarProducto,
+            cambiarCantidad, 
+            eliminarProducto,
+            vaciarCarrito,
+            cantidadTotal 
+            }}>
       {children}
     </CarritoContext.Provider>
   );

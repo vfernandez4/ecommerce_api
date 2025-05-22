@@ -154,7 +154,10 @@
       "email": "santoro.ignacio2002@gmail.com",
       "fechaNacimiento": "2002-11-05",
       "avatar": "/avatar/avatar1.png",
-      "productosComprados": [],
+      "productosComprados": [
+        2,
+        1
+      ],
       "productosVendidos": []
     }
   ]

@@ -1,19 +1,28 @@
-import React, { useState } from "react"; 
-import { Link } from "react-router-dom"; 
-import styles from "./carrito.module.css"; 
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
+import styles from "./carrito.module.css";
+import { useCarrito } from "../../context/CarritoContext";
 
 export default function Carrito() {
-  const [cartItems, setCartItems] = useState(() => {
-    const carritoGuardado = localStorage.getItem("carrito");
-    return carritoGuardado ? JSON.parse(carritoGuardado) : [];
-  });
+  const { carrito, eliminarProducto, setCarrito, cambiarCantidad } = useCarrito();
+  const cartItems = carrito;
 
   const [itemsEliminando, setItemsEliminando] = useState([]);
 
   function cambiarCantidades(id, masOMenos) {
-    modificarVista(id, masOMenos);
-    modificarJson(id, masOMenos);
+    const producto = carrito.find(item => item.id === id);
+    if (!producto) return;
+  
+    const nuevaCantidad = producto.cantidad + masOMenos;
+    if (nuevaCantidad < 1) {
+      alert("La cantidad mínima es 1.");
+      return;
+    }
+    if (nuevaCantidad >= 1) {
+      cambiarCantidad(id, nuevaCantidad);
+    }
   }
+  
 
   function modificarVista(id, masOMenos) {
     setCartItems(items =>
@@ -42,14 +51,13 @@ export default function Carrito() {
 
   const eliminar = (id) => {
     setItemsEliminando(prev => [...prev, id]);
-
+  
     setTimeout(() => {
-      const nuevoCarrito = cartItems.filter(item => item.id !== id);
-      setCartItems(nuevoCarrito);
-      localStorage.setItem("carrito", JSON.stringify(nuevoCarrito));
+      eliminarProducto(id);
       setItemsEliminando(prev => prev.filter(itemId => itemId !== id));
     }, 200);
   };
+  
 
   function calcularTotal(items) {
     let total = 0;

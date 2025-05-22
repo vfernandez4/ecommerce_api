@@ -23,24 +23,8 @@ const ProductoDetalle = () => {
   }
 
   const agregarAlCarrito = () => {
-    const carritoGuardado = localStorage.getItem("carrito");
-    const carrito = carritoGuardado ? JSON.parse(carritoGuardado) : [];
-
-    const productoExistente = carrito.find((item) => item.id === producto.id);
-
-    if (productoExistente) {
-      const carritoActualizado = carrito.map((item) =>
-        item.id === producto.id
-          ? { ...item, cantidad: item.cantidad + 1 }
-          : item
-      );
-      localStorage.setItem("carrito", JSON.stringify(carritoActualizado));
-    } else {
-      const nuevoProducto = { ...producto, cantidad: 1 };
-      localStorage.setItem("carrito", JSON.stringify([...carrito, nuevoProducto]));
-    }
-
-    alert("Producto agregado al carrito");
+    agregarProducto(producto);
+    //alert("Producto agregado al carrito");
   };
 
   return (
