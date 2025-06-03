@@ -1,6 +1,5 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.model;
 
-import java.lang.annotation.Inherited;
 import java.util.ArrayList;
 import java.util.List;
 
