@@ -7,25 +7,32 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
-@Entity(name = "productos")
+@Entity
+@Table(name = "productos")
 
 public class Producto {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Column(nullable = false, length = 100)
+	@Column(nullable = false)
 	private String nombre;
+
+	@Column(nullable = false)
 	private double precio;
+
+	@Column(nullable = false)
 	private String descripcion;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "productos_categorias",
-        joinColumns = @JoinColumn(name = "producto_id"),
-        inverseJoinColumns = @JoinColumn(name = "categoria_id")
-    )
-    private List<Categoria> categorias = new ArrayList<>();
+	@Column(nullable = false)
+	private int stock;
+
+	@Column(nullable = false)
+	private String imagen;
+
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
+	@JoinColumn(name = "categoria_id", nullable = false)
+	private Categoria categoria;
 
 	@ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
@@ -34,4 +41,10 @@ public class Producto {
         inverseJoinColumns = @JoinColumn(name = "carrito_id")
     )
     private List<Carrito> carritos = new ArrayList<>();
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "vendedor_id")
+	private Usuario vendedor;
+
+	
 }
