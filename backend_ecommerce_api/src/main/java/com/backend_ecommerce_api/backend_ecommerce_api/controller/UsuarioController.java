@@ -1,5 +1,36 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.controller;
 
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
+import com.backend_ecommerce_api.backend_ecommerce_api.service.UsuarioService;
+
+
+
+@RestController
+@RequestMapping("/api/usuarios")
+
 public class UsuarioController {
+	@Autowired
+	 private UsuarioService usuarioService;
+
+    // https://localhost:8080/api/usuario con metodo post http
+	@PostMapping
+	public Usuario guardarUsuario(@RequestBody Usuario usuario) {
+		return usuarioService.guardarUsuario(usuario);
+	}
+
+	// https://localhost:8080/api/usuarios/mail con metodo get http
+	@GetMapping("/{mail}")
+	public Usuario getUsuarioPorMail(@RequestParam String mail) {
+        return usuarioService.getUsuarioPorMail(mail);
+	} 
 	
+    @PutMapping
+    Usuario actualizarUsuario(@RequestBody Usuario usuario){
+        return usuarioService.actualizarUsuario(usuario);
+    }
 }
