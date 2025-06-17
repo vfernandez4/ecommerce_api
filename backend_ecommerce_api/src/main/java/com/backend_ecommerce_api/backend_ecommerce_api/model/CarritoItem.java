@@ -22,6 +22,4 @@ public class CarritoItem {
 
     @Column(nullable = false)
     private int cantidad;
-
-    
 }

@@ -29,13 +29,48 @@ public class CarritoService {
     @Autowired
     private CarritoItemRepository carritoItemRepository;
 
-    public Carrito crearCarritoParaUsuario(Long usuarioId) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findById(usuarioId);
-        if (usuarioOpt.isEmpty()) {
-            throw new RuntimeException("Usuario no encontrado");
+    public Carrito setCarrito(Long usuarioId, Long productoId, int cantidad) {
+        if(!carritoRepository.existsByUsuario_Id(usuarioId)) {
+            return crearCarritoParaUsuario(usuarioId);
         }
+        else {
+            Carrito carrito = obtenerCarritoPorUsuario(usuarioId);
+            Producto producto = productoRepository.findById(productoId)
+                    .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
 
-        Usuario usuario = usuarioOpt.get();
+            // Buscar si el producto ya está en el carrito
+            Optional<CarritoItem> itemExistente = carrito.getItems().stream()
+                .filter(item -> item.getProducto().getId().equals(productoId))
+                .findFirst();
+
+            if (itemExistente.isPresent() && cantidad > 0) {
+                CarritoItem item = itemExistente.get();
+                item.setCantidad(cantidad);
+            } else if (itemExistente.isPresent() && cantidad == 0) {
+                carrito.getItems().remove(itemExistente.get());
+                carritoItemRepository.delete(itemExistente.get());
+            } else {
+                CarritoItem nuevoItem = new CarritoItem();
+                nuevoItem.setProducto(producto);
+                nuevoItem.setCantidad(cantidad);
+                nuevoItem.setCarrito(carrito);
+                carrito.getItems().add(nuevoItem);
+            }
+
+            return carritoRepository.save(carrito);
+        }
+    }
+
+    public Carrito crearCarritoParaUsuario(Long usuarioId) {
+        Usuario usuario = null;
+
+        if(usuarioRepository.existsById(usuarioId)) {
+            usuario = usuarioRepository.findById(usuarioId)
+                    .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+        }
+        else {
+            return null;
+        }
 
         Carrito carrito = new Carrito();
         carrito.setUsuario(usuario);
@@ -43,49 +78,44 @@ public class CarritoService {
         return carritoRepository.save(carrito);
     }
 
-    public Carrito obtenerCarritoPorUsuarioId(Long usuarioId) {
-        return carritoRepository.findByUsuarioId(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Carrito no encontrado para el usuario"));
+    public Carrito obtenerCarritoPorUsuario(long usuarioId) {
+        return carritoRepository.findByUsuario_Id(usuarioId);
     }
 
-    public Carrito agregarProductoAlCarrito(Long usuarioId, Long productoId, int cantidad) {
-        Carrito carrito = obtenerCarritoPorUsuarioId(usuarioId);
-        Producto producto = productoRepository.findById(productoId)
-                .orElseThrow(() -> new RuntimeException("Producto no encontrado"));
-
-        // Buscar si el producto ya está en el carrito
-        Optional<CarritoItem> itemExistente = carrito.getItems().stream()
-            .filter(item -> item.getProducto().getId().equals(productoId))
-            .findFirst();
-
-        if (itemExistente.isPresent()) {
-            CarritoItem item = itemExistente.get();
-            item.setCantidad(item.getCantidad() + cantidad);
+    public void vaciarCarrito(Long usuarioId) {
+        if (carritoRepository.existsByUsuario_Id(usuarioId)) {
+            carritoRepository.deleteByUsuario_Id(usuarioId);
         } else {
-            CarritoItem nuevoItem = new CarritoItem();
-            nuevoItem.setProducto(producto);
-            nuevoItem.setCantidad(cantidad);
-            nuevoItem.setCarrito(carrito);
-            carrito.getItems().add(nuevoItem);
+            throw new RuntimeException("Producto no encontrado con el id:" + usuarioId);
+        }
+    }
+
+    public double getPrecioTotal(Long usuarioId) {
+        Carrito carrito = obtenerCarritoPorUsuario(usuarioId);
+        return carrito.getItems().stream()
+                .mapToDouble(item -> item.getProducto().getPrecio() * item.getCantidad())
+                .sum();
+    }
+
+    public boolean finalizarCompra(Long usuarioId) {
+        Carrito carrito = obtenerCarritoPorUsuario(usuarioId);
+        if (carrito == null || carrito.getItems().isEmpty()) {
+            return false; // No hay productos en el carrito
         }
 
-        return carritoRepository.save(carrito);
-    }
+        Usuario usuario = usuarioRepository.findById(usuarioId)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
-    public Carrito eliminarProductoDelCarrito(Long usuarioId, Long productoId) {
-        Carrito carrito = obtenerCarritoPorUsuarioId(usuarioId);
-    
-        carrito.getItems().removeIf(item -> item.getProducto().getId().equals(productoId));
-    
-        return carritoRepository.save(carrito);
+        // Agregar productos del carrito a productosComprados
+        for (CarritoItem item : carrito.getItems()) {
+            Producto producto = item.getProducto();
+            if (!usuario.getProductosComprados().contains(producto)) {
+                usuario.getProductosComprados().add(producto);
+            }
+        }
+        usuarioRepository.save(usuario);
+
+        vaciarCarrito(usuarioId);
+        return true;
     }
-    
-    public Carrito vaciarCarrito(Long usuarioId) {
-        Carrito carrito = obtenerCarritoPorUsuarioId(usuarioId);
-    
-        carrito.getItems().clear();
-    
-        return carritoRepository.save(carrito);
-    }
-    
 }
