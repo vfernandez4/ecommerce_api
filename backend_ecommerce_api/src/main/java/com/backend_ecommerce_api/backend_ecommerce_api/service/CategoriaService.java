@@ -42,4 +42,12 @@ public class CategoriaService {
         }
         return null;
     }
+
+    public void eliminarCategoria(Long id) {
+        if (this.categoriaRepository.existsById(id)) {
+            this.categoriaRepository.deleteById(id);
+        } else {
+            throw new RuntimeException("Categoria no encontrada con el id:" + id);
+        }
+    }
 }
