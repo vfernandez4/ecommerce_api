@@ -14,33 +14,37 @@ public class CarritoController {
     private CarritoService carritoService;
 
     // GET /api/carrito/usuario/1
-    @GetMapping("/usuario/{usuarioId}")
-    public Carrito getCarritoPorUsuarioId(@PathVariable Long usuarioId) {
-        return carritoService.obtenerCarritoPorUsuarioId(usuarioId);
+    @GetMapping("/{usuarioId}")
+    public Carrito getCarritoPorUsuario(@RequestParam Long usuarioId) {
+        return carritoService.obtenerCarritoPorUsuario(usuarioId).orElse(null);
+		//aca debería ir una exceipcion de q no se encontró el carrito de ese usuario
     }
 
-    // POST /api/carrito/agregar?usuarioId=1&productoId=5&cantidad=2
-    @PostMapping("/agregar")
-    public Carrito agregarProductoAlCarrito(
-            @RequestParam Long usuarioId,
-            @RequestParam Long productoId,
-            @RequestParam int cantidad) {
-
-        return carritoService.agregarProductoAlCarrito(usuarioId, productoId, cantidad);
+    // POST /api/carrito/{usuarioId}/{productoId}/{cantidad}
+    @PostMapping("/{usuarioId}/{productoId}/{cantidad}")
+    public Carrito setCarrito(@RequestParam Long usuarioId, @RequestParam Long productoId, @RequestParam int cantidad) {
+        return carritoService.setCarrito(usuarioId, productoId, cantidad);
     }
 
-    // DELETE /api/carrito/eliminar?usuarioId=1&productoId=5
-    @DeleteMapping("/eliminar")
-    public Carrito eliminarProductoDelCarrito(
-            @RequestParam Long usuarioId,
-            @RequestParam Long productoId) {
-
-        return carritoService.eliminarProductoDelCarrito(usuarioId, productoId);
+    // DELETE /api/carrito//1
+    @DeleteMapping("/{usuarioId}")
+    public void vaciarCarrito(@RequestParam Long usuarioId) {
+        carritoService.vaciarCarrito(usuarioId);
     }
 
-    // DELETE /api/carrito/vaciar/1
-    @DeleteMapping("/vaciar/{usuarioId}")
-    public Carrito vaciarCarrito(@PathVariable Long usuarioId) {
-        return carritoService.vaciarCarrito(usuarioId);
+    @GetMapping("/precio/{usuarioId}")
+    public double getPrecioTotal(@RequestParam Long usuarioId) {
+        return carritoService.getPrecioTotal(usuarioId);
+    }
+
+    // POST /api/carrito/finalizar/{usuarioId}
+    @PostMapping("/finalizar/{usuarioId}")
+    public String finalizarCompra(@RequestParam Long usuarioId) {
+        boolean exito = carritoService.finalizarCompra(usuarioId);
+        if (exito) {
+            return "Compra finalizada con éxito";
+        } else {
+            return "No se pudo finalizar la compra";
+        }
     }
 }

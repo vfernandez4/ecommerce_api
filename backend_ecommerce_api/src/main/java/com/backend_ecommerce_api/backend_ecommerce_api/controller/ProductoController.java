@@ -36,7 +36,32 @@ public class ProductoController {
 	} 
 	
     @PutMapping
-    Producto actualizarProducto(@RequestBody Producto producto){
+    Producto actualizarProducto(@RequestBody Producto producto) {
         return productoService.actualizarProducto(producto);
-    }	
+    }
+
+	@DeleteMapping("/{id}")
+	public void eliminarProducto(@RequestParam Long id) {
+		productoService.eliminarProducto(id);
+	}
+
+	@GetMapping("/{categoria}")
+	public List<Producto> getProductosPorCategoria(@RequestParam String categoria) {
+		return productoService.getProductosPorCategoria(categoria);
+	}
+
+	@GetMapping("/{nombre}")
+	public List<Producto> getProductosPorNombre(@RequestParam String nombre) {
+		return productoService.getProductosPorNombre(nombre);
+	}
+
+	@GetMapping("/{email}")
+	public List<Producto> getProductosPublicados(@RequestParam String email) {
+		return productoService.getProductosPublicados(email);
+	}
+
+	@GetMapping
+	public List<Producto> getProductosDestacados() {
+		return productoService.getProductosDestacados();
+	}
 }

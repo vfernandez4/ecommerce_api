@@ -35,4 +35,9 @@ public class CategoriaController {
     public Categoria actualizarCategoria(@RequestBody Categoria categoria) {
         return categoriaService.actualizarCategoria(categoria);
     }
+
+    @DeleteMapping("/{id}")
+    public void eliminarCategoria(@RequestParam Long id) {
+        categoriaService.eliminarCategoria(id);
+    }
 }

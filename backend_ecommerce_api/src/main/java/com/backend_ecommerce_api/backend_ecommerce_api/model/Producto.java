@@ -45,6 +45,4 @@ public class Producto {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vendedor_id")
 	private Usuario vendedor;
-
-	
 }

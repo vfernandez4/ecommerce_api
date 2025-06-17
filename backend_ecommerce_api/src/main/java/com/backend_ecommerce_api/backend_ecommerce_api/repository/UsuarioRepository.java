@@ -9,13 +9,13 @@ import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-
-    // Buscar usuario por email
-    Optional<Usuario> findByEmail(String email);
-
-    // Verificar existencia por email
-    boolean existsByEmail(String email);
-
-    // Eliminar por ID
-    void deleteById(Long id);
+	
+	// Método para encontrar un usuario por su email
+	Optional<Usuario> findByEmail(String email);
+	
+	// Método para verificar si un usuario existe por su email
+	boolean existsByEmail(String email);
+	
+	// Método para eliminar un usuario por su id
+	void deleteById(Long id);
 }

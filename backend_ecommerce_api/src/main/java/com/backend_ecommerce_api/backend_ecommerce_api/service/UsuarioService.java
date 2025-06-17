@@ -9,21 +9,31 @@ import com.backend_ecommerce_api.backend_ecommerce_api.dto.RegistroRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.EmailYaRegistradoException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Rol;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
-import java.util.List;
+import java.util.Optional;
+
 import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
 public class UsuarioService {
-	private final UsuarioRepository usuarioRepository;
-
+	  private final UsuarioRepository usuarioRepository;
+  
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+  
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    public Optional<Usuario> getUsuarioPorMail(String mail) {
+        try {
+            return this.usuarioRepository.findByEmail(mail);
+        }
+        catch (Exception e) {
+            return null;
+        }
+    }
 
     public Usuario registrarUsuario(RegistroRequestDTO request) {
         if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
