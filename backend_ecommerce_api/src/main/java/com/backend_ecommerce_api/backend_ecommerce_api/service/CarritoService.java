@@ -34,11 +34,12 @@ public class CarritoService {
     private CarritoItemRepository carritoItemRepository;
 
     public Carrito setCarrito(Long usuarioId, Long productoId, int cantidad) {
-        if(!carritoRepository.existsByUsuario_Id(usuarioId)) {
+        if(!carritoRepository.existsByUsuarioId(usuarioId)) {
             return crearCarritoParaUsuario(usuarioId);
         }
         else {
-            Carrito carrito = obtenerCarritoPorUsuario(usuarioId);
+            Carrito carrito = obtenerCarritoPorUsuario(usuarioId)
+                    .orElseThrow(() -> new CarritoNotFoundException("Carrito no encontrado para el usuario con id: " + usuarioId));
             Producto producto = productoRepository.findById(productoId)
                     .orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con el id: " + productoId));
 
@@ -82,30 +83,32 @@ public class CarritoService {
         return carritoRepository.save(carrito);
     }
 
-    public Carrito obtenerCarritoPorUsuario(long usuarioId) {
-        return carritoRepository.findByUsuario_Id(usuarioId);
+    public Optional<Carrito> obtenerCarritoPorUsuario(long usuarioId) {
+        return carritoRepository.findByUsuarioId(usuarioId);
     }
 
     public void vaciarCarrito(Long usuarioId) {
-        if (carritoRepository.existsByUsuario_Id(usuarioId)) {
-            carritoRepository.deleteByUsuario_Id(usuarioId);
+        if (carritoRepository.existsByUsuarioId(usuarioId)) {
+            carritoRepository.deleteByUsuarioId(usuarioId);
         } else {
             throw new CarritoNotFoundException("Carrito no encontrado para el usuario con id: " + usuarioId);
         }
     }
 
     public double getPrecioTotal(Long usuarioId) {
-        Carrito carrito = obtenerCarritoPorUsuario(usuarioId);
+        Carrito carrito = obtenerCarritoPorUsuario(usuarioId)
+                .orElseThrow(() -> new CarritoNotFoundException("Carrito no encontrado para el usuario con id: " + usuarioId));
         return carrito.getItems().stream()
                 .mapToDouble(item -> item.getProducto().getPrecio() * item.getCantidad())
                 .sum();
     }
 
     public boolean finalizarCompra(Long usuarioId) {
-        Carrito carrito = obtenerCarritoPorUsuario(usuarioId);
-        if (carrito == null || carrito.getItems().isEmpty()) {
+        Optional<Carrito> carritoOpt = obtenerCarritoPorUsuario(usuarioId);
+        if (!carritoOpt.isPresent() || carritoOpt.get().getItems().isEmpty()) {
             return false; // No hay productos en el carrito
         }
+        Carrito carrito = carritoOpt.get();
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
                 .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con el id: " + usuarioId));

@@ -16,7 +16,8 @@ public class CarritoController {
     // GET /api/carrito/usuario/1
     @GetMapping("/{usuarioId}")
     public Carrito getCarritoPorUsuario(@RequestParam Long usuarioId) {
-        return carritoService.obtenerCarritoPorUsuario(usuarioId);
+        return carritoService.obtenerCarritoPorUsuario(usuarioId).orElse(null);
+		//aca debería ir una exceipcion de q no se encontró el carrito de ese usuario
     }
 
     // POST /api/carrito/{usuarioId}/{productoId}/{cantidad}

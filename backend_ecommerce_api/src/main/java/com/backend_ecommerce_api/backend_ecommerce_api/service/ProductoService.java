@@ -66,7 +66,7 @@ public class ProductoService {
     }
 
     public List<Producto> getProductosPorCategoria(String categoria) {
-        return this.productoRepository.findByCategoria_Nombre(categoria);
+        return this.productoRepository.findByCategoriaNombre(categoria);
     }
 
     public List<Producto> getProductosPorNombre(String nombre) {
@@ -74,7 +74,7 @@ public class ProductoService {
     }
 
     public List<Producto> getProductosPublicados(String email) {
-        return this.productoRepository.findByVendedor_Email(email);
+        return this.productoRepository.findByVendedorEmail(email);
     }
 
     public List<Producto> getProductosDestacados() {

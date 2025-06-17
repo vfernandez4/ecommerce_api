@@ -15,4 +15,4 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 	// Método para eliminar un usuario por su id
 	void deleteById(Long id);
 	
-
+}
