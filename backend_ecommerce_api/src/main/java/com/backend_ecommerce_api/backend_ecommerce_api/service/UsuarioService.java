@@ -5,7 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
-import java.util.List;
+import java.util.Optional;
+
 import jakarta.transaction.Transactional;
 
 @Service
@@ -18,7 +19,7 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Usuario getUsuarioPorMail(String mail) {
+    public Optional<Usuario> getUsuarioPorMail(String mail) {
         try {
             return this.usuarioRepository.findByEmail(mail);
         }
