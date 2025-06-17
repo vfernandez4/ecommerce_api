@@ -4,9 +4,9 @@ import java.sql.Date;
 import java.util.Collection;
 import java.util.List;
 
-//import org.springframework.security.core.GrantedAuthority;
-//import org.springframework.security.core.authority.SimpleGrantedAuthority;
-//import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -15,7 +15,7 @@ import lombok.Data;
 @Entity
 @Table(name = "usuarios")
 
-public class Usuario /* implements  UserDetails */ {
+public class Usuario implements  UserDetails  {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -59,7 +59,7 @@ public class Usuario /* implements  UserDetails */ {
 
 	// metodos obligatorios de implementar por la interfaz UserDetails, hay que
 	// cambiar el return true por la logica que se necesite
-	/* 
+	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		return List.of(new SimpleGrantedAuthority(rol.name()));
@@ -89,5 +89,5 @@ public class Usuario /* implements  UserDetails */ {
 	public boolean isEnabled() {
 		return true;
 	}
-	*/
+	
 }
