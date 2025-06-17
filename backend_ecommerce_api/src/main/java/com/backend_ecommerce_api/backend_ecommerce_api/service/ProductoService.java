@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.ProductoRepository;
+import com.backend_ecommerce_api.exception.ProductoNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
 import java.util.List;
 import jakarta.transaction.Transactional;
@@ -27,7 +28,7 @@ public class ProductoService {
 
     public Producto getProductoPorId(Long id) {
         return this.productoRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Producto no encontrado con el id:" + id)
+                () -> new ProductoNotFoundException("Producto no encontrado con el id: " + id)
         );
     }
 
@@ -46,7 +47,7 @@ public class ProductoService {
         if (this.productoRepository.existsById(id)) {
             this.productoRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Producto no encontrado con el id:" + id);
+            throw new ProductoNotFoundException("Producto no encontrado con el id: " + id);
         }
     }
 
