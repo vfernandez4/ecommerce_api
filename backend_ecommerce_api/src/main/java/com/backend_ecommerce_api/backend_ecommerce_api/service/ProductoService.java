@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.ProductoRepository;
-import com.backend_ecommerce_api.exception.ProductoNotFoundException;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.ProductoNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
 import java.util.List;
 import jakarta.transaction.Transactional;

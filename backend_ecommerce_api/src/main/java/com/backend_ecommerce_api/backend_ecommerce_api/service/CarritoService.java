@@ -5,6 +5,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.CarritoNotFoundException;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.ProductoNotFoundException;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.ResourceNotFoundException;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Carrito;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.CarritoItem;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
@@ -13,10 +17,6 @@ import com.backend_ecommerce_api.backend_ecommerce_api.repository.CarritoItemRep
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.CarritoRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.ProductoRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
-import com.backend_ecommerce_api.exception.ResourceNotFoundException;
-import com.backend_ecommerce_api.exception.CarritoNotFoundException;
-import com.backend_ecommerce_api.exception.ProductoNotFoundException;
-import com.backend_ecommerce_api.exception.UsuarioNotFoundException;
 
 @Service
 public class CarritoService {

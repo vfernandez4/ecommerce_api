@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.CategoriaRepository;
-import com.backend_ecommerce_api.exception.CategoriaNotFoundException;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.CategoriaNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Categoria;
 
 import java.util.List;
