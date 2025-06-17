@@ -5,10 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.RegistroRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.UsuarioService;
-
-
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -18,10 +17,10 @@ public class UsuarioController {
 	 private UsuarioService usuarioService;
 
     // https://localhost:8080/api/usuario con metodo post http
-	@PostMapping
-	public Usuario guardarUsuario(@RequestBody Usuario usuario) {
-		return usuarioService.guardarUsuario(usuario);
-	}
+	@PostMapping("/register")
+    public Usuario registrar(@RequestBody RegistroRequestDTO request) {
+        return usuarioService.registrarUsuario(request);
+    }
 
 	// https://localhost:8080/api/usuarios/mail con metodo get http
 	@GetMapping("/{mail}")
