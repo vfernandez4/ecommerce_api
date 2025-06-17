@@ -19,9 +19,12 @@ public class UsuarioService {
     }
 
     public Usuario getUsuarioPorMail(String mail) {
-        return this.usuarioRepository.findByMail(mail).orElseThrow(
-                () -> new RuntimeException("Usuario no encontrado por el mail:" + mail)
-        );
+        try {
+            return this.usuarioRepository.findByEmail(mail);
+        }
+        catch (Exception e) {
+            return null;
+        }
     }
 
     public Usuario guardarUsuario(Usuario usuario) {
@@ -29,7 +32,7 @@ public class UsuarioService {
     }
 
     public Usuario actualizarUsuario(Usuario usuario) {
-        if (this.usuarioRepository.existsById(usuario.getMail())) {
+        if (this.usuarioRepository.existsByEmail(usuario.getEmail())) {
             return this.usuarioRepository.save(usuario);
         }
         return null;
