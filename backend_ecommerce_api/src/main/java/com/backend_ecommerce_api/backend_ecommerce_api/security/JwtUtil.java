@@ -16,11 +16,11 @@ public class JwtUtil {
 
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10;
 
-    @Value("${jwt.secret}")
-    private String secret;
+    private static final String SECRET_KEY = "6d304f2e4d41665b4f6a5c4b325d2c786e614c5a55664867696a55504275405a";
+
 
     private Key getKey() {
-        return Keys.hmacShaKeyFor(secret.getBytes());
+        return Keys.hmacShaKeyFor(SECRET_KEY.getBytes());
     }
 
     public String generateToken(String email) {

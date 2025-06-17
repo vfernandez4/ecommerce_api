@@ -8,5 +8,6 @@ import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
 
 @Repository
 public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-    Optional<Usuario> findByEmail(String email);
+    Optional<Usuario> findByEmail(String mail);
+    boolean existsByEmail(String mail);
 }

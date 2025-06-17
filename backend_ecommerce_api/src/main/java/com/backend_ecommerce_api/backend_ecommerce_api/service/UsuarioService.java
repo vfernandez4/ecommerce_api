@@ -4,17 +4,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.RegistroRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.EmailYaRegistradoException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Rol;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
-import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
+import java.util.List;
+import jakarta.transaction.Transactional;
 
 @Service
+@Transactional
 public class UsuarioService {
+	private final UsuarioRepository usuarioRepository;
 
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    public UsuarioService(UsuarioRepository usuarioRepository) {
+        this.usuarioRepository = usuarioRepository;
+    }
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -35,5 +41,17 @@ public class UsuarioService {
         usuario.setRol(Rol.USER);
 
         return usuarioRepository.save(usuario);
+    }
+
+    public Usuario getUsuarioPorMail(String mail) {
+        return this.usuarioRepository.findByEmail(mail)
+            .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + mail));
+    }
+
+    public Usuario actualizarUsuario(Usuario usuario) {
+        if (this.usuarioRepository.existsByEmail(usuario.getEmail())) {
+            return this.usuarioRepository.save(usuario);
+        }
+        return null;
     }
 }
