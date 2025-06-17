@@ -13,6 +13,7 @@ import com.backend_ecommerce_api.backend_ecommerce_api.repository.CarritoItemRep
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.CarritoRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.ProductoRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
+import com.backend_ecommerce_api.exception.ResourceNotFoundException;
 
 @Service
 public class CarritoService {
