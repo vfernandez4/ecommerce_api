@@ -1,36 +1,34 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.controller;
 
-import java.util.List;
-import java.util.Optional;
-
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.UsuarioResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.UsuarioUpdateRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.service.UsuarioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.backend_ecommerce_api.backend_ecommerce_api.dto.RegistroRequestDTO;
-import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
-import com.backend_ecommerce_api.backend_ecommerce_api.service.UsuarioService;
-
 @RestController
 @RequestMapping("/api/usuarios")
-
 public class UsuarioController {
-	@Autowired
-	 private UsuarioService usuarioService;
 
-    // https://localhost:8080/api/usuario con metodo post http
-	@PostMapping("/register")
-    public Usuario registrar(@RequestBody RegistroRequestDTO request) {
-        return usuarioService.registrarUsuario(request);
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @GetMapping("/buscar")
+    public UsuarioResponseDTO getUsuarioPorMail(@RequestParam String mail) {
+        return usuarioService.getUsuarioPorMail(mail)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + mail));
     }
 
-	// https://localhost:8080/api/usuarios/mail con metodo get http
-	@GetMapping("/{mail}")
-	public Optional<Usuario> getUsuarioPorMail(@RequestParam String mail) {
-        return usuarioService.getUsuarioPorMail(mail);
-	} 
-	
-    @PutMapping
-    Usuario actualizarUsuario(@RequestBody Usuario usuario){
-        return usuarioService.actualizarUsuario(usuario);
+    @PutMapping("/{id}")
+    public UsuarioResponseDTO actualizarUsuario(
+            @PathVariable Long id,
+            @RequestBody UsuarioUpdateRequestDTO request) {
+        return usuarioService.actualizarUsuario(id, request);
+    }
+
+    @DeleteMapping("/{id}")
+    public String eliminarUsuario(@PathVariable Long id) {
+        usuarioService.eliminarUsuario(id);
+        return "Usuario eliminado con éxito.";
     }
 }

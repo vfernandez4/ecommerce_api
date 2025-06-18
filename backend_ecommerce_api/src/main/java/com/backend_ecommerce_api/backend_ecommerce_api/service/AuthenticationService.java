@@ -7,8 +7,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Service;
 
-import com.backend_ecommerce_api.backend_ecommerce_api.dto.JwtResponseDTO;
-import com.backend_ecommerce_api.backend_ecommerce_api.dto.LoginRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.LoginRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.JwtResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.security.JwtUtil;
