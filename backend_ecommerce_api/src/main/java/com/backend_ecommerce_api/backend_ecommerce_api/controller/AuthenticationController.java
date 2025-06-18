@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.LoginRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.RegistroRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.JwtResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.AuthenticationService;
 
@@ -17,5 +18,10 @@ public class AuthenticationController {
     @PostMapping("/login")
     public JwtResponseDTO login(@RequestBody LoginRequestDTO request) {
         return authenticationService.authenticate(request);
+    }
+
+    @PostMapping("/register")
+    public JwtResponseDTO register(@RequestBody RegistroRequestDTO request) {
+        return authenticationService.register(request);
     }
 }
