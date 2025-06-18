@@ -53,11 +53,13 @@ public class UsuarioService {
         return usuarioRepository.save(usuario);
     }
 
+    /* 
     public Usuario getUsuarioPorMail(String mail) {
         return this.usuarioRepository.findByEmail(mail)
             .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + mail));
     }
 
+    */
     public Usuario actualizarUsuario(Usuario usuario) {
         if (this.usuarioRepository.existsByEmail(usuario.getEmail())) {
             return this.usuarioRepository.save(usuario);
