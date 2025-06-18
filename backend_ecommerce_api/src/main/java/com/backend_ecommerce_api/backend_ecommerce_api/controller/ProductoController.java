@@ -5,6 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoPublicarRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoUpdateRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.ProductoService;
 
@@ -15,28 +18,28 @@ import com.backend_ecommerce_api.backend_ecommerce_api.service.ProductoService;
 
 public class ProductoController {
 	@Autowired
-	 private ProductoService productoService;
+	private ProductoService productoService;
 
 	// https://localhost:8080/api/productos con metodo get http
 	@GetMapping 
-	public List<Producto> getTodosProductos() {
+	public List<ProductoResponseDTO> getTodosProductos() {
 		return productoService.getTodosProductos();
 	}
 	
 	// https://localhost:8080/api/productos con metodo post http
 	@PostMapping
-	public Producto guardarProducto(@RequestBody Producto producto) {
+	public ProductoResponseDTO publicarProducto(@RequestBody ProductoPublicarRequestDTO producto) {
 		return productoService.guardarProducto(producto);
 	}
 
 	// https://localhost:8080/api/productos/1 con metodo get http
 	@GetMapping("/{id}")
-	public Producto getProductoPorId(@RequestParam Long id) {
+	public ProductoResponseDTO getProductoPorId(@RequestParam Long id) {
 		return productoService.getProductoPorId(id);
 	} 
 	
     @PutMapping
-    Producto actualizarProducto(@RequestBody Producto producto) {
+    public ProductoResponseDTO actualizarProducto(@RequestBody ProductoUpdateRequestDTO producto) {
         return productoService.actualizarProducto(producto);
     }
 
@@ -46,22 +49,32 @@ public class ProductoController {
 	}
 
 	@GetMapping("/{categoria}")
-	public List<Producto> getProductosPorCategoria(@RequestParam String categoria) {
+	public List<ProductoResponseDTO> getProductosPorCategoria(@RequestParam String categoria) {
 		return productoService.getProductosPorCategoria(categoria);
 	}
 
 	@GetMapping("/{nombre}")
-	public List<Producto> getProductosPorNombre(@RequestParam String nombre) {
+	public List<ProductoResponseDTO> getProductosPorNombre(@RequestParam String nombre) {
 		return productoService.getProductosPorNombre(nombre);
 	}
 
-	@GetMapping("/{email}")
-	public List<Producto> getProductosPublicados(@RequestParam String email) {
-		return productoService.getProductosPublicados(email);
+	@GetMapping("/{id}") //publicados por un usuario (pueden haberse vendido aun o no)
+	public List<ProductoResponseDTO> getProductosPublicados(@RequestParam Long id) {
+		return productoService.getProductosPublicados(id);
+	}
+
+	@GetMapping("/{id}") //historial vendidos por un usuario
+	public List<ProductoResponseDTO> getProductosVendidos(@RequestParam Long id) {
+		return productoService.getProductosVendidos(id);
+	}
+
+	@GetMapping("/{id}") //historial comprados por un usuario
+	public List<ProductoResponseDTO> getProductosComprados(@RequestParam Long id) {
+		return productoService.getProductosComprados(id);
 	}
 
 	@GetMapping
-	public List<Producto> getProductosDestacados() {
+	public List<ProductoResponseDTO> getProductosDestacados() {
 		return productoService.getProductosDestacados();
 	}
 }

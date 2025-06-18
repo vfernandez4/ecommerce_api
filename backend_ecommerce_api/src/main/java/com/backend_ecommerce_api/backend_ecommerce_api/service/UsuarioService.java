@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.RegistroRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.EmailYaRegistradoException;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Rol;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
 import java.util.Optional;
@@ -24,15 +25,6 @@ public class UsuarioService {
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
-    }
-
-    public Optional<Usuario> getUsuarioPorMail(String mail) {
-        try {
-            return this.usuarioRepository.findByEmail(mail);
-        }
-        catch (Exception e) {
-            return null;
-        }
     }
 
     public Usuario registrarUsuario(RegistroRequestDTO request) {
@@ -55,7 +47,7 @@ public class UsuarioService {
 
     public Usuario getUsuarioPorMail(String mail) {
         return this.usuarioRepository.findByEmail(mail)
-            .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + mail));
+            .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con email: " + mail));
     }
 
     public Usuario actualizarUsuario(Usuario usuario) {

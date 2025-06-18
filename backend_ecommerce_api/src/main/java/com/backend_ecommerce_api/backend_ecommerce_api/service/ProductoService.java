@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.ProductoRepository;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.ProductoNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
 import java.util.List;
@@ -22,8 +23,10 @@ public class ProductoService {
 		this.productoRepository = productoRepository;
 	}
 
-	public List<Producto> getTodosProductos() {
-		return this.productoRepository.findAll();
+	public List<ProductoResponseDTO> getTodosProductos() {
+		return this.productoRepository.findAll().stream()
+				   .map(p -> toProductoResponseDTO(p))
+				   .toList();
 	}
 
     public Producto getProductoPorId(Long id) {
@@ -80,5 +83,24 @@ public class ProductoService {
     public List<Producto> getProductosDestacados() {
         return this.productoRepository.findDestacados();
     }
+
+	private ProductoResponseDTO toProductoResponseDTO(Producto producto) {
+		ProductoResponseDTO dto = new ProductoResponseDTO();
+		dto.setId(producto.getId());
+		dto.setNombre(producto.getNombre());
+		dto.setPrecio(producto.getPrecio());
+		dto.setDescripcion(producto.getDescripcion());
+		dto.setStock(producto.getStock());
+		dto.setImagen(producto.getImagen());
+		if (producto.getCategoria() != null) {
+			dto.setCategoriaId(producto.getCategoria().getId());
+			dto.setCategoriaNombre(producto.getCategoria().getNombre());
+		}
+		if (producto.getVendedor() != null) {
+			dto.setVendedorId(producto.getVendedor().getId());
+			dto.setVendedorNombre(producto.getVendedor().getNombreCompleto());
+		}
+		return dto;
+ }
 
 }

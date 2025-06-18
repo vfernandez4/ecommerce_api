@@ -25,7 +25,7 @@ public class UsuarioController {
 
 	// https://localhost:8080/api/usuarios/mail con metodo get http
 	@GetMapping("/{mail}")
-	public Optional<Usuario> getUsuarioPorMail(@RequestParam String mail) {
+	public Usuario getUsuarioPorMail(@RequestParam String mail) {
         return usuarioService.getUsuarioPorMail(mail);
 	} 
 	
