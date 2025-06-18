@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.CategoriaRepository;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.CategoriaNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Categoria;
 
 import java.util.List;
@@ -28,7 +29,7 @@ public class CategoriaService {
 
     public Categoria getCategoriaPorId(Long id) {
         return this.categoriaRepository.findById(id).orElseThrow(
-            () -> new RuntimeException("Categoria no encontrada con el id:" + id)
+            () -> new CategoriaNotFoundException("Categoria no encontrada con el id: " + id)
         );
     }
 
@@ -47,7 +48,7 @@ public class CategoriaService {
         if (this.categoriaRepository.existsById(id)) {
             this.categoriaRepository.deleteById(id);
         } else {
-            throw new RuntimeException("Categoria no encontrada con el id:" + id);
+            throw new CategoriaNotFoundException("Categoria no encontrada con el id: " + id);
         }
     }
 }

@@ -1,6 +1,8 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.service;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.*;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.CarritoNotFoundException;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.*;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -74,28 +76,31 @@ public class CarritoService {
     }
 
     public void vaciarCarrito(Long usuarioId) {
-        if (carritoRepository.existsByUsuario_Id(usuarioId)) {
-            carritoRepository.deleteByUsuario_Id(usuarioId);
+        if (carritoRepository.existsByUsuarioId(usuarioId)) {
+            carritoRepository.deleteByUsuarioId(usuarioId);
         } else {
-            throw new RuntimeException("Producto no encontrado con el id:" + usuarioId);
+            throw new CarritoNotFoundException("Carrito no encontrado para el usuario con id: " + usuarioId);
         }
     }
 
     public double getPrecioTotal(Long usuarioId) {
-        Carrito carrito = carritoRepository.findByUsuario_Id(usuarioId);
+        Carrito carrito = carritoRepository.findByUsuarioId(usuarioId)
+                .orElseThrow(() -> new CarritoNotFoundException("Carrito no encontrado para el usuario con id: " + usuarioId));
         return carrito.getItems().stream()
                 .mapToDouble(item -> item.getProducto().getPrecio() * item.getCantidad())
                 .sum();
     }
 
     public boolean finalizarCompra(Long usuarioId) {
-        Carrito carrito = carritoRepository.findByUsuario_Id(usuarioId);
-        if (carrito == null || carrito.getItems().isEmpty()) {
+        Carrito carrito = carritoRepository.findByUsuarioId(usuarioId)
+                .orElseThrow(() -> new CarritoNotFoundException("Carrito no encontrado para el usuario con id: " + usuarioId));
+
+        if (carrito.getItems().isEmpty()) {
             return false;
         }
 
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con el id: " + usuarioId));
 
         for (CarritoItem item : carrito.getItems()) {
             Producto producto = item.getProducto();
