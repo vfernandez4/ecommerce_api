@@ -1,6 +1,9 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.service;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.*;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.CarritoRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.CarritoItemResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.CarritoResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.CarritoNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.*;
