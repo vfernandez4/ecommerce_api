@@ -13,6 +13,7 @@ import com.backend_ecommerce_api.backend_ecommerce_api.service.ProductoService;
 
 @RestController
 @RequestMapping("/api/productos")
+@PreAuthorize("hasRole('ADMIN')")
 
 public class ProductoController {
 	@Autowired
