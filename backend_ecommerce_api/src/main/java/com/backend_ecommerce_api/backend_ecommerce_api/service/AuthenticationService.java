@@ -67,7 +67,7 @@ public class AuthenticationService {
             String encryptedPassword = passwordEncoder.encode(request.getPassword());
             nuevoUsuario.setPassword(encryptedPassword);
 
-            nuevoUsuario.setRol(Rol.USER);
+            nuevoUsuario.setRol(Rol.ROLE_USER);
 
             usuarioRepository.save(nuevoUsuario);
 

@@ -5,9 +5,11 @@ import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.CarritoRespo
 import com.backend_ecommerce_api.backend_ecommerce_api.service.CarritoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/carrito")
+@PreAuthorize("hasRole('USER')")
 public class CarritoController {
 
     @Autowired
