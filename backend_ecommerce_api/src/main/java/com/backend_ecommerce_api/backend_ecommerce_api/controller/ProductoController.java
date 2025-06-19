@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.ProductoService;
@@ -25,6 +26,7 @@ public class ProductoController {
 	
 	// https://localhost:8080/api/productos con metodo post http
 	@PostMapping
+	@PreAuthorize("hasRole('ADMIN')")
 	public Producto guardarProducto(@RequestBody Producto producto) {
 		return productoService.guardarProducto(producto);
 	}
@@ -41,6 +43,7 @@ public class ProductoController {
     }
 
 	@DeleteMapping("/{id}")
+	@PreAuthorize("hasRole('ADMIN')")
 	public void eliminarProducto(@RequestParam Long id) {
 		productoService.eliminarProducto(id);
 	}
