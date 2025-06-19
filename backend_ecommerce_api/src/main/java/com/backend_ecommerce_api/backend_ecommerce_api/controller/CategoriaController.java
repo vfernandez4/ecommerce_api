@@ -5,7 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.backend_ecommerce_api.backend_ecommerce_api.model.Categoria;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.CategoriaRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.CategoriaResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.CategoriaService;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,32 +16,31 @@ import org.springframework.security.access.prepost.PreAuthorize;
 @PreAuthorize("hasRole('ADMIN')")
 public class CategoriaController {
 	
-
     @Autowired
     private CategoriaService categoriaService;
 
     @GetMapping
-    public List<Categoria> getTodasCategorias() {
+    public List<CategoriaResponseDTO> getTodasCategorias() {
         return categoriaService.getTodasCategorias();
     }
 
     @PostMapping
-    public Categoria guardarCategoria(@RequestBody Categoria categoria) {
-        return categoriaService.guardarCategoria(categoria);
+    public CategoriaResponseDTO crearCategoria(@RequestBody CategoriaRequestDTO categoriaDTO) {
+        return categoriaService.crearCategoria(categoriaDTO);
     }
 
     @GetMapping("/{id}")
-    public Categoria getCategoriaPorId(@RequestParam Long id) {
+    public CategoriaResponseDTO getCategoriaPorId(@PathVariable Long id) {
         return categoriaService.getCategoriaPorId(id);
     }
 
-    @PutMapping
-    public Categoria actualizarCategoria(@RequestBody Categoria categoria) {
-        return categoriaService.actualizarCategoria(categoria);
+    @PutMapping("/{id}")
+    public CategoriaResponseDTO actualizarCategoria(Long id, @RequestBody CategoriaRequestDTO categoriaDTO) {
+        return categoriaService.actualizarCategoria(id, categoriaDTO);
     }
 
     @DeleteMapping("/{id}")
-    public void eliminarCategoria(@RequestParam Long id) {
+    public void eliminarCategoria(@PathVariable Long id) {
         categoriaService.eliminarCategoria(id);
     }
 }

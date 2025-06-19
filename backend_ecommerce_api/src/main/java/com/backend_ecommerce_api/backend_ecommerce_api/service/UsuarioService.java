@@ -26,9 +26,9 @@ public class UsuarioService {
                 .map(this::mapToResponseDTO);
     }
 
-    public UsuarioResponseDTO actualizarUsuario(Long id, UsuarioUpdateRequestDTO dto) {
-        Usuario usuario = usuarioRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+    public UsuarioResponseDTO actualizarUsuario(String email, UsuarioUpdateRequestDTO dto) {
+		Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
 
         usuario.setNombreCompleto(dto.getNombreCompleto());
         usuario.setDireccion(dto.getDireccion());
