@@ -30,11 +30,21 @@ public class SecurityConfig {
         http
             .csrf(csrf -> csrf.disable())
             .authorizeHttpRequests(auth -> auth
+
+                // Rutas públicas que no requieren autenticación
                 .requestMatchers("/auth/**").permitAll()
-                .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
-                .requestMatchers("/api/productos/**").hasAnyRole("ADMIN", "USER")
-                .requestMatchers("/api/categorias/**").hasRole("ADMIN")
+                .requestMatchers (HttpMethod.GET, "/api/productos/**").permitAll()
+
+                // Rutas protegidas que requieren autenticación
+                .requestMatchers(HttpMethod.POST, "/api/productos/**").authenticated()
+                .requestMatchers(HttpMethod.PUT, "/api/productos/**").authenticated()
+                .requestMatchers(HttpMethod.DELETE, "/api/productos/**").authenticated()
                 .requestMatchers("/api/carrito/**").hasRole("USER")
+
+                // Rutas para admins
+                .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
+                .requestMatchers("/api/categorias/**").hasRole("ADMIN")
+
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
