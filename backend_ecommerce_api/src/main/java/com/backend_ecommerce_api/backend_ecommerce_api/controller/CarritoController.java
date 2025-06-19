@@ -17,8 +17,9 @@ public class CarritoController {
     private CarritoService carritoService;
 
 	@PostMapping
-    public CarritoResponseDTO setCarrito(@RequestBody CarritoRequestDTO request) {
-        return carritoService.setCarrito(request);
+    public CarritoResponseDTO setCarrito(@RequestBody CarritoRequestDTO request, Authentication auth) {
+		String email = auth.getName();
+        return carritoService.setCarrito(request, email);
     }
 
     @GetMapping

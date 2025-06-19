@@ -31,13 +31,14 @@ public class CarritoService {
     @Autowired
     private CarritoItemRepository carritoItemRepository;
 
-    public CarritoResponseDTO setCarrito(CarritoRequestDTO request) {
-        Long usuarioId = request.getUsuarioId();
+    public CarritoResponseDTO setCarrito(CarritoRequestDTO request, String email) {
+		Usuario usuario = usuarioRepository.findByEmail(email)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
         Long productoId = request.getProductoId();
         int cantidad = request.getCantidad();
 
-        Carrito carrito = carritoRepository.findByUsuarioId(usuarioId)
-                .orElseGet(() -> crearCarritoParaUsuario(usuarioId));
+        Carrito carrito = carritoRepository.findByUsuarioId(usuario.getId())
+                .orElseGet(() -> crearCarritoParaUsuario(usuario.getId()));
 
         Producto producto = productoRepository.findById(productoId)
                 .orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado"));
@@ -119,7 +120,7 @@ public class CarritoService {
                 usuario.getProductosComprados().add(producto);
             }
         }
-		
+
         usuarioRepository.save(usuario);
         vaciarCarrito(usuario.getEmail());
         return true;
