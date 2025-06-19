@@ -67,6 +67,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
                 SecurityContextHolder.getContext().setAuthentication(authToken);
                 logger.info("Autenticación seteada en el contexto de seguridad.");
+                logger.info("Authorities asignadas: " + authToken.getAuthorities());
             } else {
                 logger.warning("Token inválido, no se setea autenticación.");
             }
