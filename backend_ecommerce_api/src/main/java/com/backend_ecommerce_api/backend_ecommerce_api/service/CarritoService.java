@@ -9,6 +9,9 @@ import com.backend_ecommerce_api.backend_ecommerce_api.exception.ProductoNotFoun
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.*;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.*;
+
+import jakarta.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -104,6 +107,7 @@ public class CarritoService {
                 .sum();
     }
 
+    @Transactional
     public boolean finalizarCompra(String email) {
 		Usuario usuario = usuarioRepository.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));			

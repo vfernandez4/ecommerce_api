@@ -69,6 +69,9 @@ public class AuthenticationService {
 
             nuevoUsuario.setRol(Rol.ROLE_USER);
 
+            System.out.println("Rol asignado al usuario: " + nuevoUsuario.getRol());
+
+
             usuarioRepository.save(nuevoUsuario);
 
             String token = jwtUtil.generateToken(nuevoUsuario.getEmail());

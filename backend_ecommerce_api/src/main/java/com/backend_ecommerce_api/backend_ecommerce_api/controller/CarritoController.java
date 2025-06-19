@@ -10,7 +10,8 @@ import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/carrito")
-@PreAuthorize("hasRole('USER')")
+@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+//@PreAuthorize("permitAll()")
 public class CarritoController {
 
     @Autowired

@@ -8,6 +8,7 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,23 +22,32 @@ public class UsuarioService {
         this.usuarioRepository = usuarioRepository;
     }
 
+    public List<UsuarioResponseDTO> getTodosLosUsuarios() {
+        return usuarioRepository.findAll()
+                .stream()
+                .map(this::mapToResponseDTO)
+                .toList();
+    }
+    
+    
     public Optional<UsuarioResponseDTO> getUsuarioPorMail(String mail) {
         return usuarioRepository.findByEmail(mail)
                 .map(this::mapToResponseDTO);
     }
 
-    public UsuarioResponseDTO actualizarUsuario(String email, UsuarioUpdateRequestDTO dto) {
-		Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
-
+    public UsuarioResponseDTO actualizarUsuario(Long id, UsuarioUpdateRequestDTO dto) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+    
         usuario.setNombreCompleto(dto.getNombreCompleto());
         usuario.setDireccion(dto.getDireccion());
         usuario.setTelefono(dto.getTelefono());
         usuario.setFechaNacimiento(dto.getFechaNacimiento());
         usuario.setAvatar(dto.getAvatar());
-
+    
         return mapToResponseDTO(usuarioRepository.save(usuario));
     }
+    
 
     public void eliminarUsuario(Long id) {
         if (!usuarioRepository.existsById(id)) {
