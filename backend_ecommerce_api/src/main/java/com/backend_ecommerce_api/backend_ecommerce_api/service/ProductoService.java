@@ -21,7 +21,6 @@ import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
 import java.util.List;
 
 @Service
-@Transactional(readOnly = true)
 public class ProductoService {
 	private final ProductoRepository productoRepository;
 	private final UsuarioRepository usuarioRepository;
@@ -34,18 +33,21 @@ public class ProductoService {
 		this.usuarioRepository = usuarioRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public List<ProductoResponseDTO> getTodosProductos() {
 		return this.productoRepository.findAll().stream()
 				   .map(p -> toProductoResponseDTO(p))
 				   .toList();
 	}
 
+	@Transactional(readOnly = true)
     public ProductoResponseDTO getProductoPorId(Long id) {
 		return toProductoResponseDTO(
 			this.productoRepository.findById(id)
 			.orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con el id: " + id)));
     }
 
+	@Transactional
 	public ProductoResponseDTO publicarProducto(String email, ProductoPublicarRequestDTO productoDTO) {
 		Usuario vendedor = usuarioRepository.findByEmail(email)
         					.orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con ese email: " + email));
@@ -74,46 +76,57 @@ public class ProductoService {
 		return toProductoResponseDTO(this.productoRepository.save(producto));
 	}
 
-    public ProductoResponseDTO actualizarProducto(ProductoUpdateRequestDTO productoDTO, Long id) {
-		Producto producto = updateToProducto(productoDTO, id);
+	@Transactional
+	public ProductoResponseDTO actualizarProducto(ProductoUpdateRequestDTO productoDTO, Long id) {
+		Producto productoAnterior = productoRepository.findById(id)
+										.orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con el id: " + id);
+		
+		productoAnterior.setNombre(productoDTO.getNombre());
+		productoAnterior.setPrecio(productoDTO.getPrecio());
+		productoAnterior.setDescripcion(productoDTO.getDescripcion());
+		productoAnterior.setStockActual(productoDTO.getStockActual());
+		productoAnterior.setImagen(productoDTO.getImagen());
+		
+		return toProductoResponseDTO(productoRepository.save(productoAnterior));
+	}
 
-        if (this.productoRepository.existsById(producto.getId())) {
-            return toProductoResponseDTO(this.productoRepository.save(producto));
-        }
-		throw new ProductoNotFoundException("Producto no encontrado con el id: " + id);
-    }
-
-    public void eliminarProducto(Long id) {
-        if (this.productoRepository.existsById(id)) {
-            this.productoRepository.deleteById(id);
+	@Transactional
+	public void eliminarProducto(Long id) {
+		if (!productoRepository.existsById(id)) {
+			throw new ProductoNotFoundException("Producto no encontrado con el id: " + id);
 		}
-        throw new ProductoNotFoundException("Producto no encontrado con el id: " + id);
-    }
+		productoRepository.deleteById(id);
+	}	
 
+	@Transactional(readOnly = true)
     public List<ProductoResponseDTO> getProductosPorCategoria(String categoria) {
         return this.productoRepository.findByCategoriaNombre(categoria).stream()
 						.map(producto -> toProductoResponseDTO(producto))
 						.toList();
 	}
 
+	@Transactional(readOnly = true)
     public List<ProductoResponseDTO> getProductosPorNombre(String nombre) {
 		return this.productoRepository.findByNombreContainingIgnoreCase(nombre).stream()
 						.map(producto -> toProductoResponseDTO(producto))
 						.toList();
     }
 
+	@Transactional(readOnly = true)
     public List<ProductoResponseDTO> getProductosPublicados(String email) {
 		return this.productoRepository.findByVendedorEmail(email).stream()
 						.map(producto -> toProductoResponseDTO(producto))
 						.toList();
     }
 
+	@Transactional(readOnly = true)
     public List<ProductoResponseDTO> getProductosVendidos(String email) {
 		return this.productoRepository.findVendidosByVendedorEmail(email).stream()
 						.map(producto -> toProductoResponseDTO(producto))
 						.toList();
     }
 
+	@Transactional(readOnly = true)
     public List<ProductoResponseDTO> getProductosComprados(String email) {
 		Usuario usuario = usuarioRepository.findByEmail(email)
 											.orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
@@ -124,6 +137,7 @@ public class ProductoService {
 				.toList();
     }	
 
+	@Transactional(readOnly = true)
     public List<ProductoResponseDTO> getProductosDestacados() {
         return this.productoRepository.findDestacados().stream()
 					.map(producto -> toProductoResponseDTO(producto))
@@ -167,17 +181,6 @@ public class ProductoService {
 		producto.setCategoria(categoria);
 		producto.setVendedor(vendedor);
 
-		return producto;
-	}
-
-	private Producto updateToProducto(ProductoUpdateRequestDTO productoUpdate, Long id) {
-		Producto producto = new Producto();
-		producto.setId(id);
-		producto.setNombre(productoUpdate.getNombre());
-		producto.setPrecio(productoUpdate.getPrecio());
-		producto.setDescripcion(productoUpdate.getDescripcion());
-		producto.setStockActual(productoUpdate.getStockActual());
-		producto.setImagen(productoUpdate.getImagen());
 		return producto;
 	}
 
