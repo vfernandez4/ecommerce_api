@@ -8,7 +8,8 @@ public class ProductoResponseDTO {
 	private String nombre;
 	private double precio;
 	private String descripcion;
- 	private int stock;
+ 	private int stockInicial;
+	private int stockActual;
 	private String imagen;
 	private Long categoriaId;
 	private String categoriaNombre;

@@ -7,6 +7,6 @@ public class ProductoUpdateRequestDTO {
 	private String nombre;
 	private double precio;
 	private String descripcion;
-	private int stock;
+	private int stockActual;
 	private String imagen;
 }

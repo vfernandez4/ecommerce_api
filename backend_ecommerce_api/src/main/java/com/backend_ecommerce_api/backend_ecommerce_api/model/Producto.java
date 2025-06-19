@@ -24,8 +24,15 @@ public class Producto {
 	@Column(nullable = false)
 	private String descripcion;
 
+	// aca iria el stock que carga el usuario cuando publica un producto
+	//po rejemplo tengo 5 de estos celulares para vender
+	// no se actualiza.
 	@Column(nullable = false)
-	private int stock;
+	private int stockInicial;
+
+	// este es el stock que se va actualizandp cuando haya ventas
+	@Column(nullable = false)
+	private int stockActual;
 
 	@Column(nullable = false)
 	private String imagen;
@@ -45,4 +52,5 @@ public class Producto {
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vendedor_id")
 	private Usuario vendedor;
+	
 }
