@@ -55,14 +55,10 @@ public class Usuario implements  UserDetails  {
 	@OneToMany(mappedBy = "vendedor", fetch = FetchType.LAZY)
 	private List<Producto> productosVendidos;
 
-
-
-	// metodos obligatorios de implementar por la interfaz UserDetails, hay que
-	// cambiar el return true por la logica que se necesite
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return List.of(new SimpleGrantedAuthority(rol.name()));
+		return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
 	}
 
 	@Override

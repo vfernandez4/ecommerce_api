@@ -1,59 +1,60 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.service;
 
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.UsuarioResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.UsuarioUpdateRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
+import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
-import com.backend_ecommerce_api.backend_ecommerce_api.dto.RegistroRequestDTO;
-import com.backend_ecommerce_api.backend_ecommerce_api.exception.EmailYaRegistradoException;
-import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
-import com.backend_ecommerce_api.backend_ecommerce_api.model.Rol;
-import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
 import java.util.Optional;
-
-import jakarta.transaction.Transactional;
 
 @Service
 @Transactional
 public class UsuarioService {
-	  private final UsuarioRepository usuarioRepository;
-  
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-  
+
+    private final UsuarioRepository usuarioRepository;
+
     @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository) {
         this.usuarioRepository = usuarioRepository;
     }
 
-    public Usuario registrarUsuario(RegistroRequestDTO request) {
-        if (usuarioRepository.findByEmail(request.getEmail()).isPresent()) {
-            throw new EmailYaRegistradoException("El email ya está registrado");
-        }
-
-        Usuario usuario = new Usuario();
-        usuario.setNombreCompleto(request.getNombreCompleto());
-        usuario.setDireccion(request.getDireccion());
-        usuario.setTelefono(request.getTelefono());
-        usuario.setFechaNacimiento(request.getFechaNacimiento());
-        usuario.setAvatar(request.getAvatar());
-        usuario.setEmail(request.getEmail());
-        usuario.setPassword(passwordEncoder.encode(request.getPassword()));
-        usuario.setRol(Rol.USER);
-
-        return usuarioRepository.save(usuario);
+    public Optional<UsuarioResponseDTO> getUsuarioPorMail(String mail) {
+        return usuarioRepository.findByEmail(mail)
+                .map(this::mapToResponseDTO);
     }
 
-    public Usuario getUsuarioPorMail(String mail) {
-        return this.usuarioRepository.findByEmail(mail)
-            .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con email: " + mail));
+    public UsuarioResponseDTO actualizarUsuario(Long id, UsuarioUpdateRequestDTO dto) {
+        Usuario usuario = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con id: " + id));
+
+        usuario.setNombreCompleto(dto.getNombreCompleto());
+        usuario.setDireccion(dto.getDireccion());
+        usuario.setTelefono(dto.getTelefono());
+        usuario.setFechaNacimiento(dto.getFechaNacimiento());
+        usuario.setAvatar(dto.getAvatar());
+
+        return mapToResponseDTO(usuarioRepository.save(usuario));
     }
 
-    public Usuario actualizarUsuario(Usuario usuario) {
-        if (this.usuarioRepository.existsByEmail(usuario.getEmail())) {
-            return this.usuarioRepository.save(usuario);
+    public void eliminarUsuario(Long id) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new RuntimeException("Usuario no encontrado con id: " + id);
         }
-        return null;
+        usuarioRepository.deleteById(id);
+    }
+
+    private UsuarioResponseDTO mapToResponseDTO(Usuario usuario) {
+        UsuarioResponseDTO dto = new UsuarioResponseDTO();
+        dto.setId(usuario.getId());
+        dto.setNombreCompleto(usuario.getNombreCompleto());
+        dto.setDireccion(usuario.getDireccion());
+        dto.setTelefono(usuario.getTelefono());
+        dto.setFechaNacimiento(usuario.getFechaNacimiento());
+        dto.setAvatar(usuario.getAvatar());
+        dto.setEmail(usuario.getEmail());
+        return dto;
     }
 }

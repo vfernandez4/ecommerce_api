@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.security.access.AccessDeniedException;
 
 @ControllerAdvice
 @ResponseBody
@@ -57,5 +58,11 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse handleCarritoNotFound(CarritoNotFoundException ex) {
         return new ErrorResponse(ex.getMessage());
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleAccessDenied(AccessDeniedException ex) {
+        return new ErrorResponse("Acceso denegado: No tienes permisos para realizar esta acción.");
     }
 }
