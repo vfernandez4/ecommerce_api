@@ -5,8 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import com.backend_ecommerce_api.backend_ecommerce_api.dto.CategoriaRequestDTO;
-import com.backend_ecommerce_api.backend_ecommerce_api.dto.CategoriaResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.CategoriaRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.CategoriaResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.CategoriaService;
 
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.CategoriaRepository;
-import com.backend_ecommerce_api.backend_ecommerce_api.dto.CategoriaRequestDTO;
-import com.backend_ecommerce_api.backend_ecommerce_api.dto.CategoriaResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.CategoriaRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.CategoriaResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.BadRequestException;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.CategoriaNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Categoria;
