@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoPublicarRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoResponseDTO;
@@ -28,8 +29,9 @@ public class ProductoController {
 	
 	// https://localhost:8080/api/productos con metodo post http
 	@PostMapping
-	public ProductoResponseDTO publicarProducto(@RequestBody ProductoPublicarRequestDTO producto) {
-		return productoService.guardarProducto(producto);
+	public ProductoResponseDTO publicarProducto(@RequestBody ProductoPublicarRequestDTO producto, Authentication auth) {
+		String email = auth.getName();
+		return productoService.publicarProducto(email, producto);
 	}
 
 	// https://localhost:8080/api/productos/1 con metodo get http

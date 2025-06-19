@@ -6,10 +6,19 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.backend_ecommerce_api.backend_ecommerce_api.repository.CategoriaRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.ProductoRepository;
+import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoPublicarRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoUpdateRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.CategoriaNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.ProductoNotFoundException;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
+import com.backend_ecommerce_api.backend_ecommerce_api.model.Categoria;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
+import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
+
 import java.util.List;
 import jakarta.transaction.Transactional;
 
@@ -17,10 +26,14 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class ProductoService {
 	private final ProductoRepository productoRepository;
+	private final UsuarioRepository usuarioRepository;
+	private final CategoriaRepository categoriaRepository;
 
 	@Autowired
-	public ProductoService(ProductoRepository productoRepository) {
+	public ProductoService(ProductoRepository productoRepository, CategoriaRepository categoriaRepository, UsuarioRepository usuarioRepository) {
 		this.productoRepository = productoRepository;
+		this.categoriaRepository = categoriaRepository;
+		this.usuarioRepository = usuarioRepository;
 	}
 
 	public List<ProductoResponseDTO> getTodosProductos() {
@@ -29,16 +42,24 @@ public class ProductoService {
 				   .toList();
 	}
 
-    public Producto getProductoPorId(Long id) {
-        return this.productoRepository.findById(id).orElseThrow(
-                () -> new ProductoNotFoundException("Producto no encontrado con el id: " + id)
-        );
+    public ProductoResponseDTO getProductoPorId(Long id) {
+		return toProductoResponseDTO(
+			this.productoRepository.findById(id)
+			.orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con el id: " + id)));
     }
 
-	public Producto guardarProducto(Producto producto) {
+	public ProductoResponseDTO publicarProducto(String email, ProductoPublicarRequestDTO productoDTO) {
+		Usuario vendedor = usuarioRepository.findByEmail(email)
+        					.orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con ese email: " + email));
+
+    	Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId())
+        						.orElseThrow(() -> new CategoriaNotFoundException("Categoría no encontrada con ese id: " + productoDTO.getCategoriaId()));
+		
+		Producto producto = publicarToProducto(productoDTO, categoria, vendedor);
+
 		// agregar validaciones de que el precio sea positivo
 		// que la descripcion, path imagen y el nombre no sean nulos o vacíos
-		return this.productoRepository.save(producto);
+		return toProductoResponseDTO(this.productoRepository.save(producto));
 	}
 	
 	public Producto venderProducto(Long id, int cantidad) {
@@ -101,6 +122,31 @@ public class ProductoService {
 			dto.setVendedorNombre(producto.getVendedor().getNombreCompleto());
 		}
 		return dto;
- }
+ 	}
+
+	private Producto publicarToProducto(ProductoPublicarRequestDTO productoRequest, Categoria categoria, Usuario vendedor) {
+		Producto producto = new Producto();
+
+		producto.setNombre(productoRequest.getNombre());
+		producto.setPrecio(productoRequest.getPrecio());
+		producto.setDescripcion(productoRequest.getDescripcion());
+		producto.setStock(productoRequest.getStock());
+		producto.setImagen(productoRequest.getImagen());
+		producto.setCategoria(categoria);
+		producto.setVendedor(vendedor);
+
+		return producto;
+	}
+
+	private Producto updateToProducto(ProductoUpdateRequestDTO productoUpdate, Long id) {
+		Producto producto = new Producto();
+		producto.setId(id);
+		producto.setNombre(productoUpdate.getNombre());
+		producto.setPrecio(productoUpdate.getPrecio());
+		producto.setDescripcion(productoUpdate.getDescripcion());
+		producto.setStock(productoUpdate.getStock());
+		producto.setImagen(productoUpdate.getImagen());
+		return producto;
+	}
 
 }
