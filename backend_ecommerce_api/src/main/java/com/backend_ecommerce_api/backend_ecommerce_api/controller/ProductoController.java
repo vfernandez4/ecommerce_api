@@ -9,7 +9,6 @@ import org.springframework.security.core.Authentication;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoPublicarRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.ProductoUpdateRequestDTO;
-import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.ProductoService;
 
 

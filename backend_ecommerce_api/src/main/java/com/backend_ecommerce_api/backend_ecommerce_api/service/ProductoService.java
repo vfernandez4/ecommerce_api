@@ -78,16 +78,16 @@ public class ProductoService {
 
 	@Transactional
 	public ProductoResponseDTO actualizarProducto(ProductoUpdateRequestDTO productoDTO, Long id) {
-		Producto productoAnterior = productoRepository.findById(id)
-										.orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con el id: " + id);
+		Producto producto = productoRepository.findById(id)
+										.orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con el id: " + id));
 		
-		productoAnterior.setNombre(productoDTO.getNombre());
-		productoAnterior.setPrecio(productoDTO.getPrecio());
-		productoAnterior.setDescripcion(productoDTO.getDescripcion());
-		productoAnterior.setStockActual(productoDTO.getStockActual());
-		productoAnterior.setImagen(productoDTO.getImagen());
+		producto.setNombre(productoDTO.getNombre());
+		producto.setPrecio(productoDTO.getPrecio());
+		producto.setDescripcion(productoDTO.getDescripcion());
+		producto.setStockActual(productoDTO.getStockActual());
+		producto.setImagen(productoDTO.getImagen());
 		
-		return toProductoResponseDTO(productoRepository.save(productoAnterior));
+		return toProductoResponseDTO(productoRepository.save(producto));
 	}
 
 	@Transactional
