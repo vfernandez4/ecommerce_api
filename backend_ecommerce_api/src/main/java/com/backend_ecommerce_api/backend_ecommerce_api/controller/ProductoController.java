@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.access.prepost.PreAuthorize;
 
-import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoPagarRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoPublicarRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoUpdateRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.ProductoResponseDTO;

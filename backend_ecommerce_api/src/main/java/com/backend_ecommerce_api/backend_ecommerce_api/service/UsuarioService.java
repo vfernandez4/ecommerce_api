@@ -45,6 +45,7 @@ public class UsuarioService {
 				.orElseThrow(() -> new ProductoNotFoundException("Usuario no encontrado con email: " + email));
 
 		usuario.addProductoComprado(producto);
+		usuarioRepository.save(usuario);
 	}
     
     public Optional<UsuarioResponseDTO> getUsuarioPorMail(String mail) {
