@@ -36,7 +36,7 @@ public class CarritoService {
 
     public CarritoResponseDTO setCarrito(CarritoRequestDTO request, String email) {
 		Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
         Long productoId = request.getProductoId();
         int cantidad = request.getCantidad();
 
@@ -71,7 +71,7 @@ public class CarritoService {
 
     public Carrito crearCarritoParaUsuario(Long usuarioId) {
         Usuario usuario = usuarioRepository.findById(usuarioId)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
         Carrito carrito = new Carrito();
         carrito.setUsuario(usuario);
         return carritoRepository.save(carrito);
@@ -79,17 +79,17 @@ public class CarritoService {
 
     public CarritoResponseDTO getCarritoPorUsuario(String email) {
 		Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new CarritoNotFoundException("Usuario no encontrado"));
 
         Carrito carrito = carritoRepository.findByUsuarioId(usuario.getId())
-                .orElseThrow(() -> new RuntimeException("Carrito no encontrado para el usuario"));
+                .orElseThrow(() -> new CarritoNotFoundException("Carrito no encontrado para el usuario"));
 
         return construirResponseDTO(carrito);
     }
 
     public void vaciarCarrito(String email) {
 		Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
         if (carritoRepository.existsByUsuarioId(usuario.getId())) {
             carritoRepository.deleteByUsuarioId(usuario.getId());
         } else {
@@ -99,7 +99,7 @@ public class CarritoService {
 
     public double getPrecioTotal(String email) {
 		Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));		
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));		
         Carrito carrito = carritoRepository.findByUsuarioId(usuario.getId())
                 .orElseThrow(() -> new CarritoNotFoundException("Carrito no encontrado para el usuario con id: " + usuario.getId()));
         return carrito.getItems().stream()
@@ -110,7 +110,7 @@ public class CarritoService {
     @Transactional
     public boolean finalizarCompra(String email) {
 		Usuario usuario = usuarioRepository.findByEmail(email)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado"));			
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));			
         Carrito carrito = carritoRepository.findByUsuarioId(usuario.getId())
                 .orElseThrow(() -> new CarritoNotFoundException("Carrito no encontrado para el usuario con id: " + usuario.getId()));
 

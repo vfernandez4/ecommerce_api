@@ -1,6 +1,7 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.controller;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.UsuarioResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.UsuarioUpdateRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.UsuarioService;
 
@@ -13,7 +14,7 @@ import org.springframework.security.core.Authentication;
 
 @RestController
 @RequestMapping("/api/usuarios")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
+@PreAuthorize("hasAuthority('ROLE_ADMIN')")
 public class UsuarioController {
 
     @Autowired
@@ -27,7 +28,7 @@ public class UsuarioController {
     @GetMapping("/buscar")
     public UsuarioResponseDTO getUsuarioPorMail(@RequestParam String mail) {
         return usuarioService.getUsuarioPorMail(mail)
-                .orElseThrow(() -> new RuntimeException("Usuario no encontrado con email: " + mail));
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con email: " + mail));
     }
 
     @PutMapping("/{id}")

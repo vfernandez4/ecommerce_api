@@ -20,43 +20,44 @@ const LoginForm = ({ onSubmit }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!validateEmail(email)) {
       setError("Por favor, ingresa un correo electrónico válido.");
       return;
     }
+
     if (!validatePassword(password)) {
-      setError(
-        "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un carácter especial."
-      );
+      setError("La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un carácter especial.");
       return;
     }
+
     setError("");
 
     try {
-      const userResponse = await fetch("http://localhost:4000/usuarios?email=" + email);
-      if (!userResponse.ok) throw new Error("Error al verificar el usuario");
+      const response = await fetch("http://localhost:8082/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-      const [user] = await userResponse.json();
-      if (!user) {
-        setError("El usuario no existe. Por favor, regístrate primero.");
+      if (!response.ok) {
+        setError("Credenciales incorrectas.");
         return;
       }
-      
-      if (user.password !== password) {
-      setError("La contraseña es incorrecta.");
-      return;
-      }
 
-      const userData = { email };
-      localStorage.setItem("user", JSON.stringify(userData));
+      const data = await response.json();
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("userEmail", email);
 
-      onSubmit(userData);
+      onSubmit(data);
 
       const redirectTo = location.state?.from?.pathname || "/";
       navigate(redirectTo);
     } catch (err) {
-      console.error(err);
-      setError("Error al verificar el usuario. Inténtalo de nuevo más tarde.");
+      console.error("Error de conexión:", err);
+      setError("No se pudo conectar al servidor.");
     }
   };
 
@@ -90,7 +91,10 @@ const LoginForm = ({ onSubmit }) => {
       <button type="submit">Ingresar</button>
       <p>
         ¿Todavía no tienes cuenta?{" "}
-        <a href="/registro" style={{ color: "blue", textDecoration: "underline" }}>
+        <a
+          href="/registro"
+          style={{ color: "blue", textDecoration: "underline" }}
+        >
           Sign Up
         </a>
       </p>
