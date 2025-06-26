@@ -7,10 +7,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.access.prepost.PreAuthorize;
 
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoPagarRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoPublicarRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoUpdateRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.ProductoResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.ProductoService;
+import com.backend_ecommerce_api.backend_ecommerce_api.service.UsuarioService;
 
 
 
@@ -20,6 +23,7 @@ import com.backend_ecommerce_api.backend_ecommerce_api.service.ProductoService;
 public class ProductoController {
 	@Autowired
 	private ProductoService productoService;
+	private UsuarioService usuarioService;
 
 	@GetMapping 
 	public List<ProductoResponseDTO> getTodosProductos() {
@@ -27,7 +31,6 @@ public class ProductoController {
 	}
 	
 	@PostMapping
-	@PreAuthorize("hasRole('ADMIN')")
 	public ProductoResponseDTO publicarProducto(@RequestBody ProductoPublicarRequestDTO producto, Authentication auth) {
 		String email = auth.getName();
 		return productoService.publicarProducto(email, producto);
@@ -81,5 +84,14 @@ public class ProductoController {
 	@GetMapping("/destacados")
 	public List<ProductoResponseDTO> getProductosDestacados() {
 		return productoService.getProductosDestacados();
+	}
+
+	@PostMapping("/pago")
+	public void pagarProductos(@RequestBody List<ProductoUpdateRequestDTO> productosDTO, Authentication auth) {
+		String email = auth.getName();
+		for (ProductoUpdateRequestDTO prod : productosDTO) {
+			productoService.actualizarProductoPago(prod);
+			usuarioService.agregarCompra(email, prod);
+		}
 	}
 }

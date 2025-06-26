@@ -2,6 +2,7 @@ package com.backend_ecommerce_api.backend_ecommerce_api.controller;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.UsuarioResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.UsuarioUpdateRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.service.ProductoService;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.UsuarioService;
 
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.Authentication;
+
 
 @RestController
 @RequestMapping("/api/usuarios")
@@ -31,8 +32,8 @@ public class UsuarioController {
     }
 
     @PutMapping("/{id}")
-    public UsuarioResponseDTO actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioUpdateRequestDTO request) {
-        return usuarioService.actualizarUsuario(id, request);
+    public UsuarioResponseDTO actualizarUsuario(@PathVariable Long id, @RequestBody UsuarioUpdateRequestDTO usuarioRequest) {
+        return usuarioService.actualizarUsuario(id, usuarioRequest);
     }
 
 
@@ -41,4 +42,7 @@ public class UsuarioController {
         usuarioService.eliminarUsuario(id);
         return "Usuario eliminado con éxito.";
     }
+
+
+
 }   
