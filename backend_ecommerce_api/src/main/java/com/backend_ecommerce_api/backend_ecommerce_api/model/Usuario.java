@@ -52,9 +52,16 @@ public class Usuario implements  UserDetails  {
 	)
 	private List<Producto> productosComprados;
 
+	public void addProductoComprado(Producto producto){
+		this.productosComprados.add(producto);
+	}
+
 	@OneToMany(mappedBy = "vendedor", fetch = FetchType.LAZY)
 	private List<Producto> productosVendidos;
 
+	public void addProductoVendido(Producto producto){
+		this.productosVendidos.add(producto);
+	}
 	
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {

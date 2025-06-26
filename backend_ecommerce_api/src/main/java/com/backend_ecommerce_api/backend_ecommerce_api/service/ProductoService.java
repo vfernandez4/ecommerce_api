@@ -79,7 +79,7 @@ public class ProductoService {
 	@Transactional
 	public ProductoResponseDTO actualizarProducto(ProductoUpdateRequestDTO productoDTO, Long id) {
 		Producto producto = productoRepository.findById(id)
-										.orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con el id: " + id));
+								.orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con el id: " + id));		
 		
 		producto.setNombre(productoDTO.getNombre());
 		producto.setPrecio(productoDTO.getPrecio());
@@ -88,6 +88,19 @@ public class ProductoService {
 		producto.setImagen(productoDTO.getImagen());
 		
 		return toProductoResponseDTO(productoRepository.save(producto));
+	}
+
+	@Transactional
+	public void actualizarProductoPago(ProductoUpdateRequestDTO productoDTO) {
+		Producto producto = productoRepository.findById(productoDTO.getId())
+							.orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con el id: " + productoDTO.getId()));
+		producto.setNombre(productoDTO.getNombre());
+		producto.setPrecio(productoDTO.getPrecio());
+		producto.setDescripcion(productoDTO.getDescripcion());
+		producto.setStockActual(productoDTO.getStockActual());
+		producto.setImagen(productoDTO.getImagen());	
+		
+		toProductoResponseDTO(productoRepository.save(producto));
 	}
 
 	@Transactional
