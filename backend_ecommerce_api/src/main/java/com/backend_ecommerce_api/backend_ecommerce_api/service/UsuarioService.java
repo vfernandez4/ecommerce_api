@@ -4,6 +4,7 @@ import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.UsuarioRespo
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.ProductoNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoUpdateRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.UsuarioUpdateRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
@@ -67,7 +68,7 @@ public class UsuarioService {
 
     public void eliminarUsuario(Long id) {
         if (!usuarioRepository.existsById(id)) {
-            throw new RuntimeException("Usuario no encontrado con id: " + id);
+            throw new UsuarioNotFoundException("Usuario no encontrado con id: " + id);
         }
         usuarioRepository.deleteById(id);
     }
