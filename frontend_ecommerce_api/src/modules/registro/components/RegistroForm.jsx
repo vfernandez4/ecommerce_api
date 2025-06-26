@@ -38,23 +38,6 @@ const RegistroForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const existingUsersResponse = await fetch("http://localhost:4000/usuarios");
-      if (!existingUsersResponse.ok) throw new Error("Error al obtener usuarios existentes");
-
-      const existingUsers = await existingUsersResponse.json();
-      const emailExists = existingUsers.some((user) => user.email === email);
-
-      if (emailExists) {
-        setError("El correo electrónico ya está registrado.");
-        return;
-      }
-    } catch (err) {
-      console.error(err);
-      setError("No se pudo verificar la existencia del correo electrónico.");
-      return;
-    }
-
     if (!validateName(name)) {
       setError("Ingrese un nombre válido.");
       return;
@@ -64,39 +47,39 @@ const RegistroForm = () => {
       return;
     }
     if (!validatePassword(password)) {
-      setError(
-        "La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un carácter especial."
-      );
+      setError("La contraseña debe tener al menos 8 caracteres, una letra mayúscula y un carácter especial.");
       return;
     }
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden.");
       return;
     }
-    
+
     setError("");
 
     const usuarioARegistrar = {
       nombreCompleto: name,
+      email,
       password,
       direccion,
       telefono,
-      email,
       fechaNacimiento,
       avatar,
-      productosComprados: [],
-      productosVendidos: []
+      rol: "ROLE_USER"
     };
 
-    console.log(usuarioARegistrar);
-
     try {
-      const res = await fetch("http://localhost:4000/usuarios", {
+      const res = await fetch("http://localhost:8082/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(usuarioARegistrar),
       });
-      if (!res.ok) throw new Error("Error al resgistrar al usuario");
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        setError(errorData.message || "Error al registrar el usuario.");
+        return;
+      }
 
       setSuccess(true);
       const redirectTo = location.state?.from?.pathname || "/";
@@ -111,59 +94,35 @@ const RegistroForm = () => {
     <form onSubmit={handleSubmit}>
       <label>
         Nombre completo:
-        <input
-          type="text"
-          name="name"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-        />
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} />
       </label>
       <br />
       <label>
         Dirección:
-        <input
-          type="text"
-          name="direccion"
-          value={direccion}
-          onChange={(e) => setDireccion(e.target.value)}
-        />
+        <input type="text" value={direccion} onChange={(e) => setDireccion(e.target.value)} />
       </label>
       <br />
       <label>
-        Telefono:
-        <input
-          type="text"
-          name="telefono"
-          value={telefono}
-          onChange={(e) => setTelefono(e.target.value)}
-        />
+        Teléfono:
+        <input type="text" value={telefono} onChange={(e) => setTelefono(e.target.value)} />
       </label>
       <br />
       <label>
         Fecha de nacimiento:
-        <input
-          type="date"
-          name="fechaNacimiento"
-          value={fechaNacimiento}
-          onChange={(e) => setFechaNacimiento(e.target.value)}
-        />
+        <input type="date" value={fechaNacimiento} onChange={(e) => setFechaNacimiento(e.target.value)} />
       </label>
       <br />
       <div className="avatar-section">
-        <p className="section-title">Elige tu avatar:</p>
+        <p>Elige tu avatar:</p>
         <div className="avatar-options">
-          {opcionesDeAvatar.map((avatarASeleccionar) => (
-            <label
-              key={avatarASeleccionar}
-              className={`avatar-option ${avatar === avatarASeleccionar ? "selected" : ""}`}
-            >
-              <img src={avatarASeleccionar} alt="avatar" width={60} height={60} />
+          {opcionesDeAvatar.map((avatarOption) => (
+            <label key={avatarOption} className={`avatar-option ${avatar === avatarOption ? "selected" : ""}`}>
+              <img src={avatarOption} alt="avatar" width={60} height={60} />
               <input
                 type="radio"
-                name="avatar"
-                value={avatarASeleccionar}
-                checked={avatar === avatarASeleccionar}
-                onChange={() => setAvatar(avatarASeleccionar)}
+                value={avatarOption}
+                checked={avatar === avatarOption}
+                onChange={() => setAvatar(avatarOption)}
               />
             </label>
           ))}
@@ -172,32 +131,17 @@ const RegistroForm = () => {
       <br />
       <label>
         Correo Electrónico:
-        <input
-          type="text"
-          name="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <input type="text" value={email} onChange={(e) => setEmail(e.target.value)} />
       </label>
       <br />
       <label>
         Contraseña:
-        <input
-          type="password"
-          name="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
       </label>
       <br />
       <label>
         Confirmar Contraseña:
-        <input
-          type="password"
-          name="confirmPassword"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
+        <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
       </label>
       <br />
       {error && <p style={{ color: "red" }}>{error}</p>}
