@@ -51,3 +51,32 @@
 .botonPublicar:hover {
 	background-color: var(--color-acento);
 }
+
+.checkboxRow {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	gap: 1rem;
+	margin: 1rem 0;
+}
+
+.checkboxLabel {
+	font-weight: bold;
+	font-size: 1.1rem;
+	color: var(--color-negro);
+	cursor: pointer;
+}
+
+.checkboxInput {
+	width: 20px;
+	height: 20px;
+	accent-color: var(--color-azul-oscuro);
+	cursor: pointer;
+	transform: scale(1.2);
+	vertical-align: middle;
+	position: relative;
+	top: 8px;
+}
+
+
+

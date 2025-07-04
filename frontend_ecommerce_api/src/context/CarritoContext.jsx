@@ -33,7 +33,7 @@ export const CarritoProvider = ({ children }) => {
     setCarrito(prevCarrito =>
       prevCarrito.map(item =>
         item.id === id
-          ? { ...item, cantidad: Math.max(1, cantidadNueva) } // nunca menos de 1
+          ? { ...item, cantidad: Math.max(1, cantidadNueva) } 
           : item
       )
     );

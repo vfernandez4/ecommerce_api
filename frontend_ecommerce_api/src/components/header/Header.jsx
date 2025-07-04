@@ -2,6 +2,7 @@ import React from "react";
 import styles from "./Header.module.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCarrito } from "../../context/CarritoContext";
+import Categorias from "./Categorias";
 
 function NavLogeado({ cerrarSesion }) {
 	const { cantidadTotal } = useCarrito();
@@ -9,10 +10,7 @@ function NavLogeado({ cerrarSesion }) {
 	return (
 		<ul className={`${styles.flex_horizontal} ${styles.margen_horizontal} ${styles.items_centro} ${styles.barrita_navegacion} ${styles.fondo_circular}`}>
 			<li><Link to="/producto">Todos Los Productos</Link></li>
-			<li><Link to="/producto/categoria/computadoras">Computadoras</Link></li>
-			<li><Link to="/producto/categoria/smartphones">Smartphones</Link></li>
-			<li><Link to="/producto/categoria/accesorios">Accesorios</Link></li>
-			<li><Link to="/producto/categoria/audio">Audio</Link></li>
+			<li><Categorias /></li>
 			<li><Link to="/vender">¡Vender!</Link></li>
 			<li><Link to="/profile">
 				<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="8" r="5" /><path d="M20 21a8 8 0 0 0-16 0" /></svg>
@@ -50,9 +48,7 @@ function NavSinLog() {
 	return (
 		<ul className={`${styles.flex_horizontal} ${styles.margen_horizontal} ${styles.items_centro} ${styles.barrita_navegacion} ${styles.fondo_circular}`}>
 			<li><Link to="/producto">Todos Los Productos</Link></li>
-			<li><Link to="/producto/categoria/computadoras">Computadoras</Link></li>
-			<li><Link to="/producto/categoria/smartphones">Smartphones</Link></li>
-			<li><Link to="/producto/categoria/accesorios">Accesorios</Link></li>
+			<li><Categorias /></li>
 			<li><Link to="/registro">Registrarse</Link></li>
 			<li><Link to="/login">Iniciar Sesión</Link></li>
 		</ul>
@@ -62,11 +58,14 @@ function NavSinLog() {
 export default function Header() {
 	const location = useLocation();
 	const navigate = useNavigate();
-	const estaLogeado = Boolean(localStorage.getItem("user"));
+	const estaLogeado = Boolean(localStorage.getItem("token"));
 
 	const cerrarSesion = () => {
 		localStorage.removeItem("user");
+		localStorage.removeItem("token");
+		localStorage.removeItem("carrito"); 
 		navigate("/");
+		window.location.reload();
 	};
 
 	return (
