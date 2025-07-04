@@ -40,6 +40,7 @@ public class SecurityConfig {
             .csrf(CsrfConfigurer::disable)   // CSRF gestionado selectivamente (stateless API)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/api/images/**").permitAll()
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET,"/api/productos/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")
                 .requestMatchers(HttpMethod.POST, "/api/productos/**").hasAnyAuthority("ROLE_USER", "ROLE_ADMIN")

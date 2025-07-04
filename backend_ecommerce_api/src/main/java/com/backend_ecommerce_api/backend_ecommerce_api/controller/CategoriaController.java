@@ -13,9 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequestMapping("/api/categorias")
-@PreAuthorize("hasRole('ROLE_ADMIN')")
 public class CategoriaController {
-	
+
     @Autowired
     private CategoriaService categoriaService;
 
@@ -25,22 +24,25 @@ public class CategoriaController {
     }
 
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CategoriaResponseDTO crearCategoria(@RequestBody CategoriaRequestDTO categoriaDTO) {
         return categoriaService.crearCategoria(categoriaDTO);
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CategoriaResponseDTO getCategoriaPorId(@PathVariable Long id) {
         return categoriaService.getCategoriaPorId(id);
     }
 
     @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public CategoriaResponseDTO actualizarCategoria(@PathVariable Long id, @RequestBody CategoriaRequestDTO categoriaDTO) {
         return categoriaService.actualizarCategoria(id, categoriaDTO);
     }
 
-
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
     public void eliminarCategoria(@PathVariable Long id) {
         categoriaService.eliminarCategoria(id);
     }

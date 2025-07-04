@@ -20,6 +20,14 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @GetMapping("/me")
+    @PreAuthorize("hasAnyAuthority('ROLE_USER', 'ROLE_ADMIN')")
+    public UsuarioResponseDTO getPerfilUsuarioAutenticado(Authentication auth) {
+        String email = auth.getName();
+        return usuarioService.getUsuarioPorMail(email)
+                .orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con email: " + email));
+    }
+
     @GetMapping
     public List<UsuarioResponseDTO> getTodosLosUsuarios() {
         return usuarioService.getTodosLosUsuarios();

@@ -156,7 +156,7 @@ public class ProductoService {
 		dto.setDescripcion(producto.getDescripcion());
 		dto.setStockInicial(producto.getStockInicial());
 		dto.setStockActual(producto.getStockActual());
-		dto.setImagen(producto.getImagen());
+		dto.setImagen("http://localhost:8082/api/images/" + producto.getImagen());
 		if (producto.getCategoria() != null) {
 			dto.setCategoriaId(producto.getCategoria().getId());
 			dto.setCategoriaNombre(producto.getCategoria().getNombre());
@@ -166,7 +166,8 @@ public class ProductoService {
 			dto.setVendedorNombre(producto.getVendedor().getNombreCompleto());
 		}
 		return dto;
- 	}
+	}
+	
 
 	private Producto publicarToProducto(ProductoPublicarRequestDTO productoRequest, Categoria categoria, Usuario vendedor) {
 		Producto producto = new Producto();
@@ -177,7 +178,11 @@ public class ProductoService {
 		producto.setStockInicial(productoRequest.getStockInicial());
 		//el stock actual va a ser igual al stock inicial al momento de publicar
 		producto.setStockActual(productoRequest.getStockInicial());
-		producto.setImagen(productoRequest.getImagen());
+		String imagenPath = productoRequest.getImagen();
+		if (imagenPath != null && imagenPath.startsWith("http")) {
+    		imagenPath = imagenPath.substring(imagenPath.lastIndexOf("/") + 1);
+		}
+		producto.setImagen(imagenPath);
 		producto.setCategoria(categoria);
 		producto.setVendedor(vendedor);
 

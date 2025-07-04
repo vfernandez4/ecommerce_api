@@ -14,11 +14,13 @@ import Vender from './modules/vender/Vender';
 import ProductoDetalle from './modules/productoDetalle/ProductoDetalle';
 import ProtectedRoute from './components/ProtectedRoute'; 
 import { CarritoProvider } from './context/CarritoContext'; 
+import { CategoriaProvider } from './context/CategoriaContext';
 
 function App() {
 	return (
 		<Router>
 			<CarritoProvider> 
+				<CategoriaProvider>
 				<div className="appContainer">
 					<Header />
 					<main className="mainGenerico">
@@ -37,6 +39,7 @@ function App() {
 					</main>
 					<Footer />
 				</div>
+				</CategoriaProvider>
 			</CarritoProvider>
 		</Router>
 	);

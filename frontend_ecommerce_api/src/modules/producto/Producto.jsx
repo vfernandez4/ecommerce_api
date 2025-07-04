@@ -8,22 +8,28 @@ const Producto = () => {
   const categorias = {}; 
 
   const [productos, setProductos] = useState([]); 
-  useEffect(() => { 
-    fetch("http://localhost:4000/productos") 
-      .then((res) => { 
-        if (!res.ok) throw new Error("Error al cargar productos"); 
-        return res.json(); 
+  useEffect(() => {
+    fetch("http://localhost:8082/api/productos", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Error al cargar productos");
+        return res.json();
       })
-      .then((data) => setProductos(data)) 
-      .catch((err) => console.error(err)); 
-  }, []); 
+      .then((data) => setProductos(data))
+      .catch((err) => console.error(err));
+  }, []);
 
   productos.forEach((producto) => { 
-    if (!categorias[producto.categoria]) { 
-      categorias[producto.categoria] = []; 
+    const nombreCategoria = producto.categoriaNombre || "Sin categoría";
+    if (!categorias[nombreCategoria]) { 
+      categorias[nombreCategoria] = []; 
     }
-    categorias[producto.categoria].push(producto); 
+    categorias[nombreCategoria].push(producto); 
   });
+  
 
   const categoriasAMostrar = categoria && categorias[categoria] 
     ? { [categoria]: categorias[categoria] } 
