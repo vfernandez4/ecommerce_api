@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "./vender.module.css";
-import { useCategorias } from "../../context/CategoriaContext"; // 💡 Importamos el contexto
+import { useCategorias } from "../../context/CategoriaContext";
 
 export default function Vender() {
 	const [nombre, setNombre] = useState("");
@@ -12,7 +12,7 @@ export default function Vender() {
 	const [nuevaCategoriaNombre, setNuevaCategoriaNombre] = useState("");
 	const [error, setError] = useState("");
 
-	const { categorias, fetchCategorias } = useCategorias(); // 💡 Usamos el contexto
+	const { categorias, fetchCategorias } = useCategorias();
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
