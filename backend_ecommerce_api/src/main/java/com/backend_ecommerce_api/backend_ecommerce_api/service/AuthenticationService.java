@@ -41,9 +41,12 @@ public class AuthenticationService {
             );
 
             Usuario usuario = (Usuario) authentication.getPrincipal();
-            String jwt = jwtUtil.generateToken(usuario.getUsername());
+			
+			String rolString = usuario.getRol().name();
+            String jwt = jwtUtil.generateToken(usuario.getUsername(), rolString);
+			Rol rol = usuario.getRol();
 
-            return new JwtResponseDTO(jwt);
+            return new JwtResponseDTO(jwt, rol);
 
         } catch (AuthenticationException ex) {
             throw new RuntimeException("Credenciales inválidas");
@@ -67,15 +70,14 @@ public class AuthenticationService {
             String encryptedPassword = passwordEncoder.encode(request.getPassword());
             nuevoUsuario.setPassword(encryptedPassword);
 
-            nuevoUsuario.setRol(Rol.ROLE_USER);
+            nuevoUsuario.setRol(Rol.USER);
 
             System.out.println("Rol asignado al usuario: " + nuevoUsuario.getRol());
 
-
             usuarioRepository.save(nuevoUsuario);
-
-            String token = jwtUtil.generateToken(nuevoUsuario.getEmail());
-            return new JwtResponseDTO(token);
+	
+            String token = jwtUtil.generateToken(nuevoUsuario.getEmail(), Rol.USER.name());
+            return new JwtResponseDTO(token, Rol.USER);
 
         } catch (Exception e) {
             throw new RuntimeException("Error al registrar usuario: " + e.getMessage());

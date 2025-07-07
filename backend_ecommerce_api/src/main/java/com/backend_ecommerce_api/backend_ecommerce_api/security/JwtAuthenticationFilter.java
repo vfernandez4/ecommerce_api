@@ -37,6 +37,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String jwt = null;
         String email = null;
+		String rolNombre = null;
 
         logger.info("Authorization Header: " + authHeader);
 
@@ -46,22 +47,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             try {
                 email = jwtUtil.extractUsername(jwt);
+				rolNombre = jwtUtil.extractRole(jwt);
+
                 logger.info("Email extraído del token: " + email);
+				logger.info("rol extraído del token: " + rolNombre);
             } catch (Exception e) {
-                logger.warning("Error al extraer el email del token: " + e.getMessage());
+                logger.warning("Error al extraer el email o el rol del token: " + e.getMessage());
             }
         }
 
-        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = userDetailsService.loadUserByUsername(email);
-            logger.info("UserDetails cargado: " + userDetails.getUsername());
-
-            boolean tokenValido = jwtUtil.isTokenValid(jwt, userDetails.getUsername());
+        if (email != null && rolNombre != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            boolean tokenValido = jwtUtil.isTokenValid(jwt, email);
             logger.info("¿Token válido? " + tokenValido);
 
             if (tokenValido) {
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
+				UserDetails userDetails = userDetailsService.loadUserByUsername(email);
+				logger.info("UserDetails cargado: " + userDetails.getUsername());
+                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
