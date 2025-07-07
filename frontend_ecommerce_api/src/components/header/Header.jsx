@@ -11,6 +11,7 @@ function NavLogeado({ cerrarSesion }) {
 	return (
 		<ul className={`${styles.flex_horizontal} ${styles.margen_horizontal} ${styles.items_centro} ${styles.barrita_navegacion} ${styles.fondo_circular}`}>
 			<li><Link to="/producto">Todos Los Productos</Link></li>
+			<li><Link to="/producto/categoria/Originales ClickCo">Originales ClickCo</Link></li>
 			<li><Categorias /></li>
 			<li><Link to="/vender">¡Vender!</Link></li>
 			<li><Link to="/profile">
@@ -42,7 +43,7 @@ function NavLogeado({ cerrarSesion }) {
 				</button>
 			</li>
 		</ul>
-	)
+	);
 }
 
 function NavSinLog() {
@@ -53,14 +54,14 @@ function NavSinLog() {
 			<li><Link to="/registro">Registrarse</Link></li>
 			<li><Link to="/login">Iniciar Sesión</Link></li>
 		</ul>
-	)
+	);
 }
 
 function NavAdmin({ cerrarSesion }) {
 	return (
 		<ul className={`${styles.flex_horizontal} ${styles.margen_horizontal} ${styles.items_centro} ${styles.barrita_navegacion} ${styles.fondo_circular}`}>
 			<li><Link to="/admin/productos">Crear productos ClickCo</Link></li>
-			<li><Link to="/admin/categorias">Crear categorias</Link></li>
+			<li><Link to="/admin/categorias">Crear categorías</Link></li>
 			<li><Link to="/admin/usuarios">Gestionar usuarios</Link></li>
 			<li>
 				<button
@@ -78,17 +79,28 @@ function NavAdmin({ cerrarSesion }) {
 				</button>
 			</li>
 		</ul>
-	)
+	);
 }
 
 export default function Header() {
 	const location = useLocation();
 	const navigate = useNavigate();
-	
-	const estaLogeado = Boolean(localStorage.getItem("token"));
-	const payload = jwtDecode(localStorage.getItem("token"));
 
-	const esAdmin = payload.rol === "ADMIN";
+	const token = localStorage.getItem("token");
+	const estaLogeado = Boolean(token);
+
+	let rol = null;
+
+	if (estaLogeado) {
+		try {
+			const payload = jwtDecode(token);
+			rol = payload.rol;
+			console.log("Rol extraído del token:", rol);
+		} catch (error) {
+			console.error("Token inválido:", error);
+			localStorage.removeItem("token");
+		}
+	}
 
 	const cerrarSesion = () => {
 		localStorage.removeItem("user");
@@ -107,16 +119,12 @@ export default function Header() {
 			</div>
 
 			<nav className={styles.width_completo}>
-				{!estaLogeado && <NavSinLog />}
-
-				{estaLogeado && !esAdmin && (
+				{!rol && <NavSinLog />}
+				{rol === "ADMIN" && <NavAdmin cerrarSesion={cerrarSesion} />}
+				{(rol === "COMPRADOR" || rol === "COMPRADOR_VENDEDOR") && (
 					<NavLogeado cerrarSesion={cerrarSesion} />
-				)}
-
-				{estaLogeado && esAdmin && (
-					<NavAdmin cerrarSesion={cerrarSesion} />
 				)}
 			</nav>
 		</header>
-	)
+	);
 }
