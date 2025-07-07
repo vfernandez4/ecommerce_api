@@ -1,22 +1,26 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import styles from "./productoDetalle.module.css";
+import { useCarrito } from "../../context/CarritoContext";
 
 const ProductoDetalle = () => {
   const { id } = useParams();
-  const [productos, setProductos] = useState([]);
+  const [producto, setProducto] = useState(null);
+  const { agregarProducto } = useCarrito();
 
   useEffect(() => {
-    fetch("http://localhost:4000/productos")
+    fetch(`http://localhost:8082/api/productos/${id}`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    })
       .then((res) => {
-        if (!res.ok) throw new Error("Error al cargar productos");
+        if (!res.ok) throw new Error("Error al cargar producto");
         return res.json();
       })
-      .then((data) => setProductos(data))
+      .then((data) => setProducto(data))
       .catch((err) => console.error(err));
-  }, []);
-
-  const producto = productos.find((p) => p.id.toString() === id);
+  }, [id]);
 
   if (!producto) {
     return <p>Producto no encontrado</p>;
@@ -24,7 +28,6 @@ const ProductoDetalle = () => {
 
   const agregarAlCarrito = () => {
     agregarProducto(producto);
-    //alert("Producto agregado al carrito");
   };
 
   return (
@@ -35,7 +38,7 @@ const ProductoDetalle = () => {
           <h1 className={styles.titulo}>{producto.nombre}</h1>
           <p className={styles.descripcion}>{producto.descripcion}</p>
           <p className={styles.precio}>Precio: ${producto.precio}</p>
-          {producto.stock > 0 ? (
+          {producto.stockActual > 0 ? (
             <button className={styles.boton} onClick={agregarAlCarrito}>
               Agregar al carrito
             </button>

@@ -39,48 +39,54 @@ const Pago = () => {
 
   const agregarAlHistorial = async () => {
     try {
-    const userData = JSON.parse(localStorage.getItem("user"));
-    const carrito = JSON.parse(localStorage.getItem("carrito"));
-
-    if (!userData || !userData.email || !Array.isArray(carrito)) {
-      throw new Error("Datos de usuario o carrito inválidos");
+      const token = localStorage.getItem("token");
+  
+      // Enviar cada item por separado
+      for (const item of cartItems) {
+        const resSet = await fetch("http://localhost:8082/api/carrito", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            productoId: item.id,
+            cantidad: item.cantidad,
+          }),
+        });
+  
+        if (!resSet.ok) throw new Error("No se pudo guardar un producto en el carrito");
+      }
+  
+      // Luego finalizar la compra
+      const resFinalizar = await fetch("http://localhost:8082/api/carrito/finalizar", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (!resFinalizar.ok) throw new Error("No se pudo finalizar la compra");
+  
+      const json = await resFinalizar.json();
+      const success = json.success;
+  
+      if (success) {
+        alert("Gracias por tu compra!");
+        vaciarCarrito();
+        navigate("/");
+      } else {
+        alert("Hubo un problema al finalizar la compra.");
+      }
+  
+    } catch (err) {
+      console.error("Error en el proceso de compra:", err);
+      alert("Error al finalizar la compra. Intente nuevamente.");
     }
-
-    const emailUsuario = userData.email;
-
-    const nuevosIds = carrito.map(item => Number(item.id));
-
-    const resUsuario = await fetch(`http://localhost:4000/usuarios?email=${emailUsuario}`);
-    const data = await resUsuario.json();
-
-    if (data.length === 0) throw new Error("Usuario no encontrado");
-
-    const usuario = data[0];
-    const idUsuario = usuario.id;
-
-    const productosActualizados = [
-      ...new Set([...(usuario.productosComprados || []), ...nuevosIds])
-    ];
-
-    const resPatch = await fetch(`http://localhost:4000/usuarios/${idUsuario}`, {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ productosComprados: productosActualizados })
-    });
-
-    if (!resPatch.ok) throw new Error("Error al actualizar el usuario");
-    }
-    catch (error) {
-      console.error("Error:", error);
-    }
-
-    alert("Gracias por tu compra!");
-
-    vaciarCarrito();
-    navigate("/");
-  }
+  };
+  
+  
+  
 
   return (
     <div className={styles["body"]}>
