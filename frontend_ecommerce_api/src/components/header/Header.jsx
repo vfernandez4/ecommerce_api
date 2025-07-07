@@ -3,6 +3,7 @@ import styles from "./Header.module.css";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useCarrito } from "../../context/CarritoContext";
 import Categorias from "./Categorias";
+import { jwtDecode } from "jwt-decode";
 
 function NavLogeado({ cerrarSesion }) {
 	const { cantidadTotal } = useCarrito();
@@ -55,15 +56,44 @@ function NavSinLog() {
 	)
 }
 
+function NavAdmin({ cerrarSesion }) {
+	return (
+		<ul className={`${styles.flex_horizontal} ${styles.margen_horizontal} ${styles.items_centro} ${styles.barrita_navegacion} ${styles.fondo_circular}`}>
+			<li><Link to="/admin/productos">Crear productos ClickCo</Link></li>
+			<li><Link to="/admin/categorias">Crear categorias</Link></li>
+			<li><Link to="/admin/usuarios">Gestionar usuarios</Link></li>
+			<li>
+				<button
+					onClick={cerrarSesion}
+					style={{
+						background: "transparent",
+						border: "none",
+						cursor: "pointer",
+						color: "#fff",
+						fontSize: "1rem",
+						padding: "0.5rem 1rem"
+					}}
+				>
+					Cerrar Sesión
+				</button>
+			</li>
+		</ul>
+	)
+}
+
 export default function Header() {
 	const location = useLocation();
 	const navigate = useNavigate();
+	
 	const estaLogeado = Boolean(localStorage.getItem("token"));
+	const payload = jwtDecode(localStorage.getItem("token"));
+
+	const esAdmin = payload.rol === "ADMIN";
 
 	const cerrarSesion = () => {
 		localStorage.removeItem("user");
 		localStorage.removeItem("token");
-		localStorage.removeItem("carrito"); 
+		localStorage.removeItem("carrito");
 		navigate("/");
 		window.location.reload();
 	};
@@ -77,7 +107,15 @@ export default function Header() {
 			</div>
 
 			<nav className={styles.width_completo}>
-				{estaLogeado ? <NavLogeado cerrarSesion={cerrarSesion} /> : <NavSinLog />}
+				{!estaLogeado && <NavSinLog />}
+
+				{estaLogeado && !esAdmin && (
+					<NavLogeado cerrarSesion={cerrarSesion} />
+				)}
+
+				{estaLogeado && esAdmin && (
+					<NavAdmin cerrarSesion={cerrarSesion} />
+				)}
 			</nav>
 		</header>
 	)

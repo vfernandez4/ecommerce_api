@@ -14,6 +14,7 @@ import ProductoDetalle from "./modules/productoDetalle/ProductoDetalle";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { CarritoProvider } from "./context/CarritoContext";
 import { CategoriaProvider } from "./context/CategoriaContext";
+import AdminHome from "./modules/admin/AdminHome";
 
 function App() {
 	return (
@@ -40,7 +41,7 @@ function App() {
 								<Route path="/vender" element={<ProtectedRoute allowedRoles={["USER", "ADMIN"]}><Vender /></ProtectedRoute>} />
 
 								{/* RUTAS solo ADMIN */}
-
+								<Route path="/admin" element={<ProtectedRoute allowedRoles={["ADMIN"]}><AdminHome /></ProtectedRoute>} />
 
 								{/* cualquier otra ruta */}
 								<Route path="*" element={<Home />} />
