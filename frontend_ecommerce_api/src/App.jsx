@@ -33,19 +33,37 @@ function App() {
 								<Route path="/login" element={<Login />} />
 								<Route path="/registro" element={<Registro />} />
 
-								{/* RUTAS que requieren estar logueado (USER o ADMIN)
-									la idea es que aca despues dividamos entre COMPRADOR, COMPRADOR_VENDEDOR Y ADMIN, por ahora lo dejo asi */}
-								<Route path="/profile" element={<ProtectedRoute allowedRoles={["USER", "ADMIN"]}><Profile /></ProtectedRoute>} />
-								<Route path="/carrito" element={<ProtectedRoute allowedRoles={["USER", "ADMIN"]}><Carrito /></ProtectedRoute>} />
-								<Route path="/pago" element={<ProtectedRoute allowedRoles={["USER", "ADMIN"]}><Pago /></ProtectedRoute>} />
-								<Route path="/vender" element={<ProtectedRoute allowedRoles={["USER", "ADMIN"]}><Vender /></ProtectedRoute>} />
+								{/* RUTAS protegidas por roles */}
+								<Route path="/profile" element={
+									<ProtectedRoute allowedRoles={["COMPRADOR", "COMPRADOR_VENDEDOR", "ADMIN"]}>
+										<Profile />
+									</ProtectedRoute>
+								} />
+								<Route path="/carrito" element={
+									<ProtectedRoute allowedRoles={["COMPRADOR", "COMPRADOR_VENDEDOR"]}>
+										<Carrito />
+									</ProtectedRoute>
+								} />
+								<Route path="/pago" element={
+									<ProtectedRoute allowedRoles={["COMPRADOR", "COMPRADOR_VENDEDOR"]}>
+										<Pago />
+									</ProtectedRoute>
+								} />
+								<Route path="/vender" element={
+									<ProtectedRoute allowedRoles={["COMPRADOR_VENDEDOR", "ADMIN"]}>
+										<Vender />
+									</ProtectedRoute>
+								} />
 
 								{/* RUTAS solo ADMIN */}
-								<Route path="/admin" element={<ProtectedRoute allowedRoles={["ADMIN"]}><AdminHome /></ProtectedRoute>} />
+								<Route path="/admin" element={
+									<ProtectedRoute allowedRoles={["ADMIN"]}>
+										<AdminHome />
+									</ProtectedRoute>
+								} />
 
 								{/* cualquier otra ruta */}
 								<Route path="*" element={<Home />} />
-
 							</Routes>
 						</main>
 						<Footer />

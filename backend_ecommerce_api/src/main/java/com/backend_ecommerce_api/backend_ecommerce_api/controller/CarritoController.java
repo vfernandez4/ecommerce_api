@@ -3,6 +3,7 @@ package com.backend_ecommerce_api.backend_ecommerce_api.controller;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.CarritoRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.CarritoResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.CarritoService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +15,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/carrito")
-@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
+@PreAuthorize("hasAnyRole('COMPRADOR', 'COMPRADOR_VENDEDOR')")
 public class CarritoController {
 
     @Autowired

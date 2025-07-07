@@ -31,4 +31,6 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
         AND p.stockActual < p.stockInicial
     """)
     List<Producto> findVendidosByVendedorEmail(@Param("email") String email);
+    List<Producto> findByCategoriaNombreIgnoreCase(String nombreCategoria);
+
 }
