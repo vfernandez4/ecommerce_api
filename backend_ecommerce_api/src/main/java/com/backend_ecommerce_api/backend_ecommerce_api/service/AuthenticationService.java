@@ -70,14 +70,14 @@ public class AuthenticationService {
             String encryptedPassword = passwordEncoder.encode(request.getPassword());
             nuevoUsuario.setPassword(encryptedPassword);
 
-            nuevoUsuario.setRol(Rol.ROLE_USER);
+            nuevoUsuario.setRol(Rol.USER);
 
             System.out.println("Rol asignado al usuario: " + nuevoUsuario.getRol());
 
             usuarioRepository.save(nuevoUsuario);
 	
-            String token = jwtUtil.generateToken(nuevoUsuario.getEmail(), Rol.ROLE_USER.name());
-            return new JwtResponseDTO(token, Rol.ROLE_USER);
+            String token = jwtUtil.generateToken(nuevoUsuario.getEmail(), Rol.USER.name());
+            return new JwtResponseDTO(token, Rol.USER);
 
         } catch (Exception e) {
             throw new RuntimeException("Error al registrar usuario: " + e.getMessage());
