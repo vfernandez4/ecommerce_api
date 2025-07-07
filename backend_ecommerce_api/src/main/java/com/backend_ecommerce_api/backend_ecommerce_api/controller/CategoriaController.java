@@ -24,25 +24,25 @@ public class CategoriaController {
     }
 
     @PostMapping
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN', 'COMPRADOR_VENDEDOR')")
     public CategoriaResponseDTO crearCategoria(@RequestBody CategoriaRequestDTO categoriaDTO) {
         return categoriaService.crearCategoria(categoriaDTO);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoriaResponseDTO getCategoriaPorId(@PathVariable Long id) {
         return categoriaService.getCategoriaPorId(id);
     }
 
     @PutMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public CategoriaResponseDTO actualizarCategoria(@PathVariable Long id, @RequestBody CategoriaRequestDTO categoriaDTO) {
         return categoriaService.actualizarCategoria(id, categoriaDTO);
     }
 
     @DeleteMapping("/{id}")
-    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public void eliminarCategoria(@PathVariable Long id) {
         categoriaService.eliminarCategoria(id);
     }

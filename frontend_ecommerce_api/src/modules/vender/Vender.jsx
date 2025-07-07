@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "./vender.module.css";
 import { useCategorias } from "../../context/CategoriaContext";
+import { jwtDecode } from "jwt-decode";
 
 export default function Vender() {
 	const [nombre, setNombre] = useState("");
@@ -14,6 +15,18 @@ export default function Vender() {
 
 	const { categorias, fetchCategorias } = useCategorias();
 
+	// Obtener el rol del usuario
+	const token = localStorage.getItem("token");
+	let userRol = null;
+	if (token) {
+		try {
+			const decoded = jwtDecode(token);
+			userRol = decoded.rol;
+		} catch (err) {
+			console.error("Error al decodificar el token", err);
+		}
+	}
+
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		setError("");
@@ -25,6 +38,17 @@ export default function Vender() {
 				setError("Debe ingresar un nombre para la nueva categoría.");
 				return;
 			}
+
+			const nombreNormalizado = nuevaCategoriaNombre.trim().toLowerCase();
+			const existe = categorias.some(
+				cat => cat.nombre.toLowerCase() === nombreNormalizado
+			);
+
+			if (existe) {
+				setError("Esta categoría ya existe.");
+				return;
+			}
+
 			try {
 				const res = await fetch("http://localhost:8082/api/categorias", {
 					method: "POST",
@@ -39,7 +63,7 @@ export default function Vender() {
 				const data = await res.json();
 				nuevaId = data.id;
 
-				await fetchCategorias(); // 💡 Actualizamos las categorías globales
+				await fetchCategorias();
 			} catch (err) {
 				console.error(err);
 				setError("No se pudo crear la nueva categoría.");
@@ -92,9 +116,14 @@ export default function Vender() {
 				<label>Categoría:
 					<select value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)} required disabled={nuevaCategoria}>
 						<option value="">Seleccione</option>
-						{categorias.map(cat => (
-							<option key={cat.id} value={cat.id}>{cat.nombre}</option>
-						))}
+						{categorias
+							.filter(cat => {
+								if (userRol === "ADMIN") return true;
+								return cat.nombre.toLowerCase() !== "originales clickco";
+							})
+							.map(cat => (
+								<option key={cat.id} value={cat.id}>{cat.nombre}</option>
+							))}
 					</select>
 				</label>
 

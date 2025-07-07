@@ -6,16 +6,19 @@ export default function Home() {
   const [productos, setProductos] = useState([]);
 
   useEffect(() => {
-    fetch("http://localhost:8082/api/productos/destacados", {
+    fetch("http://localhost:8082/api/productos", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
     })
       .then((res) => {
-        if (!res.ok) throw new Error("Error al cargar productos destacados");
+        if (!res.ok) throw new Error("Error al cargar productos");
         return res.json();
       })
-      .then((data) => setProductos(data))
+      .then((data) => {
+        const mezclados = [...data].sort(() => 0.5 - Math.random());
+        setProductos(mezclados.slice(0, 3));
+      })
       .catch((err) => console.error(err));
   }, []);
 
