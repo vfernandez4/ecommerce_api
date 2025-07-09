@@ -41,14 +41,6 @@ public class Producto {
 	@JoinColumn(name = "categoria_id", nullable = false)
 	private Categoria categoria;
 
-	@ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-        name = "productos_carritos",
-        joinColumns = @JoinColumn(name = "producto_id"),
-        inverseJoinColumns = @JoinColumn(name = "carrito_id")
-    )
-    private List<Carrito> carritos = new ArrayList<>();
-
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "vendedor_id")
 	private Usuario vendedor;
