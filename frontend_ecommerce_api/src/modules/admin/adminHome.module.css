@@ -1,0 +1,91 @@
+.dashboard {
+  padding: 24px;
+}
+
+.kpis {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 16px;
+	margin-bottom: 32px;
+}
+
+.charts {
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr;
+	gap: 24px;
+	margin-bottom: 32px;
+}
+
+.chartContainer {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	padding: 16px;
+}
+
+.large {
+	grid-column: span 2;
+}
+
+.chartTitle {
+	margin-bottom: 16px;
+	font-size: 18px;
+}
+
+.recentOrders {
+	background: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	padding: 16px;
+}
+
+.sectionTitle {
+	margin-bottom: 16px;
+	font-size: 18px;
+}
+
+.ordersTable {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.ordersTable th,
+.ordersTable td {
+	padding: 12px;
+	text-align: left;
+	border-bottom: 1px solid #eee;
+}
+
+.status {
+	padding: 4px 8px;
+	border-radius: 8px;
+	font-size: 12px;
+	font-weight: 500;
+}
+
+.pendiente {
+	background: #fef3c7;
+	color: #92400e;
+}
+
+.enviado {
+	background: #dbeafe;
+	color: #1e40af;
+}
+
+.completado {
+	background: #dcfce7;
+	color: #166534;
+}
+
+.viewBtn {
+	background: none;
+	border: none;
+	color: #4a90e2;
+	cursor: pointer;
+	font-size: 14px;
+}
+
+.viewBtn:hover {
+	text-decoration: underline;
+}
