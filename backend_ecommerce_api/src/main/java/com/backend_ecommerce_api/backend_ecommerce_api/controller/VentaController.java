@@ -17,17 +17,13 @@ public class VentaController {
 	@Autowired
     private VentaService ventaService;
 
-	@Autowired
-    private UsuarioService usuarioService;
-
 	// POST para finalizar compra (guardar venta)
 	// Este endpoint debería recibir el carrito del usuario y crear una venta
 	// asociada al usuario autenticado, vaciando el carrito en el proceso.
 	@PostMapping("/finalizar")
 	public String finalizarCompra(Authentication auth, @RequestBody CarritoRequestDTO carritoRequestDTO) {
-		// Aquí se implementaría la lógica para finalizar la compra.
-		// Se debería obtener el carrito del usuario autenticado, crear una venta,
-		// asociar los productos del carrito a la venta y vaciar el carrito.
+		String email = auth.getName();
+		ventaService.finalizarCompra(email, carritoRequestDTO);
 		return "Compra finalizada con éxito";
 	}
 

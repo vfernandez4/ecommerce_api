@@ -16,7 +16,7 @@ public class Venta {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@OneToOne(optional = false)
+	@ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(name = "usuario_id")
 	private Usuario comprador;
 
@@ -24,9 +24,13 @@ public class Venta {
 	private LocalDateTime fecha;
 
 	@Column(nullable = false, precision = 10, scale = 2)
-	private BigDecimal total;
+	private double total;
 
 	@OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<VentaItem> ventaItem = new ArrayList<>();
+    private List<VentaItem> items = new ArrayList<>();
+
+	public void agregarItem(VentaItem item) {
+		items.add(item);
+	}
 
 }
