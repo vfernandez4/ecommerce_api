@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-tp
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: base_de_datos_tp
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    networks:
+      - ecommerce-net
+
+  frontend:
+    build:
+      context: ./frontend_ecommerce_api
+      dockerfile: Dockerfile
+    container_name: ecommerce-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - mysql
+    restart: unless-stopped
+    networks:
+      - ecommerce-net
+
+volumes:
+  mysql_data:
+
+networks:
+  ecommerce-net:
