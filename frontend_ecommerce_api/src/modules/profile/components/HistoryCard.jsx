@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./HistoryCard.module.css";
+import styles from "./historycard.module.css";
 
 const HistoryCard = ({ nombre, precio, imagen, descripcion }) => {
 	const imagenPath = "http://localhost:8082/api/images/" + imagen
