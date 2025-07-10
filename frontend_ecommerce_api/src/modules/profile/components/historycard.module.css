@@ -1,17 +1,45 @@
+:root {
+	--color-card: #fafafa;
+	--color-accent: #3f51b5;
+	--radius: 10px;
+	--shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
 .history_card {
-    display: flex;
-    flex-direction: row;
-    margin-bottom: 15px;
-    background-color: var(--color-acento);
-    padding: 5px;
+	display: flex;
+	align-items: center;
+	background: var(--color-card);
+	border-radius: var(--radius);
+	box-shadow: var(--shadow-sm);
+	margin-bottom: 1rem;
+	overflow: hidden;
+	transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.history_card:hover {
+	transform: translateY(-4px);
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
 }
 
 .profile_img {
-    height: 150px;
-    width: 150px;
-    object-fit: cover;
+	width: 120px;
+	height: 120px;
+	object-fit: cover;
+	flex-shrink: 0;
 }
 
 .history_card_info {
-    margin-left: 30px;
+	padding: 1rem;
+}
+
+.history_card_info h1 {
+	margin: 0;
+	font-size: 1.1rem;
+	color: var(--color-text);
+}
+
+.history_card_info p {
+	margin: 0.5rem 0 0;
+	font-size: 0.95rem;
+	color: var(--color-muted);
 }

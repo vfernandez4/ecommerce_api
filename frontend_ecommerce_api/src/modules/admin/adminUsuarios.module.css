@@ -1,0 +1,54 @@
+.container {
+	padding: 24px;
+	background: #fff;
+	border-radius: 8px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.header {
+	margin: 0 0 16px;
+	font-size: 1.5rem;
+	color: #333;
+}
+
+.userList {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.userList th,
+.userList td {
+	padding: 12px 8px;
+	border: 1px solid #e0e0e0;
+	text-align: left;
+}
+
+.userList th {
+	background-color: #f7f7f7;
+	font-weight: 600;
+}
+
+.userList tr:hover td {
+	background-color: #fafafa;
+}
+
+.approveButton {
+	padding: 6px 12px;
+	background-color: #28a745;
+	color: #fff;
+	border: none;
+	border-radius: 4px;
+	cursor: pointer;
+	font-size: 0.9rem;
+}
+
+.approveButton:hover {
+	background-color: #218838;
+}
+
+.loading,
+.error {
+	text-align: center;
+	font-size: 1.1rem;
+	color: #666;
+}

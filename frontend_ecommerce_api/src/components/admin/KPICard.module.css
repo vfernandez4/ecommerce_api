@@ -1,0 +1,38 @@
+.kpis {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+	gap: 16px;
+	margin-bottom: 32px;
+}
+
+.kpiCard {
+	background-color: #fff;
+	border-radius: 12px;
+	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+	padding: 16px;
+	display: flex;
+	flex-direction: column;
+}
+
+.kpiTitle {
+	font-size: 14px;
+	color: #666;
+}
+
+.kpiValue {
+	font-size: 24px;
+	margin-top: 8px;
+}
+
+.kpiDelta {
+	font-size: 14px;
+	margin-top: 8px;
+}
+
+.positive {
+	color: #16a34a;
+}
+
+.negative {
+	color: #dc2626;
+}

@@ -15,6 +15,9 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import { CarritoProvider } from "./context/CarritoContext";
 import { CategoriaProvider } from "./context/CategoriaContext";
 import AdminHome from "./modules/admin/AdminHome";
+import AdminUsuarios from "./modules/admin/AdminUsuarios";
+import AdminProductos from "./modules/admin/AdminProductos";
+import AdminCategorias from "./modules/admin/AdminCategorias";
 
 function App() {
 	return (
@@ -50,7 +53,7 @@ function App() {
 									</ProtectedRoute>
 								} />
 								<Route path="/vender" element={
-									<ProtectedRoute allowedRoles={["COMPRADOR_VENDEDOR", "ADMIN"]}>
+									<ProtectedRoute allowedRoles={["COMPRADOR", "COMPRADOR_VENDEDOR", "ADMIN"]}>
 										<Vender />
 									</ProtectedRoute>
 								} />
@@ -59,6 +62,24 @@ function App() {
 								<Route path="/admin" element={
 									<ProtectedRoute allowedRoles={["ADMIN"]}>
 										<AdminHome />
+									</ProtectedRoute>
+								} />
+
+								<Route path="/admin/usuarios" element={
+									<ProtectedRoute allowedRoles={["ADMIN"]}>
+										<AdminUsuarios />
+									</ProtectedRoute>
+								} />
+
+								<Route path="/admin/productos" element={
+									<ProtectedRoute allowedRoles={["ADMIN"]}>
+										<AdminProductos />
+									</ProtectedRoute>
+								} />
+
+								<Route path="/admin/categorias" element={
+									<ProtectedRoute allowedRoles={["ADMIN"]}>
+										<AdminCategorias />
 									</ProtectedRoute>
 								} />
 

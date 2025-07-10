@@ -43,7 +43,7 @@ public class AuthenticationService {
             Usuario usuario = (Usuario) authentication.getPrincipal();
 			
 			String rolString = usuario.getRol().name();
-            String jwt = jwtUtil.generateToken(usuario.getUsername(), rolString);
+            String jwt = jwtUtil.generateToken(usuario.getEmail(), rolString);
 			Rol rol = usuario.getRol();
 
             return new JwtResponseDTO(jwt, rol);
@@ -66,6 +66,7 @@ public class AuthenticationService {
             nuevoUsuario.setFechaNacimiento(request.getFechaNacimiento());
             nuevoUsuario.setAvatar(request.getAvatar());
             nuevoUsuario.setEmail(request.getEmail());
+			nuevoUsuario.setSolicitudVendedor(false);
 
             String encryptedPassword = passwordEncoder.encode(request.getPassword());
             nuevoUsuario.setPassword(encryptedPassword);
@@ -75,7 +76,8 @@ public class AuthenticationService {
             System.out.println("Rol asignado al usuario: " + nuevoUsuario.getRol());
 
             usuarioRepository.save(nuevoUsuario);
-	
+			System.out.println("guarde un usuario");
+
             String token = jwtUtil.generateToken(nuevoUsuario.getEmail(), Rol.COMPRADOR.name());
             return new JwtResponseDTO(token, Rol.COMPRADOR);
 

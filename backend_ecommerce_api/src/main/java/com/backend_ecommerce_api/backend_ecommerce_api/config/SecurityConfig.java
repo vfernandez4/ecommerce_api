@@ -40,26 +40,38 @@ public class SecurityConfig {
             .csrf(CsrfConfigurer::disable)   // CSRF gestionado selectivamente (stateless API)
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+				// TODO EL MUNDO
                 .requestMatchers("/auth/**").permitAll()
                 .requestMatchers("/api/images/**").permitAll()
-                // Productos: todos pueden ver, pero solo vendedores o admin pueden publicar/modificar
-                .requestMatchers(HttpMethod.GET, "/api/productos/**").hasAnyRole("COMPRADOR", "COMPRADOR_VENDEDOR", "ADMIN")
+				.requestMatchers(HttpMethod.GET, "/api/productos/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/api/categorias/**").permitAll()
+
+				// SOLO COMPRADOR
+				.requestMatchers("/api/usuarios/solicitudVendedor").hasRole("COMPRADOR")
+
+                // SOLO COMPRADOR_VENDEDOR O ADMIN
                 .requestMatchers(HttpMethod.POST, "/api/productos/**").hasAnyRole("COMPRADOR_VENDEDOR", "ADMIN")
                 .requestMatchers(HttpMethod.PUT, "/api/productos/**").hasAnyRole("COMPRADOR_VENDEDOR", "ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/productos/**").hasAnyRole("COMPRADOR_VENDEDOR", "ADMIN")
-                // Carrito: solo compradores o compradores-vendedores
+
+				.requestMatchers(HttpMethod.POST, "/api/categorias/**").hasAnyRole("COMPRADOR_VENDEDOR", "ADMIN")
+
+
+                // SOLO COMPRADOR O COMPRADOR_VENDEDOR
                 .requestMatchers("/api/carrito/**").hasAnyRole("COMPRADOR", "COMPRADOR_VENDEDOR")
-                // Ver perfil propio
-                .requestMatchers("/api/usuarios/me").hasAnyRole("COMPRADOR", "COMPRADOR_VENDEDOR", "ADMIN")
-                // Gestión de usuarios
+
+                .requestMatchers("/api/usuarios/me").hasAnyRole("COMPRADOR", "COMPRADOR_VENDEDOR")
+
+
+                // SOLO ADMIN
                 .requestMatchers("/api/usuarios/**").hasRole("ADMIN")
-                // Categorías
-                .requestMatchers(HttpMethod.POST, "/api/categorias/**").hasAnyRole("COMPRADOR_VENDEDOR", "ADMIN")
-                .requestMatchers(HttpMethod.PUT, "/api/categorias/**").hasRole("ADMIN")
+
+				.requestMatchers(HttpMethod.PUT, "/api/categorias/**").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.DELETE, "/api/categorias/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.GET, "/api/categorias/**").hasAnyRole("COMPRADOR", "COMPRADOR_VENDEDOR", "ADMIN")
+
+
                 .anyRequest().authenticated()
-            )
+            ) 
 
             .authenticationProvider(authenticationProvider())
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
