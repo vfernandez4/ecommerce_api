@@ -1,5 +1,7 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.repository;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -25,4 +27,7 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
 
 	@Query("SELECT COUNT(*) FROM Usuario WHERE rol='COMPRADOR_VENDEDOR'")
 	long countTotalVendedores();
+
+	@Query("SELECT u FROM Usuario u WHERE solicitudVendedor=true and rol='COMPRADOR'")
+	List<Usuario> findAllBySolicitudAprobacion();
 }

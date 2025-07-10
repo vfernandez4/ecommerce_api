@@ -45,6 +45,9 @@ export default function Vender() {
 		e.preventDefault();
 		setError("");
 		try {
+			const token = localStorage.getItem("token");
+			if (!token) throw new Error("No hay token");
+			
 			const res = await fetch("http://localhost:8082/api/usuarios/solicitudVendedor", {
 				method: "POST",
 				headers: {

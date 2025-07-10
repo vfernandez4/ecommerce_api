@@ -69,9 +69,22 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuarioService.getCantidadTotalCompradores());
 	}
 
-		@GetMapping("/cantidad-total-vendedores")
+	@GetMapping("/cantidad-total-vendedores")
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Long> getCantidadTotalVendedores() {
 		return ResponseEntity.ok(usuarioService.getCantidadTotalVendedores());
 	}
+
+	@GetMapping("/pendiente-aprobacion")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<UsuarioResponseDTO>> getUsuariosPendienteAprobacion() {
+        return ResponseEntity.ok(usuarioService.getUsuariosPendienteAprobacion());
+    }
+
+	@PutMapping("/{id}/aprobar-solicitud")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Void> aprobarSolicitudVendedor(@PathVariable Long id) {
+        usuarioService.aprobarSolicitudVendedor(id);
+        return ResponseEntity.ok().build();
+    }
 }

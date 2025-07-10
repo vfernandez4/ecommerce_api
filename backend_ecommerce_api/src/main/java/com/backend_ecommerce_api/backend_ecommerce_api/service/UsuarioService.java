@@ -8,9 +8,12 @@ import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoUpdat
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.UsuarioUpdateRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
+import com.backend_ecommerce_api.backend_ecommerce_api.model.Rol;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.ProductoRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
+
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -72,6 +75,20 @@ public class UsuarioService {
 		usuarioRepository.save(usuario);
 	}
 
+	public long getCantidadTotalCompradores() {
+		return usuarioRepository.countTotalCompradores();	
+	}
+
+	public long getCantidadTotalVendedores() {
+		return usuarioRepository.countTotalVendedores();	
+	}
+
+	public List<UsuarioResponseDTO> getUsuariosPendienteAprobacion() {
+		return usuarioRepository.findAllBySolicitudAprobacion().stream()
+				.map(this::mapToResponseDTO)
+				.toList();
+	}
+
 	private UsuarioResponseDTO mapToResponseDTO(Usuario usuario) {
 		UsuarioResponseDTO dto = new UsuarioResponseDTO();
 		dto.setId(usuario.getId());
@@ -95,12 +112,12 @@ public class UsuarioService {
 		return dto;
 	}
 
-	public long getCantidadTotalCompradores() {
-		return usuarioRepository.countTotalCompradores();	
-	}
+    public void aprobarSolicitudVendedor(Long id) {
+        Usuario usuario = usuarioRepository.findById(id)
+            .orElseThrow(() -> new EntityNotFoundException("Usuario no encontrado con id " + id));
 
-	public long getCantidadTotalVendedores() {
-		return usuarioRepository.countTotalVendedores();	
-	}
+        usuario.setRol(Rol.COMPRADOR_VENDEDOR);
+        usuarioRepository.save(usuario);
+    }
 
 }
