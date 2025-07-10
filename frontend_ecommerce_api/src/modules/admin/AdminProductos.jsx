@@ -8,13 +8,19 @@ export default function AdminProductos() {
 	const [precio, setPrecio] = useState(0);
 	const [cantidadStock, setCantidadStock] = useState(1);
 	const [descripcion, setDescripcion] = useState("");
-	const [imagen, setImagen] = useState("");
+	const [imagen, setImagen] = useState(null);
 	const [nuevaCategoria, setNuevaCategoria] = useState(false);
 	const [nuevaCategoriaNombre, setNuevaCategoriaNombre] = useState("");
 	const [error, setError] = useState("");
 	const { categorias, fetchCategorias } = useCategorias();
 	const [usuarioRol, setUsuarioRol] = useState(null);
 
+	useEffect(() => {
+		const token = localStorage.getItem("token");
+		if (!token) return;
+		const payload = JSON.parse(atob(token.split(".")[1]));
+		setUsuarioRol(payload.rol);
+	}, []);
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -65,28 +71,32 @@ export default function AdminProductos() {
 			descripcion,
 			precio: Number(precio),
 			categoriaId: Number(nuevaId),
-			imagen,
 			stockInicial: Number(cantidadStock),
 		};
+
+		const formData = new FormData();
+		formData.append("producto", new Blob([JSON.stringify(productoAVender)], { type: "application/json" }));
+		formData.append("imagen", imagen);
 
 		try {
 			const res = await fetch("http://localhost:8082/api/productos", {
 				method: "POST",
 				headers: {
-					"Content-Type": "application/json",
 					Authorization: `Bearer ${localStorage.getItem("token")}`,
 				},
-				body: JSON.stringify(productoAVender),
+				body: formData,
 			});
+
 			if (!res.ok) throw new Error("Error al publicar el producto");
+
 			alert("Producto publicado correctamente!");
 
 			setNombre("");
 			setDescripcion("");
 			setPrecio(0);
-			setCantidadStock(0);
+			setCantidadStock(1);
 			setCategoriaId("");
-			setImagen("");
+			setImagen(null);
 			setNuevaCategoria(false);
 			setNuevaCategoriaNombre("");
 		} catch (err) {
@@ -94,6 +104,7 @@ export default function AdminProductos() {
 			setError("No se pudo conectar con el servidor.");
 		}
 	};
+
 	return (
 		<div className={styles.contenedor}>
 			<h1 className={styles.titulo}>Publicar producto original ClickCo</h1>
@@ -172,11 +183,13 @@ export default function AdminProductos() {
 					/>
 				</label>
 
-				<label>Nombre de la imagen:
+				<label className={styles.inputFileLabel}>
+					📁 Seleccionar imagen
 					<input
-						type="text"
-						value={imagen}
-						onChange={e => setImagen(e.target.value)}
+						type="file"
+						accept="image/*"
+						onChange={e => setImagen(e.target.files[0])}
+						className={styles.inputFile}
 						required
 					/>
 				</label>
