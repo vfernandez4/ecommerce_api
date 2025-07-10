@@ -8,7 +8,5 @@ public class ProductoPublicarRequestDTO {
 	private double precio;
 	private String descripcion;
 	private int stockInicial;
-	private String imagen;
 	private Long categoriaId;
-	private Long vendedorId;
 }
