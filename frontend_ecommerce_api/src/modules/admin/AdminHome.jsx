@@ -1,46 +1,126 @@
 import React, { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
 import styles from "./adminHome.module.css";
-import KPICard from "../../components/admin/KPICard";
+import {KPICard, KPICardDelta} from "../../components/admin/KPICard";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie } from 'recharts';
 
 export default function AdminHome() {
+	const [ventasHoy, setVentasHoy] = useState(0);
+	const [ventasDelta, setVentasDelta] = useState(0);
+	const [cantTotal, setCantTotal] = useState(0); 
+	const [cantTotalCompradores, setCantTotalCompradores] = useState(0); 
+	const [cantTotalVendedores, setCantTotalVendedores] = useState(0); 
 
-	const salesData = [
-		{ date: '2025-06-09', sales: 400 },
-		{ date: '2025-06-10', sales: 750 },
-		// ... más datos
-	];
+	useEffect(() => {
+		const hoy = new Date();
+		const ayer = new Date(hoy);
+		ayer.setDate(hoy.getDate() - 1);
 
-	const topProductsData = [
-		{ name: 'Producto A', sales: 240 },
-		{ name: 'Producto B', sales: 190 },
-		// ...
-	];
+		const fechaHoyStr = hoy.toISOString().slice(0, 10);   // "2025-07-10"
+		const fechaAyerStr = ayer.toISOString().slice(0, 10);  // "2025-07-09"
+		
+		Promise.all([
+			fetch(`http://localhost:8082/api/venta/cantidad-por-dia/${fechaHoyStr}`, {
+				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+			})
+				.then(res => {
+					if (!res.ok) throw new Error(`Error ${res.status}`);
+					return res.text();
+				})
+				.then(text => parseInt(text, 10)),    // convierte "5" → 5
 
-	const ordersStatusData = [
-		{ status: 'Pendiente', value: 40 },
-		{ status: 'Enviado', value: 80 },
-		{ status: 'Completado', value: 160 }
-	];
+			fetch(`http://localhost:8082/api/venta/cantidad-por-dia/${fechaAyerStr}`, {
+				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+			})
+				.then(res => {
+					if (!res.ok) throw new Error(`Error ${res.status}`);
+					return res.text();
+				})
+				.then(text => parseInt(text, 10))
+		])
+			.then(([countHoy, countAyer]) => {
+				setVentasHoy(countHoy);
+				if (countAyer === 0) setVentasDelta(0);
+				else setVentasDelta(Math.round(((countHoy - countAyer) / countAyer) * 100));
+			})
+			.catch(err => console.error('Error al obtener ventas:', err));
+	}, []);
 
-	const recentOrders = [
-		{ id: 1021, customer: 'Ana López', date: '2025-07-07', total: '$120', status: 'Pendiente' },
-		{ id: 1020, customer: 'Luis Pérez', date: '2025-07-07', total: '$85', status: 'Enviado' },
-		// ...
-	];
+	useEffect(() => {
+		const cantidadTotal = async () => {
+			try {
+				const token = localStorage.getItem("token");
+				if (!token) throw new Error("No hay token");
+
+				const total = await fetch("http://localhost:8082/api/productos/cantidad-total", {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				if (!total.ok) throw new Error("Error al cargar el total de productos:");
+				const text = await total.text();     // '"123"'
+				const totalparse = JSON.parse(text);         // 123
+				setCantTotal(totalparse);
+			} catch (e) {
+				console.error("Error al cargar el total de productos:", e);
+			}
+		};
+		cantidadTotal();
+	}, []);
+
+	useEffect(() => {
+		const cantUsuariosCompradores = async () => {
+			try {
+				const token = localStorage.getItem("token");
+				if (!token) throw new Error("No hay token");
+
+				const total = await fetch("http://localhost:8082/api/usuarios/cantidad-total-compradores", {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				if (!total.ok) throw new Error("Error al cargar el total de compradores:");
+				const text = await total.text();     // '"123"'
+				const totalparse = JSON.parse(text);         // 123
+				setCantTotalCompradores(totalparse);
+			} catch (e) {
+				console.error("Error al cargar el total de compradores:", e);
+			}
+		};
+		cantUsuariosCompradores();
+	}, []);
+
+	useEffect(() => {
+		const cantUsuariosVendedores = async () => {
+			try {
+				const token = localStorage.getItem("token");
+				if (!token) throw new Error("No hay token");
+
+				const total = await fetch("http://localhost:8082/api/usuarios/cantidad-total-vendedores", {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				if (!total.ok) throw new Error("Error al cargar el total de vendedores:");
+				const text = await total.text();     // '"123"'
+				const totalparse = JSON.parse(text);         // 123
+				setCantTotalVendedores(totalparse);
+			} catch (e) {
+				console.error("Error al cargar el total de vendedores:", e);
+			}
+		};
+		cantUsuariosVendedores();
+	}, []);
+
 
 	return (
 		<div className={styles.dashboard}>
 			<div className={styles.kpis}>
-				<KPICard title="Total Ventas Hoy" value="$1.200" delta={5} />
-				<KPICard title="Total Vendidos" value="35" delta={-2} />
-				<KPICard title="Total No Vendidos" value="35" delta={-2} />
-				<KPICard title="Total Productos" value="35" delta={-2} />
-				<KPICard title="Total Usuarios Compradores" value="35" delta={-2} />
-				<KPICard title="Total Usuarios Vendedores" value="35" delta={-2} />
+				<KPICardDelta title="Total Ventas Hoy" value={ventasHoy} delta={ventasDelta} />
+				<KPICard title="Total Productos" value={cantTotal} />
+				<KPICard title="Total Usuarios Compradores" value={cantTotalCompradores} />
+				<KPICard title="Total Usuarios Vendedores" value={cantTotalVendedores} />
 			</div>
-
+			{/* 
 			<div className={styles.charts}>
 				<div className={`${styles.chartContainer} ${styles.large}`}>
 					<h2 className={styles.chartTitle}>Ventas por día</h2>
@@ -113,6 +193,7 @@ export default function AdminHome() {
 					</tbody>
 				</table>
 			</div>
+			*/}
 		</div>
 	);
 }

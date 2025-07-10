@@ -132,6 +132,10 @@ public class ProductoService {
 					.toList();
     }
 
+	public long getCantidadProductosTotal() {
+		return productoRepository.countTotalProductos();
+	}
+
 	/*
 		metodos privados para convertir entidades a DTOs y viceversa
 	*/

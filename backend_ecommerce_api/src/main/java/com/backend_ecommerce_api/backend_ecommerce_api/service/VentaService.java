@@ -1,13 +1,18 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.CarritoItemRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.CarritoRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.UsuarioResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.VentaResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.ProductoNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
@@ -30,17 +35,17 @@ public class VentaService {
 	private final VentaItemRepository ventaItemRepository;
 
 	@Autowired
-	public VentaService(VentaRepository ventaRepository, UsuarioRepository usuarioRepository, ProductoRepository productoRepository, VentaItemRepository ventaItemRepository) {
+	public VentaService(VentaRepository ventaRepository, UsuarioRepository usuarioRepository,
+			ProductoRepository productoRepository, VentaItemRepository ventaItemRepository) {
 		this.ventaRepository = ventaRepository;
 		this.usuarioRepository = usuarioRepository;
 		this.productoRepository = productoRepository;
 		this.ventaItemRepository = ventaItemRepository;
 	}
 
-	
 	public void finalizarCompra(String email, CarritoRequestDTO carritoRequestDTO) {
-		Usuario comprador  = usuarioRepository.findByEmail(email)
-        				.orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con ese email: " + email));
+		Usuario comprador = usuarioRepository.findByEmail(email)
+				.orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con ese email: " + email));
 
 		Venta venta = new Venta();
 		venta.setComprador(comprador);
@@ -49,19 +54,20 @@ public class VentaService {
 		for (CarritoItemRequestDTO item : carritoRequestDTO.getItems()) {
 			VentaItem ventaItem = new VentaItem();
 			Producto producto = productoRepository.findById(item.getProductoId())
-								.orElseThrow(() -> new ProductoNotFoundException("Producto no encontrado con el id: " + item.getProductoId()));		
+					.orElseThrow(() -> new ProductoNotFoundException(
+							"Producto no encontrado con el id: " + item.getProductoId()));
 			ventaItem.setProducto(producto);
 			ventaItem.setCantidad(item.getCantidad());
 			ventaItem.setVenta(venta);
 			ventaItem.setSubtotal(producto.getPrecio() * item.getCantidad());
-			
+
 			producto.disminuirStock(item.getCantidad());
-			
-			if (!comprador.getProductosComprados().contains(producto)){
+
+			if (!comprador.getProductosComprados().contains(producto)) {
 				comprador.addProductoComprado(producto);
 			}
-			
-			if(!producto.getVendedor().getProductosVendidos().contains(producto)){
+
+			if (!producto.getVendedor().getProductosVendidos().contains(producto)) {
 				producto.getVendedor().addProductoVendido(producto);
 			}
 
@@ -76,14 +82,19 @@ public class VentaService {
 		venta.setTotal(venta.getItems().stream()
 				.mapToDouble(item -> item.getSubtotal())
 				.sum());
-		
+
 		ventaRepository.save(venta);
 
-		for(VentaItem item : venta.getItems()) {
+		for (VentaItem item : venta.getItems()) {
 			ventaItemRepository.save(item);
 		}
 
 	}
 
-	
+	public long getCantidadVentasPorDia(LocalDate dia) {
+		LocalDateTime inicio = dia.atStartOfDay();
+		LocalDateTime fin = dia.atTime(LocalTime.MAX);
+		return ventaRepository.countByFechaBetween(inicio, fin);
+	}
+
 }

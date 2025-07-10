@@ -33,4 +33,7 @@ public interface ProductoRepository extends JpaRepository<Producto, Long> {
     List<Producto> findVendidosByVendedorEmail(@Param("email") String email);
     List<Producto> findByCategoriaNombreIgnoreCase(String nombreCategoria);
 
+	@Query("SELECT COUNT(p) FROM Producto p")
+    long countTotalProductos();
+
 }

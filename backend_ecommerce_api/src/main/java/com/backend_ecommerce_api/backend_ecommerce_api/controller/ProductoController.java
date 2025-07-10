@@ -1,8 +1,11 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.controller;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,7 +29,7 @@ public class ProductoController {
 		return productoService.getTodosProductos();
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{id:\\d+}")
 	public ProductoResponseDTO getProductoPorId(@PathVariable Long id) {
 		return productoService.getProductoPorId(id);
 	}
@@ -63,6 +66,12 @@ public class ProductoController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public void eliminarProducto(@PathVariable Long id) {
 		productoService.eliminarProducto(id);
+	}
+	
+    @GetMapping("/cantidad-total")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Long> getCantidadProductosTotal() {
+		return ResponseEntity.ok(productoService.getCantidadProductosTotal());
 	}
 
 }

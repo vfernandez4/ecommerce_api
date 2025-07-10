@@ -1,6 +1,6 @@
 import styles from "./KPICard.module.css";
 
-const KPICard = ({ title, value, delta })  => {
+const KPICardDelta = ({ title, value, delta })  => {
 	return (
 		<div className={styles.kpiCard}>
 			<div className={styles.kpiTitle}>{title}</div>
@@ -14,4 +14,13 @@ const KPICard = ({ title, value, delta })  => {
 	)
 };
 
-export default KPICard;
+const KPICard = ({ title, value })  => {
+	return (
+		<div className={styles.kpiCard}>
+			<div className={styles.kpiTitle}>{title}</div>
+			<div className={styles.kpiValue}>{value}</div>
+		</div>
+	)
+};
+
+export { KPICard, KPICardDelta };

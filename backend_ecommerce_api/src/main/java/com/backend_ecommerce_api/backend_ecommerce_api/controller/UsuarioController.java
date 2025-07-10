@@ -63,4 +63,15 @@ public class UsuarioController {
 		return ResponseEntity.ok("Solicitud enviada correctamente");
 	}
 	
+	@GetMapping("/cantidad-total-compradores")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Long> getCantidadTotalCompradores() {
+		return ResponseEntity.ok(usuarioService.getCantidadTotalCompradores());
+	}
+
+		@GetMapping("/cantidad-total-vendedores")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Long> getCantidadTotalVendedores() {
+		return ResponseEntity.ok(usuarioService.getCantidadTotalVendedores());
+	}
 }

@@ -95,4 +95,12 @@ public class UsuarioService {
 		return dto;
 	}
 
+	public long getCantidadTotalCompradores() {
+		return usuarioRepository.countTotalCompradores();	
+	}
+
+	public long getCantidadTotalVendedores() {
+		return usuarioRepository.countTotalVendedores();	
+	}
+
 }
