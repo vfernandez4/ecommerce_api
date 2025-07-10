@@ -78,5 +78,37 @@
 	top: 8px;
 }
 
+.inputFileWrapper {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+}
 
+.inputFileLabel {
+	display: inline-flex;
+	align-items: center;
+	gap: 0.5rem;
+	padding: 0.75rem 1.5rem;
+	background-color: rgb(130, 183, 240);
+	color: white; 
+	border-radius: 999px;
+	font-weight: 600;
+	font-size: 1rem;
+	cursor: pointer;
+	transition: background-color 0.3s ease;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  }
+  
+  .inputFileLabel:hover {
+	background-color: var(--color-acento);
+  }
+  
+  .inputFile {
+	display: none; 
+  }  
 
+.nombreArchivo {
+	color: var(--color-negro);
+	font-size: 0.95rem;
+	font-style: italic;
+}

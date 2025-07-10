@@ -3,10 +3,14 @@ package com.backend_ecommerce_api.backend_ecommerce_api.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.CategoriaRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.ProductoRepository;
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
+
+import java.io.IOException;
+
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoPublicarRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoUpdateRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.ProductoResponseDTO;
@@ -18,6 +22,9 @@ import com.backend_ecommerce_api.backend_ecommerce_api.model.Categoria;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
 import com.backend_ecommerce_api.backend_ecommerce_api.model.Usuario;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.Files;
 import java.util.List;
 
 @Service
@@ -75,6 +82,38 @@ public class ProductoService {
 
 		return toProductoResponseDTO(this.productoRepository.save(producto));
 	}
+
+	@Transactional
+	public ProductoResponseDTO publicarProductoConImagen(String email, ProductoPublicarRequestDTO productoDTO, MultipartFile imagenFile) throws IOException {
+    	Usuario vendedor = usuarioRepository.findByEmail(email)
+        	.orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con ese email: " + email));
+
+    	Categoria categoria = categoriaRepository.findById(productoDTO.getCategoriaId())
+        	.orElseThrow(() -> new CategoriaNotFoundException("Categoría no encontrada con ese id: " + productoDTO.getCategoriaId()));
+
+    	if (imagenFile.isEmpty()) {
+        	throw new BadRequestException("La imagen del producto es obligatoria.");
+    	}
+
+    	// Guardar imagen en disco
+    	String originalFilename = imagenFile.getOriginalFilename();
+    	String fileName = System.currentTimeMillis() + "_" + originalFilename;
+    	Path uploadPath = Paths.get(System.getProperty("user.dir"), "uploads", "productos");
+
+    	if (!Files.exists(uploadPath)) {
+        	Files.createDirectories(uploadPath);
+    	}
+
+    	Path filePath = uploadPath.resolve(fileName);
+    	imagenFile.transferTo(filePath.toFile());
+
+    	// Crear y guardar producto
+    	Producto producto = publicarToProducto(productoDTO, categoria, vendedor);
+    	producto.setImagen(fileName);
+
+    	return toProductoResponseDTO(productoRepository.save(producto));
+	}
+
 
 	@Transactional
 	public ProductoResponseDTO actualizarProducto(ProductoUpdateRequestDTO productoDTO, Long id) {
@@ -170,11 +209,6 @@ public class ProductoService {
 		producto.setStockInicial(productoRequest.getStockInicial());
 		//el stock actual va a ser igual al stock inicial al momento de publicar
 		producto.setStockActual(productoRequest.getStockInicial());
-		String imagenPath = productoRequest.getImagen();
-		if (imagenPath != null && imagenPath.startsWith("http")) {
-    		imagenPath = imagenPath.substring(imagenPath.lastIndexOf("/") + 1);
-		}
-		producto.setImagen(imagenPath);
 		producto.setCategoria(categoria);
 		producto.setVendedor(vendedor);
 

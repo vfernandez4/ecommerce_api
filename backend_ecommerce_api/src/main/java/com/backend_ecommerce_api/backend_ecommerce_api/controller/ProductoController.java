@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.access.prepost.PreAuthorize;
 
@@ -12,6 +13,8 @@ import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoPubli
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoUpdateRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.ProductoResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.ProductoService;
+
+import java.io.IOException;
 
 
 
@@ -47,12 +50,17 @@ public class ProductoController {
 		return productoService.getProductosDestacados();
 	}
 
-	@PostMapping
+	@PostMapping(consumes = "multipart/form-data")
 	@PreAuthorize("hasRole('COMPRADOR_VENDEDOR', 'ADMIN')")
-	public ProductoResponseDTO publicarProducto(@RequestBody ProductoPublicarRequestDTO producto, Authentication auth) {
-		String email = auth.getName();
-		return productoService.publicarProducto(email, producto);
+	public ProductoResponseDTO publicarProducto(
+    	@RequestPart("producto") ProductoPublicarRequestDTO producto,
+    	@RequestPart("imagen") MultipartFile imagen,
+    	Authentication auth
+	) throws IOException {
+    	String email = auth.getName();
+    	return productoService.publicarProductoConImagen(email, producto, imagen);
 	}
+
 
 	@PutMapping("/{id}")
 	@PreAuthorize("hasRole('COMPRADOR_VENDEDOR', 'ADMIN')")
