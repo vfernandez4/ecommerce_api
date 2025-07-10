@@ -7,10 +7,9 @@ export default function Vender() {
 	const [nombre, setNombre] = useState("");
 	const [categoriaId, setCategoriaId] = useState("");
 	const [precio, setPrecio] = useState(0);
+	const [cantidadStock, setCantidadStock] = useState(1);
 	const [descripcion, setDescripcion] = useState("");
 	const [imagen, setImagen] = useState("");
-	const [nuevaCategoria, setNuevaCategoria] = useState(false);
-	const [nuevaCategoriaNombre, setNuevaCategoriaNombre] = useState("");
 	const [error, setError] = useState("");
 	const { categorias, fetchCategorias } = useCategorias();
 	const [usuarioSolicitudVendedor, setUsuarioSolicitudVendedor] = useState(null);
@@ -47,7 +46,7 @@ export default function Vender() {
 		try {
 			const token = localStorage.getItem("token");
 			if (!token) throw new Error("No hay token");
-			
+
 			const res = await fetch("http://localhost:8082/api/usuarios/solicitudVendedor", {
 				method: "POST",
 				headers: {
@@ -67,53 +66,13 @@ export default function Vender() {
 		e.preventDefault();
 		setError("");
 
-		let nuevaId = categoriaId;
-
-		if (nuevaCategoria) {
-			if (!nuevaCategoriaNombre.trim()) {
-				setError("Debe ingresar un nombre para la nueva categoría.");
-				return;
-			}
-
-			const nombreNormalizado = nuevaCategoriaNombre.trim().toLowerCase();
-			const existe = categorias.some(
-				cat => cat.nombre.toLowerCase() === nombreNormalizado
-			);
-
-			if (existe) {
-				setError("Esta categoría ya existe.");
-				return;
-			}
-
-			try {
-				const res = await fetch("http://localhost:8082/api/categorias", {
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${localStorage.getItem("token")}`,
-					},
-					body: JSON.stringify({ nombre: nuevaCategoriaNombre }),
-				});
-				if (!res.ok) throw new Error("Error al crear nueva categoría");
-
-				const data = await res.json();
-				nuevaId = data.id;
-
-				await fetchCategorias();
-			} catch (err) {
-				console.error(err);
-				setError("No se pudo crear la nueva categoría.");
-				return;
-			}
-		}
-
 		const productoAVender = {
 			nombre,
 			descripcion,
 			precio: Number(precio),
-			categoriaId: Number(nuevaId),
+			categoriaId: Number(categoriaId),
 			imagen,
-			stockInicial: 1,
+			stockInicial: Number(cantidadStock),
 		};
 
 		try {
@@ -133,8 +92,7 @@ export default function Vender() {
 			setPrecio(0);
 			setCategoriaId("");
 			setImagen("");
-			setNuevaCategoria(false);
-			setNuevaCategoriaNombre("");
+			setCantidadStock(0);
 		} catch (err) {
 			console.error(err);
 			setError("No se pudo conectar con el servidor.");
@@ -178,41 +136,16 @@ export default function Vender() {
 							value={categoriaId}
 							onChange={e => setCategoriaId(e.target.value)}
 							required
-							disabled={nuevaCategoria}
 						>
 							<option value="">Seleccione</option>
 							{categorias
-								.filter(cat => usuarioRol === "ADMIN" || cat.nombre.toLowerCase() !== "originales clickco")
+								.filter(cat => cat.nombre.toLowerCase() !== "originales clickco")
 								.map(cat => (
 									<option key={cat.id} value={cat.id}>{cat.nombre}</option>
 								))
 							}
 						</select>
 					</label>
-
-					<div className={styles.checkboxRow}>
-						<label htmlFor="crearCategoria" className={styles.checkboxLabel}>
-							Crear nueva categoría
-						</label>
-						<input
-							id="crearCategoria"
-							type="checkbox"
-							checked={nuevaCategoria}
-							onChange={e => setNuevaCategoria(e.target.checked)}
-							className={styles.checkboxInput}
-						/>
-					</div>
-
-					{nuevaCategoria && (
-						<label>Nombre de la nueva categoría:
-							<input
-								type="text"
-								value={nuevaCategoriaNombre}
-								onChange={e => setNuevaCategoriaNombre(e.target.value)}
-								required
-							/>
-						</label>
-					)}
 
 					<label>Precio:
 						<input
@@ -223,6 +156,16 @@ export default function Vender() {
 							required
 						/>
 					</label>
+
+					<label>Cantidad de stock:
+						<input
+							type="number"
+							min="1"
+							value={cantidadStock}
+							onChange={e => setCantidadStock(e.target.value)}
+							required
+						/>
+					</label>					
 
 					<label>Descripción:
 						<textarea
