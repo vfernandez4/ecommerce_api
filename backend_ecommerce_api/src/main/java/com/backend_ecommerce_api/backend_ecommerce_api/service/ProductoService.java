@@ -126,36 +126,15 @@ public class ProductoService {
     }
 
 	@Transactional(readOnly = true)
-    public List<ProductoResponseDTO> getProductosPublicados(String email) {
-		return this.productoRepository.findByVendedorEmail(email).stream()
-						.map(producto -> toProductoResponseDTO(producto))
-						.toList();
-    }
-
-	@Transactional(readOnly = true)
-    public List<ProductoResponseDTO> getProductosVendidos(String email) {
-		return this.productoRepository.findVendidosByVendedorEmail(email).stream()
-						.map(producto -> toProductoResponseDTO(producto))
-						.toList();
-    }
-
-	@Transactional(readOnly = true)
-    public List<ProductoResponseDTO> getProductosComprados(String email) {
-		Usuario usuario = usuarioRepository.findByEmail(email)
-											.orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado"));
-
-		// estr getProductosComprados() hace un get de la la tabla intermedia q se creo en Producto
-		return usuario.getProductosComprados().stream()
-				.map(producto -> toProductoResponseDTO(producto))
-				.toList();
-    }	
-
-	@Transactional(readOnly = true)
     public List<ProductoResponseDTO> getProductosDestacados() {
         return this.productoRepository.findDestacados().stream()
 					.map(producto -> toProductoResponseDTO(producto))
 					.toList();
     }
+
+	public long getCantidadProductosTotal() {
+		return productoRepository.countTotalProductos();
+	}
 
 	/*
 		metodos privados para convertir entidades a DTOs y viceversa

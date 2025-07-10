@@ -3,6 +3,7 @@ package com.backend_ecommerce_api.backend_ecommerce_api.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,9 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoPublicarRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.ProductoUpdateRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.ProductoResponseDTO;
-import com.backend_ecommerce_api.backend_ecommerce_api.model.Producto;
 import com.backend_ecommerce_api.backend_ecommerce_api.service.ProductoService;
-import com.backend_ecommerce_api.backend_ecommerce_api.service.UsuarioService;
 
 
 
@@ -23,15 +22,12 @@ public class ProductoController {
 	@Autowired
 	private ProductoService productoService;
 
-	@Autowired
-	private UsuarioService usuarioService;
-
 	@GetMapping
 	public List<ProductoResponseDTO> getTodosProductos() {
 		return productoService.getTodosProductos();
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/{id:\\d+}")
 	public ProductoResponseDTO getProductoPorId(@PathVariable Long id) {
 		return productoService.getProductoPorId(id);
 	}
@@ -69,36 +65,12 @@ public class ProductoController {
 	public void eliminarProducto(@PathVariable Long id) {
 		productoService.eliminarProducto(id);
 	}
-
-	@GetMapping("/publicados")
-	@PreAuthorize("hasRole('COMPRADOR_VENDEDOR')")
-	public List<ProductoResponseDTO> getProductosPublicados(Authentication auth) {
-		String email = auth.getName();
-		return productoService.getProductosPublicados(email);
+	
+    @GetMapping("/cantidad-total")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Long> getCantidadProductosTotal() {
+		return ResponseEntity.ok(productoService.getCantidadProductosTotal());
 	}
 
-	@GetMapping("/vendidos")
-	@PreAuthorize("hasRole('COMPRADOR_VENDEDOR')")
-	public List<ProductoResponseDTO> getProductosVendidos(Authentication auth) {
-		String email = auth.getName();
-		return productoService.getProductosVendidos(email);
-	}
-
-	@GetMapping("/comprados")
-	@PreAuthorize("hasAnyRole('COMPRADOR', 'COMPRADOR_VENDEDOR')")
-	public List<ProductoResponseDTO> getProductosComprados(Authentication auth) {
-		String email = auth.getName();
-		return productoService.getProductosComprados(email);
-	}
-
-	@PostMapping("/pago")
-	@PreAuthorize("hasAnyRole('COMPRADOR', 'COMPRADOR_VENDEDOR')")
-	public void pagarProductos(@RequestBody List<ProductoUpdateRequestDTO> productosDTO, Authentication auth) {
-		String email = auth.getName();
-		for (ProductoUpdateRequestDTO prod : productosDTO) {
-			productoService.actualizarProductoPago(prod);
-			usuarioService.agregarCompra(email, prod);
-		}
-	}
 }
 

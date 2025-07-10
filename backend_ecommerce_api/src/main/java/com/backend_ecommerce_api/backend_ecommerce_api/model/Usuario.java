@@ -44,6 +44,13 @@ public class Usuario implements  UserDetails  {
 	@Enumerated(EnumType.STRING)
 	private Rol rol;
 
+	@Column(name = "solicitud_vendedor", nullable = false)
+    private boolean solicitudVendedor;
+
+	public boolean getSolicitudVendedor() {
+		return this.solicitudVendedor;
+	}
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable(
 		name = "usuarios_productos_comprados", 
@@ -63,6 +70,8 @@ public class Usuario implements  UserDetails  {
 		this.productosVendidos.add(producto);
 	}
 	
+
+	//metodos de seguridad
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
     	return List.of(new SimpleGrantedAuthority("ROLE_" + rol.name()));
