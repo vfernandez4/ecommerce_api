@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-tp
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_DATABASE: base_de_datos_tp
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - ecommerce-net
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend_ecommerce_api
+      dockerfile: Dockerfile
+    container_name: ecommerce-backend
+    ports:
+      - "8082:8082"
+    depends_on:
+      - mysql
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/base_de_datos_tp
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: ""
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: "true"
+      SPRING_JPA_PROPERTIES_HIBERNATE_DIALECT: org.hibernate.dialect.MySQL8Dialect
+      SERVER_PORT: 8082
+    volumes:
+      - ./backend_ecommerce_api/uploads/productos:/app/uploads/productos
+    networks:
+      - ecommerce-net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend_ecommerce_api
+      dockerfile: Dockerfile
+    container_name: ecommerce-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    networks:
+      - ecommerce-net
+    restart: unless-stopped
+
+volumes:
+  mysql_data:
+
+networks:
+  ecommerce-net:
