@@ -1,7 +1,6 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.controller;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +35,11 @@ public class VentaController {
 		return ResponseEntity.ok(ventaService.getCantidadVentasPorDia(dia));
 	}
 
+	@GetMapping
+	public List<VentaResponseDTO> getTodasLasVentas() {
+		return ventaService.getTodasLasVentas();
+	}
 	
-	// GET una venta por id
 
-
-	
-
-	// GET historial de ventas por usuario
 	
 }

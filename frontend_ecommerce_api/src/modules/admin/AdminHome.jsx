@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from "react";
 import styles from "./adminHome.module.css";
-import {KPICard, KPICardDelta} from "../../components/admin/KPICard";
+import { KPICard, KPICardDelta } from "../../components/admin/KPICard";
 import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie } from 'recharts';
 
 export default function AdminHome() {
 	const [ventasHoy, setVentasHoy] = useState(0);
 	const [ventasDelta, setVentasDelta] = useState(0);
-	const [cantTotal, setCantTotal] = useState(0); 
-	const [cantTotalCompradores, setCantTotalCompradores] = useState(0); 
-	const [cantTotalVendedores, setCantTotalVendedores] = useState(0); 
+	const [cantTotal, setCantTotal] = useState(0);
+	const [cantTotalCompradores, setCantTotalCompradores] = useState(0);
+	const [cantTotalVendedores, setCantTotalVendedores] = useState(0);
 
 	useEffect(() => {
 		const hoy = new Date();
@@ -17,7 +17,7 @@ export default function AdminHome() {
 
 		const fechaHoyStr = hoy.toISOString().slice(0, 10);   // "2025-07-10"
 		const fechaAyerStr = ayer.toISOString().slice(0, 10);  // "2025-07-09"
-		
+
 		Promise.all([
 			fetch(`http://localhost:8082/api/venta/cantidad-por-dia/${fechaHoyStr}`, {
 				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
@@ -111,6 +111,22 @@ export default function AdminHome() {
 		cantUsuariosVendedores();
 	}, []);
 
+	const [todasLasVentas, setTodasLasVentas] = useState([]);
+
+	useEffect(() => {
+		fetch("http://localhost:8082/api/venta", {
+			headers: {
+				Authorization: `Bearer ${localStorage.getItem("token")}`,
+			},
+		})
+			.then((res) => {
+				if (!res.ok) throw new Error("Error al cargar las ventas");
+				return res.json();
+			})
+			.then((data) => setTodasLasVentas(data))
+			.catch((err) => console.error(err));
+	}, []);
+
 
 	return (
 		<div className={styles.dashboard}>
@@ -120,20 +136,19 @@ export default function AdminHome() {
 				<KPICard title="Total Usuarios Compradores" value={cantTotalCompradores} />
 				<KPICard title="Total Usuarios Vendedores" value={cantTotalVendedores} />
 			</div>
-			{/* 
 			<div className={styles.charts}>
 				<div className={`${styles.chartContainer} ${styles.large}`}>
-					<h2 className={styles.chartTitle}>Ventas por día</h2>
+					<h2 className={styles.chartTitle}>Monto de ventas por día</h2>
 					<ResponsiveContainer width="100%" height={250}>
-						<LineChart data={salesData}>
-							<XAxis dataKey="date" />
+						<LineChart data={todasLasVentas}>
+							<XAxis dataKey="fecha" />
 							<YAxis />
 							<Tooltip />
-							<Line dataKey="sales" stroke="#4a90e2" strokeWidth={2} />
+							<Line dataKey="total" stroke="#4a90e2" strokeWidth={2} />
 						</LineChart>
 					</ResponsiveContainer>
 				</div>
-
+		{/*
 				<div className={styles.chartContainer}>
 					<h2 className={styles.chartTitle}>Top 5 productos</h2>
 					<ResponsiveContainer width="100%" height={250}>
@@ -192,9 +207,13 @@ export default function AdminHome() {
 						))}
 					</tbody>
 				</table>
+				*/}
 			</div>
-			*/}
+		
+
 		</div>
+
+
 	);
 }
 

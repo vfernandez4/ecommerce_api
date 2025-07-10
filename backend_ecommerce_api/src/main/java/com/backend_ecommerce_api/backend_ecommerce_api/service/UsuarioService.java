@@ -101,12 +101,12 @@ public class UsuarioService {
 		dto.setSolicitudVendedor(usuario.getSolicitudVendedor());
 		dto.setProductosComprados(
 				usuario.getProductosComprados().stream()
-						.map(p -> new ProductoDTO(p.getNombre(), p.getPrecio(), p.getImagen()))
+						.map(p -> new ProductoDTO(p.getNombre(), p.getPrecio(), p.getImagen(), p.getDescripcion()))
 						.collect(Collectors.toList()));
 
 		dto.setProductosVendidos(
 				usuario.getProductosVendidos().stream()
-						.map(p -> new ProductoDTO(p.getNombre(), p.getPrecio(), p.getImagen()))
+						.map(p -> new ProductoDTO(p.getNombre(), p.getPrecio(), p.getImagen(), p.getDescripcion()))
 						.collect(Collectors.toList()));
 
 		return dto;

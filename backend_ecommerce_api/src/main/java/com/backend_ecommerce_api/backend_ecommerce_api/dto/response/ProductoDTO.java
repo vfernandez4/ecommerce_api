@@ -7,10 +7,12 @@ public class ProductoDTO {
 	private String nombre;
 	private double precio;
 	private String imagen;
+	private String descripcion;
 
-	public ProductoDTO(String nombre, double precio, String imagen) {
+	public ProductoDTO(String nombre, double precio, String imagen, String descripcion) {
 		this.nombre = nombre;
 		this.precio = precio;
 		this.imagen = imagen;
+		this.descripcion = descripcion;
 	}
 }

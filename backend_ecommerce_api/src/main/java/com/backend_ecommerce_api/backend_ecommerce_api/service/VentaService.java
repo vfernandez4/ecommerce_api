@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.CarritoItemRequestDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.request.CarritoRequestDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.ProductoResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.UsuarioResponseDTO;
+import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.VentaItemResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.dto.response.VentaResponseDTO;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.ProductoNotFoundException;
 import com.backend_ecommerce_api.backend_ecommerce_api.exception.UsuarioNotFoundException;
@@ -95,6 +97,30 @@ public class VentaService {
 		LocalDateTime inicio = dia.atStartOfDay();
 		LocalDateTime fin = dia.atTime(LocalTime.MAX);
 		return ventaRepository.countByFechaBetween(inicio, fin);
+	}
+
+	public List<VentaResponseDTO> getTodasLasVentas() {
+		return this.ventaRepository.findAll().stream()
+				.map(venta -> toVentaResponseDTO(venta))
+				.toList();
+	}
+
+	private VentaResponseDTO toVentaResponseDTO(Venta venta) {
+		VentaResponseDTO dto = new VentaResponseDTO();
+		dto.setComprador_id(venta.getComprador().getId());
+		dto.setFecha(venta.getFecha());
+		dto.setId(venta.getId());
+		dto.setTotal(venta.getTotal());
+		for(VentaItem item : venta.getItems()) {
+			VentaItemResponseDTO i = new VentaItemResponseDTO();
+			i.setCantidad(item.getCantidad());
+			i.setId(item.getId());
+			i.setProductoId(item.getProducto().getId());
+			i.setSubtotal(item.getSubtotal());
+			i.setVentaId(item.getVenta().getId());
+			dto.agregarItemDTO(i);
+		}
+		return dto;
 	}
 
 }

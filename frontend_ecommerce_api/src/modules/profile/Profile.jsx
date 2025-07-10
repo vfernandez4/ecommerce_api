@@ -55,7 +55,7 @@ const Profile = () => {
 					))}
 				</div>
 				<div className={styles["child_history"]}>
-					<h2>Historial de ventas</h2>
+					<h2>Productos mios en venta</h2>
 					{vendidos.map((producto) => (
 						<HistoryCard key={producto.id} {...producto} />
 					))}
