@@ -1,7 +1,7 @@
 :root {
 	--color-azul-oscuro: #172f74;
 	--color-azul-claro: #3b82f6;
-	--color-fondo: #d9e5f1;
+	--color-fondo: #c7d1ffc9;
 	--color-negro: #000000;
 	--color-blanco: #FFFFFF;
 	--color-acento: #5c9aff;
@@ -27,12 +27,14 @@ body {
 }
 
 .appContainer {
+	background-color: var(--color-fondo);
 	display: flex;
 	flex-direction: column;
 	min-height: 100vh;
 }
 
 .mainGenerico {
+	background-color: var(--color-fondo);
 	flex: 1;
 }
 

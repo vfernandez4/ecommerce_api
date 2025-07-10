@@ -1,7 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import styles from "./adminHome.module.css";
 import { KPICard, KPICardDelta } from "../../components/admin/KPICard";
-import { LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, BarChart, Bar, PieChart, Pie } from 'recharts';
+import {
+	LineChart,
+	Line,
+	XAxis,
+	YAxis,
+	Tooltip,
+	ResponsiveContainer,
+} from "recharts";
 
 export default function AdminHome() {
 	const [ventasHoy, setVentasHoy] = useState(0);
@@ -9,212 +16,180 @@ export default function AdminHome() {
 	const [cantTotal, setCantTotal] = useState(0);
 	const [cantTotalCompradores, setCantTotalCompradores] = useState(0);
 	const [cantTotalVendedores, setCantTotalVendedores] = useState(0);
+	const [todasLasVentas, setTodasLasVentas] = useState([]);
+
+	const currencyFmt = new Intl.NumberFormat("es-AR", {
+		style: "currency",
+		currency: "ARS",
+	});
 
 	useEffect(() => {
 		const hoy = new Date();
 		const ayer = new Date(hoy);
 		ayer.setDate(hoy.getDate() - 1);
 
-		const fechaHoyStr = hoy.toISOString().slice(0, 10);   // "2025-07-10"
-		const fechaAyerStr = ayer.toISOString().slice(0, 10);  // "2025-07-09"
+		const fechaHoyStr = hoy.toISOString().slice(0, 10);
+		const fechaAyerStr = ayer.toISOString().slice(0, 10);
 
 		Promise.all([
 			fetch(`http://localhost:8082/api/venta/cantidad-por-dia/${fechaHoyStr}`, {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+				headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
 			})
-				.then(res => {
-					if (!res.ok) throw new Error(`Error ${res.status}`);
+				.then((res) => {
+					if (!res.ok) throw new Error(res.status);
 					return res.text();
 				})
-				.then(text => parseInt(text, 10)),    // convierte "5" → 5
-
+				.then((text) => parseInt(text, 10)),
 			fetch(`http://localhost:8082/api/venta/cantidad-por-dia/${fechaAyerStr}`, {
-				headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+				headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
 			})
-				.then(res => {
-					if (!res.ok) throw new Error(`Error ${res.status}`);
+				.then((res) => {
+					if (!res.ok) throw new Error(res.status);
 					return res.text();
 				})
-				.then(text => parseInt(text, 10))
+				.then((text) => parseInt(text, 10)),
 		])
 			.then(([countHoy, countAyer]) => {
 				setVentasHoy(countHoy);
-				if (countAyer === 0) setVentasDelta(0);
-				else setVentasDelta(Math.round(((countHoy - countAyer) / countAyer) * 100));
+				setVentasDelta(
+					countAyer === 0 ? 0 : Math.round(((countHoy - countAyer) / countAyer) * 100)
+				);
 			})
-			.catch(err => console.error('Error al obtener ventas:', err));
+			.catch((err) => console.error("Error al obtener ventas:", err));
 	}, []);
 
 	useEffect(() => {
-		const cantidadTotal = async () => {
+		const fetchTotalProductos = async () => {
 			try {
 				const token = localStorage.getItem("token");
 				if (!token) throw new Error("No hay token");
-
-				const total = await fetch("http://localhost:8082/api/productos/cantidad-total", {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
+				const res = await fetch("http://localhost:8082/api/productos/cantidad-total", {
+					headers: { Authorization: `Bearer ${token}` },
 				});
-				if (!total.ok) throw new Error("Error al cargar el total de productos:");
-				const text = await total.text();     // '"123"'
-				const totalparse = JSON.parse(text);         // 123
-				setCantTotal(totalparse);
+				if (!res.ok) throw new Error("Error al cargar total productos");
+				const text = await res.text();
+				setCantTotal(JSON.parse(text));
 			} catch (e) {
-				console.error("Error al cargar el total de productos:", e);
+				console.error(e);
 			}
 		};
-		cantidadTotal();
+		fetchTotalProductos();
 	}, []);
 
 	useEffect(() => {
-		const cantUsuariosCompradores = async () => {
+		const fetchCompradores = async () => {
 			try {
 				const token = localStorage.getItem("token");
 				if (!token) throw new Error("No hay token");
-
-				const total = await fetch("http://localhost:8082/api/usuarios/cantidad-total-compradores", {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
-				if (!total.ok) throw new Error("Error al cargar el total de compradores:");
-				const text = await total.text();     // '"123"'
-				const totalparse = JSON.parse(text);         // 123
-				setCantTotalCompradores(totalparse);
+				const res = await fetch(
+					"http://localhost:8082/api/usuarios/cantidad-total-compradores",
+					{ headers: { Authorization: `Bearer ${token}` } }
+				);
+				if (!res.ok) throw new Error("Error al cargar total compradores");
+				const text = await res.text();
+				setCantTotalCompradores(JSON.parse(text));
 			} catch (e) {
-				console.error("Error al cargar el total de compradores:", e);
+				console.error(e);
 			}
 		};
-		cantUsuariosCompradores();
+		fetchCompradores();
 	}, []);
 
 	useEffect(() => {
-		const cantUsuariosVendedores = async () => {
+		const fetchVendedores = async () => {
 			try {
 				const token = localStorage.getItem("token");
 				if (!token) throw new Error("No hay token");
-
-				const total = await fetch("http://localhost:8082/api/usuarios/cantidad-total-vendedores", {
-					headers: {
-						Authorization: `Bearer ${token}`,
-					},
-				});
-				if (!total.ok) throw new Error("Error al cargar el total de vendedores:");
-				const text = await total.text();     // '"123"'
-				const totalparse = JSON.parse(text);         // 123
-				setCantTotalVendedores(totalparse);
+				const res = await fetch(
+					"http://localhost:8082/api/usuarios/cantidad-total-vendedores",
+					{ headers: { Authorization: `Bearer ${token}` } }
+				);
+				if (!res.ok) throw new Error("Error al cargar total vendedores");
+				const text = await res.text();
+				setCantTotalVendedores(JSON.parse(text));
 			} catch (e) {
-				console.error("Error al cargar el total de vendedores:", e);
+				console.error(e);
 			}
 		};
-		cantUsuariosVendedores();
+		fetchVendedores();
 	}, []);
-
-	const [todasLasVentas, setTodasLasVentas] = useState([]);
 
 	useEffect(() => {
 		fetch("http://localhost:8082/api/venta", {
-			headers: {
-				Authorization: `Bearer ${localStorage.getItem("token")}`,
-			},
+			headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
 		})
 			.then((res) => {
-				if (!res.ok) throw new Error("Error al cargar las ventas");
+				if (!res.ok) throw new Error("Error al cargar ventas");
 				return res.json();
 			})
 			.then((data) => setTodasLasVentas(data))
 			.catch((err) => console.error(err));
 	}, []);
 
+	const ventasOrdenadas = useMemo(() => {
+		return [...todasLasVentas].sort(
+			(a, b) => new Date(b.fecha).getTime() - new Date(a.fecha).getTime()
+		);
+	}, [todasLasVentas]);
 
 	return (
 		<div className={styles.dashboard}>
 			<div className={styles.kpis}>
-				<KPICardDelta title="Total Ventas Hoy" value={ventasHoy} delta={ventasDelta} />
+				<KPICardDelta title="Ventas Hoy" value={ventasHoy} delta={ventasDelta} />
 				<KPICard title="Total Productos" value={cantTotal} />
-				<KPICard title="Total Usuarios Compradores" value={cantTotalCompradores} />
-				<KPICard title="Total Usuarios Vendedores" value={cantTotalVendedores} />
+				<KPICard title="Compradores" value={cantTotalCompradores} />
+				<KPICard title="Vendedores" value={cantTotalVendedores} />
 			</div>
+
 			<div className={styles.charts}>
-				<div className={`${styles.chartContainer} ${styles.large}`}>
-					<h2 className={styles.chartTitle}>Monto de ventas por día</h2>
+				<div className={styles.chartContainer}>
+					<h2 className={styles.chartTitle}>Monto total de ventas por día</h2>
 					<ResponsiveContainer width="100%" height={250}>
 						<LineChart data={todasLasVentas}>
 							<XAxis dataKey="fecha" />
 							<YAxis />
-							<Tooltip />
+							<Tooltip formatter={(value) => currencyFmt.format(value)} />
 							<Line dataKey="total" stroke="#4a90e2" strokeWidth={2} />
 						</LineChart>
 					</ResponsiveContainer>
 				</div>
-		{/*
-				<div className={styles.chartContainer}>
-					<h2 className={styles.chartTitle}>Top 5 productos</h2>
-					<ResponsiveContainer width="100%" height={250}>
-						<BarChart data={topProductsData}>
-							<XAxis dataKey="name" />
-							<YAxis />
-							<Tooltip />
-							<Bar dataKey="sales" />
-						</BarChart>
-					</ResponsiveContainer>
-				</div>
-
-				<div className={styles.chartContainer}>
-					<h2 className={styles.chartTitle}>Estado de pedidos</h2>
-					<ResponsiveContainer width="100%" height={250}>
-						<PieChart>
-							<Pie
-								data={ordersStatusData}
-								dataKey="value"
-								nameKey="status"
-								cx="50%"
-								cy="50%"
-								innerRadius={40}
-								outerRadius={80}
-								label
-							/>
-							<Tooltip />
-						</PieChart>
-					</ResponsiveContainer>
-				</div>
 			</div>
 
-			<div className={styles.recentOrders}>
-				<h2 className={styles.sectionTitle}>Últimos pedidos</h2>
-				<table className={styles.ordersTable}>
-					<thead>
-						<tr>
-							<th>Nº Pedido</th>
-							<th>Cliente</th>
-							<th>Fecha</th>
-							<th>Total</th>
-							<th>Estado</th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						{recentOrders.map(order => (
-							<tr key={order.id}>
-								<td>{order.id}</td>
-								<td>{order.customer}</td>
-								<td>{order.date}</td>
-								<td>{order.total}</td>
-								<td><span className={`${styles.status} ${styles[order.status.toLowerCase()]}`}>{order.status}</span></td>
-								<td><button className={styles.viewBtn}>Ver</button></td>
-							</tr>
+			<div className={styles.salesListContainer}>
+				<h2 className={styles.listTitle}>Listado de todas las Ventas</h2>
+				{ventasOrdenadas.length === 0 ? (
+					<p className={styles.noSales}>No hay ventas aún.</p>
+				) : (
+					<div className={styles.salesGrid}>
+						{ventasOrdenadas.map((v) => (
+							<div key={v.id} className={styles.saleCard}>
+								<div className={styles.saleHeader}>
+									<div className={styles.saleDate}>
+										{new Date(v.fecha).toLocaleString("es-AR", {
+											day: "2-digit",
+											month: "2-digit",
+											year: "numeric",
+											hour: "2-digit",
+											minute: "2-digit",
+										})}
+									</div>
+									<div className={styles.saleTotal}>{currencyFmt.format(v.total)}</div>
+									<div className={styles.saleBuyer}>User #{v.comprador_id}</div>
+								</div>
+								<div className={styles.itemsList}>
+									{v.items.map((it) => (
+										<div key={it.id} className={styles.item}>
+											<span>ID: {it.productoId}</span>
+											<span>Cant: {it.cantidad}</span>
+											<span>{currencyFmt.format(it.subtotal)}</span>
+										</div>
+									))}
+								</div>
+							</div>
 						))}
-					</tbody>
-				</table>
-				*/}
+					</div>
+				)}
 			</div>
-		
-
 		</div>
-
-
 	);
 }
-
-

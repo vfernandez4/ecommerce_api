@@ -9,7 +9,7 @@
 }
 
 .body {
-	background-color: var(--color-bg);
+	background-color: var(--color-fondo);
 	padding: 2rem;
 	font-family: "Segoe UI", sans-serif;
 	color: var(--color-text);
