@@ -63,6 +63,7 @@ public class DataInitializer implements CommandLineRunner {
             prod1.setStockInicial(10);
             prod1.setStockActual(10);
             prod1.setCategoria(categoriaOriginales);
+            usuarioRepository.findByEmail(adminEmail).ifPresent(prod1::setVendedor);
 
             Producto prod2 = new Producto();
             prod2.setNombre("Teclado Mecánico ClickCo");
@@ -72,6 +73,7 @@ public class DataInitializer implements CommandLineRunner {
             prod2.setStockInicial(5);
             prod2.setStockActual(5);
             prod2.setCategoria(categoriaOriginales);
+			usuarioRepository.findByEmail(adminEmail).ifPresent(prod2::setVendedor);
 
             Producto prod3 = new Producto();
             prod3.setNombre("Auriculares ClickCo Pro");
@@ -81,6 +83,7 @@ public class DataInitializer implements CommandLineRunner {
             prod3.setStockInicial(8);
             prod3.setStockActual(8);
             prod3.setCategoria(categoriaOriginales);
+			usuarioRepository.findByEmail(adminEmail).ifPresent(prod3::setVendedor);
 
             productoRepository.save(prod1);
             productoRepository.save(prod2);

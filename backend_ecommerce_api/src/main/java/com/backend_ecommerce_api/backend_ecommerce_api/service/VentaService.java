@@ -37,6 +37,7 @@ public class VentaService {
 		this.ventaItemRepository = ventaItemRepository;
 	}
 
+	
 	public void finalizarCompra(String email, CarritoRequestDTO carritoRequestDTO) {
 		Usuario comprador  = usuarioRepository.findByEmail(email)
         				.orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con ese email: " + email));
