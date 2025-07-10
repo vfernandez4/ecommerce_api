@@ -13,6 +13,7 @@ public class UsuarioResponseDTO {
     private Date fechaNacimiento;
     private String avatar;
     private String email;
+	private boolean solicitudVendedor;
 	private List<ProductoDTO> productosComprados;
     private List<ProductoDTO> productosVendidos;
 }

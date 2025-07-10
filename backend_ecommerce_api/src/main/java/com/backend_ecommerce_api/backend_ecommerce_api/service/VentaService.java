@@ -57,8 +57,13 @@ public class VentaService {
 			
 			producto.disminuirStock(item.getCantidad());
 			
-			comprador.addProductoComprado(producto);
-			producto.getVendedor().addProductoVendido(producto);
+			if (!comprador.getProductosComprados().contains(producto)){
+				comprador.addProductoComprado(producto);
+			}
+			
+			if(!producto.getVendedor().getProductosVendidos().contains(producto)){
+				producto.getVendedor().addProductoVendido(producto);
+			}
 
 			productoRepository.save(producto);
 

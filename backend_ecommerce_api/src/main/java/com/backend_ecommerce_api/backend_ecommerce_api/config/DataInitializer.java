@@ -41,6 +41,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setTelefono(0);
             admin.setAvatar("avatar1.png");
             admin.setFechaNacimiento(Date.valueOf("2000-08-10"));
+			admin.setSolicitudVendedor(false);
             usuarioRepository.save(admin);
             System.out.println("Usuario ADMIN creado: " + adminEmail + " / Admin123!");
         }

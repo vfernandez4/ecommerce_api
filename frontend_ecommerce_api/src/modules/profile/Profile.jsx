@@ -13,7 +13,6 @@ const Profile = () => {
 				const token = localStorage.getItem("token");
 				if (!token) throw new Error("No hay token");
 
-				// Obtener usuario
 				const resUser = await fetch("http://localhost:8082/api/usuarios/me", {
 					headers: {
 						Authorization: `Bearer ${token}`,

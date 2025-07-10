@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "./vender.module.css";
 import { useCategorias } from "../../context/CategoriaContext";
 import { jwtDecode } from "jwt-decode";
@@ -12,20 +12,53 @@ export default function Vender() {
 	const [nuevaCategoria, setNuevaCategoria] = useState(false);
 	const [nuevaCategoriaNombre, setNuevaCategoriaNombre] = useState("");
 	const [error, setError] = useState("");
-
 	const { categorias, fetchCategorias } = useCategorias();
+	const [usuarioSolicitudVendedor, setUsuarioSolicitudVendedor] = useState(null);
+	const [usuarioRol, setUsuarioRol] = useState(null);
 
-	// Obtener el rol del usuario
-	const token = localStorage.getItem("token");
-	let userRol = null;
-	if (token) {
+	useEffect(() => {
+		const cargarPerfil = async () => {
+			try {
+				const token = localStorage.getItem("token");
+				if (!token) throw new Error("No hay token");
+
+				const resUser = await fetch("http://localhost:8082/api/usuarios/me", {
+					headers: {
+						Authorization: `Bearer ${token}`,
+					},
+				});
+				if (!resUser.ok) throw new Error("Error al obtener usuario");
+				const user = await resUser.json();
+				setUsuarioSolicitudVendedor(user.solicitudVendedor);
+				const payload = jwtDecode(token);
+				setUsuarioRol(payload.rol);
+				console.log("solicitudVendedor en backend:", user.solicitudVendedor);
+				console.log("rol desde token:", payload.rol);
+			} catch (e) {
+				console.error("Error al cargar perfil:", e);
+			}
+		};
+		cargarPerfil();
+	}, []);
+
+	const handleSolicitud = async (e) => {
+		e.preventDefault();
+		setError("");
 		try {
-			const decoded = jwtDecode(token);
-			userRol = decoded.rol;
+			const res = await fetch("http://localhost:8082/api/usuarios/solicitudVendedor", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+			});
+			if (!res.ok) throw new Error("Error al solicitar alta como vendedor");
+			alert("Solicitud enviada. Espera la aprobación de un administrador.");
 		} catch (err) {
-			console.error("Error al decodificar el token", err);
+			console.error(err);
+			setError("No se pudo enviar la solicitud. Intenta de nuevo.");
 		}
-	}
+	};
 
 	const handleSubmit = async (e) => {
 		e.preventDefault();
@@ -105,68 +138,115 @@ export default function Vender() {
 		}
 	};
 
-	return (
-		<div className={styles.contenedor}>
-			<h1 className={styles.titulo}>¡Vende tu producto!</h1>
-			<form className={styles.form} onSubmit={handleSubmit}>
-				<label>Nombre:
-					<input type="text" value={nombre} onChange={(e) => setNombre(e.target.value)} required />
-				</label>
+		if (usuarioRol === "COMPRADOR" && usuarioSolicitudVendedor == false) {
+		return (
+			<div className={styles.contenedor}>
+				<h1 className={styles.titulo}>¡Conviértete en vendedor!</h1>
+				<form className={styles.form} onSubmit={handleSolicitud}>
+					<p>Para vender productos, primero debes solicitar ser Vendedor.</p>
+					<button type="submit" className={styles.botonPublicar}>
+						Solicitar alta como vendedor
+					</button>
+					{error && <p className={styles.error}>{error}</p>}
+				</form>
+			</div>
+		);
+	}
 
-				<label>Categoría:
-					<select value={categoriaId} onChange={(e) => setCategoriaId(e.target.value)} required disabled={nuevaCategoria}>
-						<option value="">Seleccione</option>
-						{categorias
-							.filter(cat => {
-								if (userRol === "ADMIN") return true;
-								return cat.nombre.toLowerCase() !== "originales clickco";
-							})
-							.map(cat => (
-								<option key={cat.id} value={cat.id}>{cat.nombre}</option>
-							))}
-					</select>
-				</label>
-
-				<div className={styles.checkboxRow}>
-					<label htmlFor="crearCategoria" className={styles.checkboxLabel}>
-						Crear nueva categoría
+	if (usuarioRol === "COMPRADOR" && usuarioSolicitudVendedor == true) {
+		return (
+			<div className={styles.contenedor}>
+				<h1 className={styles.titulo}>¡Solicitud enviada!</h1>
+				<p>Ya has solicitado ser vendedor. Un administrador te aprobará la solicitud en breve</p>
+			</div>
+		);
+	}
+	else {
+		return (
+			<div className={styles.contenedor}>
+				<h1 className={styles.titulo}>¡Vende tu producto!</h1>
+				<form className={styles.form} onSubmit={handleSubmit}>
+					<label>Nombre:
+						<input type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
 					</label>
-					<input
-						id="crearCategoria"
-						type="checkbox"
-						checked={nuevaCategoria}
-						onChange={(e) => setNuevaCategoria(e.target.checked)}
-						className={styles.checkboxInput}
-					/>
-				</div>
 
-				{nuevaCategoria && (
-					<label>Nombre de la nueva categoría:
+					<label>Categoría:
+						<select
+							value={categoriaId}
+							onChange={e => setCategoriaId(e.target.value)}
+							required
+							disabled={nuevaCategoria}
+						>
+							<option value="">Seleccione</option>
+							{categorias
+								.filter(cat => usuarioRol === "ADMIN" || cat.nombre.toLowerCase() !== "originales clickco")
+								.map(cat => (
+									<option key={cat.id} value={cat.id}>{cat.nombre}</option>
+								))
+							}
+						</select>
+					</label>
+
+					<div className={styles.checkboxRow}>
+						<label htmlFor="crearCategoria" className={styles.checkboxLabel}>
+							Crear nueva categoría
+						</label>
 						<input
-							type="text"
-							value={nuevaCategoriaNombre}
-							onChange={(e) => setNuevaCategoriaNombre(e.target.value)}
+							id="crearCategoria"
+							type="checkbox"
+							checked={nuevaCategoria}
+							onChange={e => setNuevaCategoria(e.target.checked)}
+							className={styles.checkboxInput}
+						/>
+					</div>
+
+					{nuevaCategoria && (
+						<label>Nombre de la nueva categoría:
+							<input
+								type="text"
+								value={nuevaCategoriaNombre}
+								onChange={e => setNuevaCategoriaNombre(e.target.value)}
+								required
+							/>
+						</label>
+					)}
+
+					<label>Precio:
+						<input
+							type="number"
+							min="0"
+							value={precio}
+							onChange={e => setPrecio(e.target.value)}
 							required
 						/>
 					</label>
-				)}
 
-				<label>Precio:
-					<input type="number" min="0" value={precio} onChange={(e) => setPrecio(e.target.value)} required />
-				</label>
+					<label>Descripción:
+						<textarea
+							rows="6"
+							value={descripcion}
+							onChange={e => setDescripcion(e.target.value)}
+							required
+						/>
+					</label>
 
-				<label>Descripción:
-					<textarea rows="6" value={descripcion} onChange={(e) => setDescripcion(e.target.value)} required />
-				</label>
+					<label>Nombre de la imagen:
+						<input
+							type="text"
+							value={imagen}
+							onChange={e => setImagen(e.target.value)}
+							required
+						/>
+					</label>
 
-				<label>Nombre de la imagen:
-					<input type="text" value={imagen} onChange={(e) => setImagen(e.target.value)} required />
-				</label>
+					<button type="submit" className={styles.botonPublicar}>
+						Publicar producto
+					</button>
 
-				<button type="submit" className={styles.botonPublicar}>Publicar producto</button>
+					{error && <p className={styles.error}>{error}</p>}
+				</form>
+			</div>
+		);
+	}
 
-				{error && <p className={styles.error}>{error}</p>}
-			</form>
-		</div>
-	);
 }

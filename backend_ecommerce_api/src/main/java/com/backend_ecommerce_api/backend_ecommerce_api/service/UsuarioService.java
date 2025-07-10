@@ -13,6 +13,7 @@ import com.backend_ecommerce_api.backend_ecommerce_api.repository.ProductoReposi
 import com.backend_ecommerce_api.backend_ecommerce_api.repository.UsuarioRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,18 +40,8 @@ public class UsuarioService {
 				.toList();
 	}
 
-	public void agregarCompra(String email, ProductoUpdateRequestDTO prod) {
-		Usuario usuario = usuarioRepository.findByEmail(email)
-				.orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con email: " + email));
-		Producto producto = productoRepository.findById(prod.getId())
-				.orElseThrow(() -> new ProductoNotFoundException("Usuario no encontrado con email: " + email));
-
-		usuario.addProductoComprado(producto);
-		usuarioRepository.save(usuario);
-	}
-
-	public Optional<UsuarioResponseDTO> getUsuarioPorMail(String mail) {
-		return usuarioRepository.findByEmail(mail)
+	public Optional<UsuarioResponseDTO> getUsuarioPorMail(String email) {
+		return usuarioRepository.findByEmail(email)
 				.map(this::mapToResponseDTO);
 	}
 
@@ -74,6 +65,13 @@ public class UsuarioService {
 		usuarioRepository.deleteById(id);
 	}
 
+	public void solicitarSerVendedor(String email) {
+		Usuario usuario = usuarioRepository.findByEmail(email)
+        		.orElseThrow(() -> new UsuarioNotFoundException("Usuario no encontrado con ese email: " + email));
+		usuario.setSolicitudVendedor(true);
+		usuarioRepository.save(usuario);
+	}
+
 	private UsuarioResponseDTO mapToResponseDTO(Usuario usuario) {
 		UsuarioResponseDTO dto = new UsuarioResponseDTO();
 		dto.setId(usuario.getId());
@@ -83,7 +81,7 @@ public class UsuarioService {
 		dto.setFechaNacimiento(usuario.getFechaNacimiento());
 		dto.setAvatar(usuario.getAvatar());
 		dto.setEmail(usuario.getEmail());
-
+		dto.setSolicitudVendedor(usuario.getSolicitudVendedor());
 		dto.setProductosComprados(
 				usuario.getProductosComprados().stream()
 						.map(p -> new ProductoDTO(p.getNombre(), p.getPrecio(), p.getImagen()))

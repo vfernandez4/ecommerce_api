@@ -66,6 +66,7 @@ public class AuthenticationService {
             nuevoUsuario.setFechaNacimiento(request.getFechaNacimiento());
             nuevoUsuario.setAvatar(request.getAvatar());
             nuevoUsuario.setEmail(request.getEmail());
+			nuevoUsuario.setSolicitudVendedor(false);
 
             String encryptedPassword = passwordEncoder.encode(request.getPassword());
             nuevoUsuario.setPassword(encryptedPassword);
