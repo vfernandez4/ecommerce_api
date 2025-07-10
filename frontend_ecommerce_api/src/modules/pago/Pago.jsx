@@ -63,7 +63,6 @@ const Pago = () => {
 				throw new Error(`Error ${res.status}: ${errBody}`);
 			}
 
-			const data = await res.json();
 			alert("Gracias por tu compra!");
 			vaciarCarrito();
 			navigate("/");

@@ -2,6 +2,7 @@ package com.backend_ecommerce_api.backend_ecommerce_api.dto.response;
 
 import lombok.Data;
 import java.sql.Date;
+import java.util.List;
 
 @Data
 public class UsuarioResponseDTO {
@@ -12,4 +13,6 @@ public class UsuarioResponseDTO {
     private Date fechaNacimiento;
     private String avatar;
     private String email;
+	private List<ProductoDTO> productosComprados;
+    private List<ProductoDTO> productosVendidos;
 }

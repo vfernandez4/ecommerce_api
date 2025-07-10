@@ -1,5 +1,4 @@
 package com.backend_ecommerce_api.backend_ecommerce_api.model;
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,7 @@ public class Venta {
 	@Column(nullable = false)
 	private LocalDateTime fecha;
 
-	@Column(nullable = false, precision = 10, scale = 2)
+	@Column(nullable = false)
 	private double total;
 
 	@OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)

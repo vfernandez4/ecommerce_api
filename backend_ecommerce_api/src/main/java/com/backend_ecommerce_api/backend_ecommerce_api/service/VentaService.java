@@ -63,7 +63,6 @@ public class VentaService {
 			productoRepository.save(producto);
 
 			venta.agregarItem(ventaItem);
-			ventaItemRepository.save(ventaItem);
 
 			usuarioRepository.save(comprador);
 			usuarioRepository.save(producto.getVendedor());
@@ -74,6 +73,10 @@ public class VentaService {
 				.sum());
 		
 		ventaRepository.save(venta);
+
+		for(VentaItem item : venta.getItems()) {
+			ventaItemRepository.save(item);
+		}
 
 	}
 
